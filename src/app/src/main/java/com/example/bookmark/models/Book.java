@@ -1,5 +1,9 @@
 package com.example.bookmark.models;
 
+/**
+ * TODO: Description of class.
+ * @author Kyle Hennig.
+ */
 public class Book {
     public enum Status {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED

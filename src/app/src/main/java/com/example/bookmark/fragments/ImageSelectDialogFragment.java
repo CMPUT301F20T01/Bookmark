@@ -11,9 +11,8 @@ import android.view.ViewGroup;
 import com.example.bookmark.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ImageSelectDialogFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * TODO: Description of class.
+ * @author Eric Claerhout.
  */
 public class ImageSelectDialogFragment extends Fragment {
 

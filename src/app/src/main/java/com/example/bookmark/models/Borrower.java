@@ -2,6 +2,10 @@ package com.example.bookmark.models;
 
 import java.util.List;
 
+/**
+ * TODO: Description of class.
+ * @author Kyle Hennig.
+ */
 public class Borrower extends User {
     private List<Request> requests;
     private List<Book> borrowedBooks;

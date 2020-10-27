@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * TODO: Description of class.
+ * @author Nayan Prakash.
+ */
 public class AcceptedBookDetailsActivity extends AppCompatActivity {
 
     @Override

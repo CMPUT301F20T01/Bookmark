@@ -2,6 +2,10 @@ package com.example.bookmark.models;
 
 import java.util.List;
 
+/**
+ * TODO: Description of class.
+ * @author Kyle Hennig.
+ */
 public class Owner extends User {
     private List<Book> ownedBooks;
     private List<Request> requests;

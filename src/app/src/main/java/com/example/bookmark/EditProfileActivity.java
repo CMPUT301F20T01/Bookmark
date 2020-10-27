@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * TODO: Description of class.
+ * @author Konrad Staniszewski
+ */
 public class EditProfileActivity extends AppCompatActivity {
 
     @Override

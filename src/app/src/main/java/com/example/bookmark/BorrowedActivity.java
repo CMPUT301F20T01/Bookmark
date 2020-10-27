@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * TODO: Description of class.
+ * @author Ryan Kortbeek.
+ */
 public class BorrowedActivity extends AppCompatActivity {
 
     @Override

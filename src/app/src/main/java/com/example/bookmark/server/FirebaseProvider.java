@@ -1,5 +1,9 @@
 package com.example.bookmark.server;
 
+/**
+ * TODO: Description of class.
+ * @author Kyle Hennig.
+ */
 public class FirebaseProvider {
     private static FirebaseProvider instance;
 
