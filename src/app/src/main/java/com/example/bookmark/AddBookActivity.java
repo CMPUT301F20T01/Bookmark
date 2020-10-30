@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,10 +80,13 @@ public class AddBookActivity extends AppCompatActivity {
 
     private void addPhoto() {
         // TODO: I think Eric is doing this
+        Log.d("Add Book", "Click add photo");
+
     }
 
     private void doneAddBook() {
-        // TODO: Need the book class
+        // TODO: Create a book class and return that
+        Log.d("Add Book", "Click done add book");
     }
 
     @Override
