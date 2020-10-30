@@ -42,8 +42,9 @@ import java.util.concurrent.Executors;
  * This activity opens up a camera view using CameraX and allows a
  * user to scan a barcode using Google's ML kit. Upon success
  * the isbn will be returned.
- *
+ * <p>
  * TODO: Add more to these? Classes/Listeners? More about libraries used?
+ *
  * @author Mitch Adam.
  */
 public class ScanIsbnActivity extends AppCompatActivity {
@@ -80,7 +81,7 @@ public class ScanIsbnActivity extends AppCompatActivity {
                 .build();
         scanner = BarcodeScanning.getClient();
 
-        if(allPermissionsGranted()){
+        if (allPermissionsGranted()) {
             startCamera(); //start camera if permission has been granted by user
         } else {
             Log.d("PHOTO", "Should request permissions");
@@ -95,15 +96,15 @@ public class ScanIsbnActivity extends AppCompatActivity {
         cameraProviderFuture.addListener(new Runnable() {
             @Override
             public void run() {
+                ProcessCameraProvider cameraProvider = null;
                 try {
-
-                    ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                    bindPreview(cameraProvider);
-
-                } catch (ExecutionException | InterruptedException e) {
-                    // No errors need to be handled for this Future.
-                    // This should never be reached.
+                    cameraProvider = cameraProviderFuture.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                bindPreview(cameraProvider);
             }
         }, ContextCompat.getMainExecutor(this));
     }
@@ -132,10 +133,10 @@ public class ScanIsbnActivity extends AppCompatActivity {
             }
         });
 
-        try{
+        try {
             Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
             preview.setSurfaceProvider(mPreviewView.createSurfaceProvider());
-        } catch(Exception e){
+        } catch (Exception e) {
             Log.e("error", String.valueOf(e));
         }
     }
@@ -152,10 +153,7 @@ public class ScanIsbnActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<Barcode> barcodes) {
                         // Task completed successfully
-                        for (Barcode barcode: barcodes) {
-                            Rect bounds = barcode.getBoundingBox();
-                            Point[] corners = barcode.getCornerPoints();
-
+                        for (Barcode barcode : barcodes) {
                             String rawValue = barcode.getRawValue();
 
                             addBarcode(rawValue);
@@ -190,8 +188,8 @@ public class ScanIsbnActivity extends AppCompatActivity {
         if (barcodesIndex == (numRequiredSameBarcodes - 1)) {
             // Return barcode
             Intent intent = new Intent();
-            intent.putExtra("ISBN",barcode);
-            setResult(1,intent);
+            intent.putExtra("ISBN", barcode);
+            setResult(1, intent);
             finish(); //finishing activity
 
         } else {
@@ -201,10 +199,10 @@ public class ScanIsbnActivity extends AppCompatActivity {
         }
     }
 
-    private boolean allPermissionsGranted(){
+    private boolean allPermissionsGranted() {
 
-        for(String permission : REQUIRED_PERMISSIONS){
-            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }
@@ -214,10 +212,10 @@ public class ScanIsbnActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if(requestCode == REQUEST_CODE_PERMISSIONS){
-            if(allPermissionsGranted()){
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
                 startCamera();
-            } else{
+            } else {
                 Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
                 this.finish();
             }
