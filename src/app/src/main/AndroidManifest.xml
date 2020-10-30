@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bookmark">
 
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,12 +17,9 @@
         <activity android:name=".ScanIsbnActivity" />
         <activity android:name=".RequestedBookDetailsActivity" />
         <activity android:name=".PendingRequestsActivity" />
-        <activity android:name=".MyRequestedBookDetailsActivity" />
         <activity android:name=".MyProfileActivity" />
-        <activity android:name=".MyBorrowedBookDetailsActivity" />
         <activity android:name=".MyBooksActivity" />
-        <activity android:name=".MyAvailableBookDetailsActivity" />
-        <activity android:name=".MyAcceptedBookDetailsActivity" />
+        <activity android:name=".MyBookDetailsActivity" />
         <activity android:name=".ManageRequestsActivity" />
         <activity android:name=".ExploreBookDetailsActivity" />
         <activity android:name=".ExploreActivity" />
