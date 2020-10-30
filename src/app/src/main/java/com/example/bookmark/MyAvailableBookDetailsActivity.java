@@ -2,8 +2,11 @@ package com.example.bookmark;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +15,13 @@ import android.widget.TextView;
  * @author Mitch Adam.
  */
 public class MyAvailableBookDetailsActivity extends AppCompatActivity {
+
+    String isbn;
+    String title;
+    String author;
+    String description;
+    String status;
+    //Image image;
 
     private TextView titleEditText;
     private TextView authorEditText;
@@ -29,6 +39,9 @@ public class MyAvailableBookDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Intent myIntent = getIntent(); // gets the previously created intent
+        isbn = myIntent.getStringExtra("ISBN");
+
         titleEditText = findViewById(R.id.book_details_title_text);
         authorEditText = findViewById(R.id.book_details_author_text);
         isbnEditText = findViewById(R.id.book_details_isbn_text);
@@ -36,17 +49,42 @@ public class MyAvailableBookDetailsActivity extends AppCompatActivity {
         imageView = findViewById(R.id.book_details_book_image);
         statusText = findViewById(R.id.book_details_book_status_text);
 
+        getBookDetailsFromISBN();
         fillBookDetails();
     }
 
-    public void fillBookDetails() {
-        //TODO: Pass in actual details
-        Log.d("Book Details", "Setting book description");
-        titleEditText.setText("My Book Title");
-        authorEditText.setText("My Book Author");
-        isbnEditText.setText("ISBN: 11111111111");
-        descriptionEditText.setText("Description: My Book description");
-        //TODO: imageView.setImageBitmap();
-        statusText.setText("Status: Available");
+    private void getBookDetailsFromISBN() {
+        // TODO: Get details from firebase
+        author = "Book Author";
+        title = "Book Title";
+        description = "Book Description";
+        //Image = some image
+        status = "Available";
     }
+
+    public void fillBookDetails() {
+        titleEditText.setText(title);
+        authorEditText.setText(author);
+        isbnEditText.setText("ISBN: " + isbn);
+        descriptionEditText.setText("Description: " + description);
+        //imageView.setImageBitmap();
+        statusText.setText("Status: " + status);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.edit_menu_edit_btn:
+            Intent intent = new Intent(MyAvailableBookDetailsActivity.this, EditBookActivity.class);
+            intent.putExtra("ISBN",isbn);
+            startActivity(intent);
+    }
+        return(super.onOptionsItemSelected(item));
+    }
+
 }

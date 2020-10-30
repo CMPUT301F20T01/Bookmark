@@ -16,6 +16,11 @@ import android.widget.ImageButton;
  */
 public class EditBookActivity extends AppCompatActivity {
 
+    String isbn;
+    String title;
+    String author;
+    String description;
+
     private ImageButton scanISBNButton;
     private ImageButton addPhotoButton;
     private ImageButton deletePhotoButton;
@@ -73,6 +78,9 @@ public class EditBookActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Intent myIntent = getIntent(); // gets the previously created intent
+        isbn = myIntent.getStringExtra("ISBN");
+
         scanISBNButton = findViewById(R.id.edit_book_scan_isbn_btn);
         scanISBNButton.setOnClickListener(scanISBNListener);
 
@@ -93,15 +101,22 @@ public class EditBookActivity extends AppCompatActivity {
         isbnEditText = findViewById(R.id.edit_book_isbn_field);
         descriptionEditText = findViewById(R.id.edit_book_description_field);
 
+        getBookDetailsFromISBN();
         fillBookDescriptionFields();
     }
 
+    private void getBookDetailsFromISBN() {
+        // TODO: Get details from firebase
+        author = "Book Author";
+        title = "Book Title";
+        description = "Book Description";
+    }
+
     private void fillBookDescriptionFields() {
-        // TODO: Pass in actual details
-        titleEditText.setText("Book Title");
-        authorEditText.setText("Book Author");
-        isbnEditText.setText("Book ISBN");
-        descriptionEditText.setText("Book Description");
+        titleEditText.setText(title);
+        authorEditText.setText(author);
+        isbnEditText.setText(isbn);
+        descriptionEditText.setText(description);
     }
 
     private void goToScanISBN() {
