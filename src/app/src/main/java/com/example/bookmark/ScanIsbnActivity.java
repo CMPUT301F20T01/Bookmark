@@ -50,7 +50,7 @@ public class ScanIsbnActivity extends AppCompatActivity {
     // TODO: Figure out the back navigation
 
     private Executor executor = Executors.newSingleThreadExecutor();
-    private int REQUEST_CODE_PERMISSIONS = 1001;
+    private static final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
 
     PreviewView mPreviewView;
