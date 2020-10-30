@@ -16,8 +16,9 @@ import android.widget.TextView;
  * This activity shows the details of a book. Depending on the
  * status of the book the user can then take some action. A user
  * can also navigate to the edit book activity from here.
- *
+ * <p>
  * TODO: Add more to these? Classes/Listeners?
+ *
  * @author Mitch Adam.
  */
 public class MyBookDetailsActivity extends AppCompatActivity {
@@ -147,14 +148,14 @@ public class MyBookDetailsActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:
                 Intent intent = new Intent(MyBookDetailsActivity.this, EditBookActivity.class);
-                intent.putExtra("ISBN",isbn);
+                intent.putExtra("ISBN", isbn);
                 startActivity(intent);
                 break;
         }
-        return(super.onOptionsItemSelected(item));
+        return (super.onOptionsItemSelected(item));
     }
 
 }

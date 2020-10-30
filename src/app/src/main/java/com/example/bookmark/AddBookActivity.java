@@ -13,8 +13,9 @@ import android.widget.ImageButton;
 /**
  * This activity allows a user to add a new book. It provides fields
  * to enter all book details, scan isbn and add a photo.
- *
+ * <p>
  * TODO: Add more to these? Classes/Listeners?
+ *
  * @author Mitch Adam.
  */
 public class AddBookActivity extends AppCompatActivity {
@@ -94,12 +95,11 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Get ISBN
-        if(requestCode==1){
+        if (requestCode == 1) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
         }

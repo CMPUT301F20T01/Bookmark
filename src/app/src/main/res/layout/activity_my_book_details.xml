@@ -6,28 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".MyBookDetailsActivity">
 
-    <TextView
-        android:id="@+id/book_details_title_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Book Title"
-        android:textSize="24sp"
+    <Button
+        android:id="@+id/book_details_action_btn"
+        android:layout_width="219dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="16dp"
+        android:background="#673AB7"
+        android:text="Action"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/book_details_book_status_text" />
 
-    <TextView
-        android:id="@+id/book_details_author_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:text="Author"
-        android:textColor="#787878"
-        android:textSize="18sp"
+    <ImageView
+        android:id="@+id/book_details_book_image"
+        android:layout_width="191dp"
+        android:layout_height="172dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/book_details_title_text" />
+        app:layout_constraintTop_toBottomOf="@+id/book_details_description_text"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/book_details_isbn_text"
@@ -52,15 +51,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/book_details_isbn_text" />
 
-    <ImageView
-        android:id="@+id/book_details_book_image"
-        android:layout_width="191dp"
-        android:layout_height="172dp"
+    <TextView
+        android:id="@+id/book_details_title_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Book Title"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/book_details_description_text"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/book_details_book_status_text"
@@ -73,16 +73,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/book_details_book_image" />
 
-    <Button
-        android:id="@+id/book_details_action_btn"
-        android:layout_width="219dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="16dp"
-        android:background="#673AB7"
-        android:text="Action"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/book_details_author_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Author"
+        android:textColor="#787878"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/book_details_book_status_text" />
+        app:layout_constraintTop_toBottomOf="@+id/book_details_title_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

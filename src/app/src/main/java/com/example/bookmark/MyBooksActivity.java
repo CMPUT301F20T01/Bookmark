@@ -27,8 +27,9 @@ import java.util.List;
  * This activity shows a user a list of their books.
  * They can select a book to see and edit the details of a book.
  * They can also add a book from here
+ * <p>
+ * TODO: Add more to these? Classes/Listeners?
  *
- *  TODO: Add more to these? Classes/Listeners?
  * @author Mitch Adam.
  */
 public class MyBooksActivity extends AppCompatActivity {
@@ -84,12 +85,12 @@ public class MyBooksActivity extends AppCompatActivity {
         //Temp add some books
         Owner owner = new Owner("u", "fn", "ln",
             "email", "pn",
-            new ArrayList<Book>(), new ArrayList<Request>() );
+            new ArrayList<Book>(), new ArrayList<Request>());
 
-        Book b1 = new Book("Title 1", "Author 1", "1111111", owner );
+        Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
         b1.setDescription("Book 1 description");
 
-        Book b2 = new Book("Title 2", "Author 2", "22222", owner );
+        Book b2 = new Book("Title 2", "Author 2", "22222", owner);
         b2.setDescription("Book 2 description");
 
         allBooks.add(b1);
@@ -115,7 +116,7 @@ public class MyBooksActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:
                 //TODO: Open search fragment
                 break;
@@ -123,6 +124,6 @@ public class MyBooksActivity extends AppCompatActivity {
                 //TODO: Open filter fragment
                 break;
         }
-        return(super.onOptionsItemSelected(item));
+        return (super.onOptionsItemSelected(item));
     }
 }

@@ -13,8 +13,9 @@ import android.widget.ImageButton;
 /**
  * This activity allows a user to edit the details of a book, remove a photo
  * and delete a book. Navigate here from the BookDetailsActivity
- *
+ * <p>
  * TODO: Add more to these? Classes/Listeners?
+ *
  * @author Mitch Adam.
  */
 public class EditBookActivity extends AppCompatActivity {
@@ -149,12 +150,11 @@ public class EditBookActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Get ISBN
-        if(requestCode==1){
+        if (requestCode == 1) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
         }
