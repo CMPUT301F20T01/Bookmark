@@ -12,6 +12,7 @@ import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,10 +25,10 @@ import androidx.annotation.Nullable;
  */
 public class BookList extends ArrayAdapter<Book> {
 
-    private ArrayList<Book> booksList;
+    private List<Book> booksList;
     private Context context;
 
-    public BookList(Context context, ArrayList<Book> books) {
+    public BookList(Context context, List<Book> books) {
         super(context, 0, books);
         this.booksList = books;
         this.context = context;
