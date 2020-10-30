@@ -34,8 +34,8 @@ public class MyBooksActivity extends AppCompatActivity {
     // TODO: Figure out the back navigation
     // Going to need some sort of owner or uid
 
-    ArrayList<Book> allBooks = new ArrayList<Book>();;
-    ArrayList<Book> filteredBooks;
+    List<Book> allBooks = new ArrayList<Book>();
+    List<Book> filteredBooks;
 
     BookList booksAdapter;
     ListView booksListView;
