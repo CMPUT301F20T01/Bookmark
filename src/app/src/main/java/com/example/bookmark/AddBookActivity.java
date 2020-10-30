@@ -11,7 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 /**
- * TODO: Description of class.
+ * This activity allows a user to add a new book. It provides fields
+ * to enter all book details, scan isbn and add a photo.
+ *
+ * TODO: Add more to these? Classes/Listeners?
  * @author Mitch Adam.
  */
 public class AddBookActivity extends AppCompatActivity {
@@ -79,13 +82,13 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private void addPhoto() {
-        // TODO: I think Eric is doing this
+        // TODO: I think Eric is doing this?
         Log.d("Add Book", "Click add photo");
 
     }
 
     private void doneAddBook() {
-        // TODO: Create a book class and return that
+        // TODO: Create a book class and return isbn possibly?
         Log.d("Add Book", "Click done add book");
     }
 

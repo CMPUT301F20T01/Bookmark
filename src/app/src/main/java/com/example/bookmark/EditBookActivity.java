@@ -11,7 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 /**
- * TODO: Description of class.
+ * This activity allows a user to edit the details of a book, remove a photo
+ * and delete a book. Navigate here from the BookDetailsActivity
+ *
+ * TODO: Add more to these? Classes/Listeners?
  * @author Mitch Adam.
  */
 public class EditBookActivity extends AppCompatActivity {

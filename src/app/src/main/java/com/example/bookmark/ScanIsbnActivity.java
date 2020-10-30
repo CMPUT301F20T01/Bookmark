@@ -37,6 +37,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+
+/**
+ * This activity opens up a camera view using CameraX and allows a
+ * user to scan a barcode using Google's ML kit. Upon success
+ * the isbn will be returned.
+ *
+ * TODO: Add more to these? Classes/Listeners? More about libraries used?
+ * @author Mitch Adam.
+ */
 public class ScanIsbnActivity extends AppCompatActivity {
 
     private Executor executor = Executors.newSingleThreadExecutor();
@@ -213,4 +222,24 @@ public class ScanIsbnActivity extends AppCompatActivity {
             }
         }
     }
+
+    // TODO: Figure out the back navigation
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // handle arrow click here
+//        if (item.getItemId() == android.R.id.home) {
+//            finish(); // close this activity and return to preview activity (if there is any)
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        Intent intent = getIntent();
+//        setResult(MainActivity.ACTIVITY_CANCELED, intent);
+//        finish();
+//        return true;
+//    }
 }
