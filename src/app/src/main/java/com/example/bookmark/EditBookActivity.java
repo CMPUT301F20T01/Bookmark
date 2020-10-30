@@ -22,8 +22,6 @@ public class EditBookActivity extends AppCompatActivity {
     private Button doneAddBookButton;
     private Button deleteBookButton;
 
-
-
     private EditText titleEditText;
     private EditText authorEditText;
     private EditText isbnEditText;
