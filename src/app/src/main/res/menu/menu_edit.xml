@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item
-        android:id="@+id/edit_menu_edit_btn" android:icon="@android:drawable/ic_menu_edit" app:showAsAction="always"   android:title="edit"/>
+        android:id="@+id/menu_filter_search_search_btn" android:icon="@android:drawable/ic_menu_edit" app:showAsAction="always"   android:title="edit"/>
 
 </menu>

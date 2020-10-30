@@ -47,6 +47,7 @@ import java.util.concurrent.Executors;
  * @author Mitch Adam.
  */
 public class ScanIsbnActivity extends AppCompatActivity {
+    // TODO: Figure out the back navigation
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private int REQUEST_CODE_PERMISSIONS = 1001;
@@ -222,24 +223,4 @@ public class ScanIsbnActivity extends AppCompatActivity {
             }
         }
     }
-
-    // TODO: Figure out the back navigation
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // handle arrow click here
-//        if (item.getItemId() == android.R.id.home) {
-//            finish(); // close this activity and return to preview activity (if there is any)
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        Intent intent = getIntent();
-//        setResult(MainActivity.ACTIVITY_CANCELED, intent);
-//        finish();
-//        return true;
-//    }
 }

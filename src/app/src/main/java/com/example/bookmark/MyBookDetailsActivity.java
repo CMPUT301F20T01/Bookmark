@@ -21,6 +21,7 @@ import android.widget.TextView;
  * @author Mitch Adam.
  */
 public class MyBookDetailsActivity extends AppCompatActivity {
+    // TODO: Figure out the back navigation
 
     String isbn;
     String title;
@@ -147,7 +148,7 @@ public class MyBookDetailsActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.edit_menu_edit_btn:
+            case R.id.menu_filter_search_search_btn:
                 Intent intent = new Intent(MyBookDetailsActivity.this, EditBookActivity.class);
                 intent.putExtra("ISBN",isbn);
                 startActivity(intent);
@@ -156,23 +157,4 @@ public class MyBookDetailsActivity extends AppCompatActivity {
         return(super.onOptionsItemSelected(item));
     }
 
-    // TODO: Figure out the back navigation
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // handle arrow click here
-//        if (item.getItemId() == android.R.id.home) {
-//            finish(); // close this activity and return to preview activity (if there is any)
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        Intent intent = getIntent();
-//        setResult(MainActivity.ACTIVITY_CANCELED, intent);
-//        finish();
-//        return true;
-//    }
 }

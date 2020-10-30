@@ -18,6 +18,7 @@ import android.widget.ImageButton;
  * @author Mitch Adam.
  */
 public class EditBookActivity extends AppCompatActivity {
+    // TODO: Figure out the back navigation
 
     String isbn;
     String title;
@@ -158,25 +159,4 @@ public class EditBookActivity extends AppCompatActivity {
             isbnEditText.setText(isbn);
         }
     }
-
-
-// TODO: Figure out the back navigation
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // handle arrow click here
-//        if (item.getItemId() == android.R.id.home) {
-//            finish(); // close this activity and return to preview activity (if there is any)
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        Intent intent = getIntent();
-//        setResult(MainActivity.ACTIVITY_CANCELED, intent);
-//        finish();
-//        return true;
-//    }
 }
