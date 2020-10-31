@@ -50,7 +50,7 @@ public class BorrowedActivity extends AppCompatActivity {
 
         borrowedBooks = new ArrayList<>();
         getBorrowedBooks();
-        borrowedBooksAdapter = new BookList(this, borrowedBooks);
+        borrowedBooksAdapter = new BookList(this, borrowedBooks, true, false);
         borrowedBooksListView.setAdapter(borrowedBooksAdapter);
         borrowedBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
