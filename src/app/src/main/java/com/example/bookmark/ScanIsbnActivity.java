@@ -1,7 +1,14 @@
 package com.example.bookmark;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.Image;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -11,16 +18,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.media.Image;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,8 +44,7 @@ import java.util.concurrent.Executors;
  *
  * @author Mitch Adam.
  */
-public class ScanIsbnActivity extends AppCompatActivity {
-    // TODO: Figure out the back navigation
+public class ScanIsbnActivity extends BackButtonActivity {
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
