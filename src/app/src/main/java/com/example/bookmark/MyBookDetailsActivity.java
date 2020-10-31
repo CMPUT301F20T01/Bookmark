@@ -1,7 +1,5 @@
 package com.example.bookmark;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +19,7 @@ import android.widget.TextView;
  *
  * @author Mitch Adam.
  */
-public class MyBookDetailsActivity extends AppCompatActivity {
-    // TODO: Figure out the back navigation
+public class MyBookDetailsActivity extends BackButtonActivity {
 
     String isbn;
     String title;
