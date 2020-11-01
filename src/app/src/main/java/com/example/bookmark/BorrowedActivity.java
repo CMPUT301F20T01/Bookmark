@@ -19,6 +19,7 @@ import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This activity shows a user a list of books that they are currently
@@ -31,7 +32,7 @@ import java.util.ArrayList;
  */
 public class BorrowedActivity extends AppCompatActivity {
 
-    ArrayList<Book> borrowedBooks;
+    List<Book> borrowedBooks = new ArrayList<>();
     BookList borrowedBooksAdapter;
     ListView borrowedBooksListView;
 
@@ -48,7 +49,6 @@ public class BorrowedActivity extends AppCompatActivity {
 
         borrowedBooksListView = findViewById(R.id.borrowed_books_listview);
 
-        borrowedBooks = new ArrayList<>();
         getBorrowedBooks();
         borrowedBooksAdapter = new BookList(this, borrowedBooks, true, false);
         borrowedBooksListView.setAdapter(borrowedBooksAdapter);
