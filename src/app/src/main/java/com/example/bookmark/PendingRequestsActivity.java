@@ -19,6 +19,7 @@ import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This activity shows a user a list of books that they have pending requests
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  */
 public class PendingRequestsActivity extends AppCompatActivity {
 
-    ArrayList<Book> requestedBooks;
+    List<Book> requestedBooks = new ArrayList<>();
     BookList requestedBooksAdapter;
     ListView requestedBooksListView;
 
@@ -47,7 +48,6 @@ public class PendingRequestsActivity extends AppCompatActivity {
 
         requestedBooksListView = findViewById(R.id.requested_books_listview);
 
-        requestedBooks = new ArrayList<>();
         getRequestedBooks();
         requestedBooksAdapter = new BookList(this, requestedBooks, true, true);
         requestedBooksListView.setAdapter(requestedBooksAdapter);
