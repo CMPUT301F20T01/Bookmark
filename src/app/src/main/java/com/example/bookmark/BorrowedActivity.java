@@ -59,7 +59,8 @@ public class BorrowedActivity extends AppCompatActivity {
                     BorrowedBookDetailsActivity.class);
                 // TODO decide how the book data is to be sent to the
                 //  BorrowedBookDetailsActivity
-                intent.putExtra("borrowed-book", (Parcelable) borrowedBooks.get(i));
+                intent.putExtra("selected-book",
+                    (Parcelable) borrowedBooks.get(i));
                 startActivity(intent);
             }
         });
