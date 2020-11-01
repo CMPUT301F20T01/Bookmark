@@ -49,7 +49,7 @@ public class PendingRequestsActivity extends AppCompatActivity {
 
         requestedBooks = new ArrayList<>();
         getRequestedBooks();
-        requestedBooksAdapter = new BookList(this, requestedBooks);
+        requestedBooksAdapter = new BookList(this, requestedBooks, true, true);
         requestedBooksListView.setAdapter(requestedBooksAdapter);
         requestedBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,7 +58,7 @@ public class PendingRequestsActivity extends AppCompatActivity {
                     RequestedBookDetailsActivity.class);
                 // TODO decide how the book data is to be sent to the
                 //  RequestedBookDetailsActivity
-                intent.putExtra("requested-book",
+                intent.putExtra("selected-book",
                     (Parcelable) requestedBooks.get(i));
                 startActivity(intent);
             }
