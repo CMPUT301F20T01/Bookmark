@@ -20,6 +20,7 @@ import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This activity shows a user a list of books that match the keyword(s) from
@@ -31,7 +32,7 @@ import java.util.ArrayList;
  */
 public class ExploreActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
 
-    ArrayList<Book> searchResults;
+    List<Book> searchResults = new ArrayList<>();
     BookList searchResultsAdapter;
     ListView searchResultsListView;
 
@@ -48,7 +49,6 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
 
         searchResultsListView = findViewById(R.id.search_results_listview);
 
-        searchResults = new ArrayList<>();
         getSearchResults(getIntent());
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
