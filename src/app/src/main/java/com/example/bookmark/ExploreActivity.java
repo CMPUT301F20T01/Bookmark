@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookmark.adapters.BookList;
+import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
  *
  * @author Ryan Kortbeek.
  */
-public class ExploreActivity extends AppCompatActivity {
+public class ExploreActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
 
     ArrayList<Book> searchResults;
     BookList searchResultsAdapter;
@@ -48,7 +49,7 @@ public class ExploreActivity extends AppCompatActivity {
         searchResultsListView = findViewById(R.id.search_results_listview);
 
         searchResults = new ArrayList<>();
-        getSearchResults();
+        getSearchResults(getIntent());
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
         searchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,7 +66,7 @@ public class ExploreActivity extends AppCompatActivity {
         });
     }
 
-    private void getSearchResults() {
+    private void getSearchResults(Intent intent) {
         // TODO get books from intent that match the searched keyword(s) -
         //  this should be passed from the activity that started this
         //  activity (i.e. the class that implements the executeSearch(..)
@@ -73,14 +74,19 @@ public class ExploreActivity extends AppCompatActivity {
         //  perform the search and pass the results to this activity)
 
         // Proof of concept
-        Owner owner = new Owner("u", "fn", "ln",
-            "email", "pn",
-            new ArrayList<Book>(), new ArrayList<Request>());
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            String proof = bundle.getString("proof");
 
-        Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
-        b1.setDescription("Book 1 description");
+            Owner owner = new Owner("u", "fn", "ln",
+                "email", "pn",
+                new ArrayList<Book>(), new ArrayList<Request>());
 
-        searchResults.add(b1);
+            Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
+            b1.setDescription(proof);
+
+            searchResults.add(b1);
+        }
     }
 
     @Override
@@ -94,12 +100,28 @@ public class ExploreActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:
-                // TODO open search fragment
-                break;
+                // Opens search fragment
+                new SearchDialogFragment().show(getSupportFragmentManager(),
+                    "SEARCH_AVAILABLE_BOOKS");
             case R.id.menu_filter_search_filter_btn:
                 // TODO open filter fragment
                 break;
         }
         return (super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public void executeSearch(String searchString) {
+        // TODO call search method from singleton that interacts with firebase
+
+        Intent intent = new Intent(ExploreActivity.this, ExploreActivity.class);
+        // TODO put books that match the searched keyword(s) into intent that
+        //  is sent to the ExploreActivity which will display the search
+        //  results
+
+        // Proof of concept
+        intent.putExtra("proof", "Intent has been received!");
+
+        startActivity(intent);
     }
 }
