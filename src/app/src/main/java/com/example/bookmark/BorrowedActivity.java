@@ -50,7 +50,7 @@ public class BorrowedActivity extends AppCompatActivity {
 
         borrowedBooks = new ArrayList<>();
         getBorrowedBooks();
-        borrowedBooksAdapter = new BookList(this, borrowedBooks);
+        borrowedBooksAdapter = new BookList(this, borrowedBooks, true, false);
         borrowedBooksListView.setAdapter(borrowedBooksAdapter);
         borrowedBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,9 +66,10 @@ public class BorrowedActivity extends AppCompatActivity {
     }
 
     private void getBorrowedBooks() {
-        // TODO get books currently borrowed by current user
+        // TODO get books currently borrowed by current user - need access to
+        //  current user and firebase
 
-        // Test data
+        // Proof of concept
         Owner owner = new Owner("u", "fn", "ln",
             "email", "pn",
             new ArrayList<Book>(), new ArrayList<Request>());
