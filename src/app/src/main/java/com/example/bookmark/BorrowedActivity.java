@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookmark.adapters.BookList;
+import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
@@ -30,7 +31,7 @@ import java.util.List;
  *
  * @author Ryan Kortbeek.
  */
-public class BorrowedActivity extends AppCompatActivity {
+public class BorrowedActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
 
     List<Book> borrowedBooks = new ArrayList<>();
     BookList borrowedBooksAdapter;
@@ -89,9 +90,25 @@ public class BorrowedActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_filter_search_search_btn) {
-            // TODO open search fragment
-            ;
+            // Opens search fragment
+            new SearchDialogFragment().show(getSupportFragmentManager(),
+                "SEARCH_AVAILABLE_BOOKS");
         }
         return (super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public void executeSearch(String searchString) {
+        // TODO call search method from singleton that interacts with firebase
+
+        Intent intent = new Intent(BorrowedActivity.this, ExploreActivity.class);
+        // TODO put books that match the searched keyword(s) into intent that
+        //  is sent to the ExploreActivity which will display the search
+        //  results
+
+        // Proof of concept
+        intent.putExtra("proof", "Intent has been received!");
+
+        startActivity(intent);
     }
 }
