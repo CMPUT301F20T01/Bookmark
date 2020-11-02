@@ -43,9 +43,7 @@ public class BorrowedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrowed);
 
-        borrowedActionBar = getSupportActionBar();
-        assert borrowedActionBar != null;
-        borrowedActionBar.setTitle("Borrowed");
+        getSupportActionBar().setTitle("Borrowed");
 
         borrowedBooksListView = findViewById(R.id.borrowed_books_listview);
 

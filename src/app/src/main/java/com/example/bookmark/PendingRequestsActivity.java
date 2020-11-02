@@ -42,9 +42,7 @@ public class PendingRequestsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_requests);
 
-        pendingRequestsActionBar = getSupportActionBar();
-        assert pendingRequestsActionBar != null;
-        pendingRequestsActionBar.setTitle("Pending Requests");
+        getSupportActionBar().setTitle("Pending Requests");
 
         requestedBooksListView = findViewById(R.id.requested_books_listview);
 
