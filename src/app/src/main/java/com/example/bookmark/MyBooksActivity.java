@@ -1,23 +1,19 @@
 package com.example.bookmark;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -65,7 +61,7 @@ public class MyBooksActivity extends AppCompatActivity {
 
         getBooks();
         setFilteredBooks();
-        booksAdapter = new BookList(this, filteredBooks);
+        booksAdapter = new BookList(this, filteredBooks, false, true);
         booksListView.setAdapter(booksAdapter);
         booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
