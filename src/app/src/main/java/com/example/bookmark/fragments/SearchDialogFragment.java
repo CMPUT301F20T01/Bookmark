@@ -68,7 +68,7 @@ public class SearchDialogFragment extends DialogFragment {
                 if (TextUtils.isEmpty(searchEditText.getText())) {
                     searchEditText.setError("Please enter the keywords that " +
                         "you would like to search.");
-                    proceed = Boolean.FALSE;
+                    proceed = false;
                 }
                 if (proceed) {
                     listener.executeSearch(searchEditText.getText().toString());
