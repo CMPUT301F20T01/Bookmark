@@ -43,9 +43,7 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-        exploreActionBar = getSupportActionBar();
-        assert exploreActionBar != null;
-        exploreActionBar.setTitle("Explore");
+        getSupportActionBar().setTitle("Explore");
 
         searchResultsListView = findViewById(R.id.search_results_listview);
 
