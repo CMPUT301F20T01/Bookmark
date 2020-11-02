@@ -63,7 +63,7 @@ public class SearchDialogFragment extends DialogFragment {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean proceed = Boolean.TRUE;
+                boolean proceed = true;
                 // There must be some text in the search bar to execute a search
                 if (TextUtils.isEmpty(searchEditText.getText())) {
                     searchEditText.setError("Please enter the keywords that " +
