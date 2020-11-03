@@ -28,6 +28,18 @@ public class Book implements FirestoreSerializable {
      * @param title  The title.
      * @param author The author.
      * @param isbn   This ISBN.
+     * @param owner  The owner.
+     */
+    public Book(String title, String author, String isbn, Owner owner) {
+        this(title, author, isbn, owner.getUsername());
+    }
+
+    /**
+     * Creates a Book.
+     *
+     * @param title  The title.
+     * @param author The author.
+     * @param isbn   This ISBN.
      * @param owner  The username of the owner.
      */
     public Book(String title, String author, String isbn, String owner) {
