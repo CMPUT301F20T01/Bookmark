@@ -72,6 +72,11 @@
                 android:backgroundTint="#FFFFFF"
                 android:text="@string/reject_request"
                 android:textColor="#EE0000" />
+
+            <Space
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
