@@ -23,6 +23,13 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+<!--        <fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--            android:id="@+id/map"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            class="com.google.android.gms.maps.SupportMapFragment" />-->
+
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
