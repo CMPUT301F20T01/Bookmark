@@ -1,21 +1,24 @@
 package com.example.bookmark.models;
 
+import android.graphics.Bitmap;
+
 /**
- * TODO: Description of class.
+ * Represents a photograph taken by the app.
+ *
  * @author Kyle Hennig.
  */
 public class Photograph {
-    private String url;
+    private Bitmap bitmap;
 
-    public Photograph(String url) {
-        this.url = url;
+    public Photograph(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
-    public String getUrl() {
-        return url;
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }

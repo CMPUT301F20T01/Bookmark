@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -49,4 +50,11 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha14"
 
+    // Import the Firebase BoM. When using the BoM, don't specify versions in Firebase dependencies.
+    implementation platform('com.google.firebase:firebase-bom:26.0.0')
+    // Add the dependency for the Firebase SDK for Google Analytics.
+    implementation 'com.google.firebase:firebase-analytics'
+    // Add the dependency for Firestore.
+    implementation 'com.google.firebase:firebase-firestore'
+    // See https://firebase.google.com/docs/android/setup#available-libraries for other libraries we can use.
 }
