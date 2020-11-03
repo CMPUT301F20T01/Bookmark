@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.example.bookmark.R;
 import com.example.bookmark.models.Request;
+import com.example.bookmark.server.FirebaseProvider;
 
 import java.util.ArrayList;
 
@@ -42,6 +44,21 @@ public class RequestList extends ArrayAdapter<Request> {
 
         borrowerName.setText(request.getRequester().getUsername());
         requestDate.setText(request.getRequestDate());
+
+        Button acceptButton = view.findViewById(R.id.accept_button);
+        Button rejectButton = view.findViewById(R.id.reject_button);
+
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FirebaseProvider.getInstance().acceptRequest(request);
+            }
+        });
+
+        rejectButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FirebaseProvider.getInstance().rejectRequest(request);
+            }
+        });
 
         return view;
     }

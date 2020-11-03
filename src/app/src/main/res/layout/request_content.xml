@@ -55,16 +55,17 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/accept_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="#6200EE"
+                android:onClick="accept"
                 android:text="@string/accept_request"
                 android:textColor="#FFFFFF" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/reject_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
