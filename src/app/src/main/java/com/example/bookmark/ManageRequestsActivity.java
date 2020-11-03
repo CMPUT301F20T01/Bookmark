@@ -3,6 +3,7 @@ package com.example.bookmark;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,9 +26,10 @@ import java.util.ArrayList;
  */
 public class ManageRequestsActivity extends BackButtonActivity {
 
-    ListView requestList;
-    ArrayAdapter<Request> requestAdapter;
-    ArrayList<Request> requestDataList;
+    private Book book;
+    private ListView requestList;
+    private ArrayAdapter<Request> requestAdapter;
+    private ArrayList<Request> requestDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,16 @@ public class ManageRequestsActivity extends BackButtonActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        Book book = (Book) bundle.getSerializable("Book");
+
+        String bookTitle = "Book Title";
+
+        if (bundle != null) {
+            book = (Book) bundle.getSerializable("Book");
+            bookTitle = book.getTitle();
+        }
 
         TextView bookName = findViewById(R.id.book_name);
-        bookName.setText(book.getTitle());
+        bookName.setText(bookTitle);
 
         requestList = findViewById(R.id.request_list);
         requestDataList = new ArrayList<>();
@@ -54,7 +62,10 @@ public class ManageRequestsActivity extends BackButtonActivity {
 
         final CollectionReference collectionReference = db.collection("Requests");
 
-        collectionReference.addSnapshotListener((queryDocumentSnapshots, e) -> {
+        collectionReference
+            .whereEqualTo("Owner", username)
+            .whereEqualTo("BookTitle", book.getTitle())
+            .addSnapshotListener((queryDocumentSnapshots, e) -> {
 
             requestDataList.clear();
             for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
@@ -70,5 +81,15 @@ public class ManageRequestsActivity extends BackButtonActivity {
             requestAdapter.notifyDataSetChanged();
         });
 
+    }
+
+    public void accept_request(View v) {
+//        FirebaseProvider.getInstance().acceptRequest(request);
+        Intent i = new Intent(this, AcceptRequestsActivity.class);
+        startActivity(i);
+    }
+
+    public void reject_request(View v) {
+//        FirebaseProvider.getInstance().rejectRequest(request);
     }
 }

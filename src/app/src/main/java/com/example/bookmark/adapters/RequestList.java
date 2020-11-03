@@ -45,21 +45,6 @@ public class RequestList extends ArrayAdapter<Request> {
         borrowerName.setText(request.getRequester().getUsername());
         requestDate.setText(request.getRequestDate());
 
-        Button acceptButton = view.findViewById(R.id.accept_button);
-        Button rejectButton = view.findViewById(R.id.reject_button);
-
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FirebaseProvider.getInstance().acceptRequest(request);
-            }
-        });
-
-        rejectButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FirebaseProvider.getInstance().rejectRequest(request);
-            }
-        });
-
         return view;
     }
 

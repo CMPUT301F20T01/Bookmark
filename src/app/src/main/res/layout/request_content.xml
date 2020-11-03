@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="#6200EE"
-                android:onClick="accept"
+                android:onClick="accept_request"
                 android:text="@string/accept_request"
                 android:textColor="#FFFFFF" />
 
@@ -70,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="#FFFFFF"
+                android:onClick="reject_request"
                 android:text="@string/reject_request"
                 android:textColor="#EE0000" />
 
