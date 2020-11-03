@@ -1,10 +1,14 @@
 package com.example.bookmark.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TODO: Description of class.
+ *
  * @author Kyle Hennig.
  */
-public class User {
+public class User implements FirestoreSerializable {
     private String username;
     private String firstName;
     private String lastName;
@@ -57,5 +61,26 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public Map<String, Object> toFirestoreDocument() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", username);
+        map.put("firstName", firstName);
+        map.put("lastName", lastName);
+        map.put("emailAddress", emailAddress);
+        map.put("phoneNumber", phoneNumber);
+        return map;
+    }
+
+    public static User fromFirestoreDocument(Map<String, Object> map) {
+        return new User(
+            (String) map.get("username"),
+            (String) map.get("firstName"),
+            (String) map.get("lastName"),
+            (String) map.get("emailAddress"),
+            (String) map.get("phoneNumber")
+        );
     }
 }
