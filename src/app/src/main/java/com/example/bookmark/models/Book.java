@@ -2,6 +2,7 @@ package com.example.bookmark.models;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a book.
@@ -149,7 +150,6 @@ public class Book implements FirestoreSerializable {
         // TODO: Photograph will likely have to be compressed and serialized due to size.
         map.put("photograph", photograph);
         map.put("description", description);
-        // TODO: Verify that status enum serializes and deserializes correctly.
         map.put("status", status);
         return map;
     }
@@ -158,7 +158,21 @@ public class Book implements FirestoreSerializable {
         Book book = new Book((String) map.get("title"), (String) map.get("author"), (String) map.get("isbn"), (String) map.get("owner"));
         book.photograph = (Photograph) map.get("photograph");
         book.description = (String) map.get("description");
-        book.status = (Status) map.get("status");
+        book.status = Status.valueOf((String) map.get("status"));
         return book;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(title, book.title) &&
+            Objects.equals(author, book.author) &&
+            Objects.equals(isbn, book.isbn) &&
+            Objects.equals(owner, book.owner) &&
+            Objects.equals(photograph, book.photograph) &&
+            Objects.equals(description, book.description) &&
+            status == book.status;
     }
 }
