@@ -38,16 +38,22 @@ public class FirebaseProvider {
     /**
      * Saves the specified user to Firebase.
      *
-     * @param user The user.
+     * @param user              The user.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
      */
-    public void saveUser(User user) {
+    public void saveUser(User user, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("users")
             .document(user.getUsername())
             .set(user.toFirestoreDocument())
             .addOnSuccessListener(aVoid -> {
                 Log.d(TAG, "User created successfully.");
+                onSuccessListener.onSuccess(aVoid);
             })
-            .addOnFailureListener(e -> Log.w(TAG, "Error creating user.", e));
+            .addOnFailureListener(e -> {
+                Log.w(TAG, "Error creating user.", e);
+                onFailureListener.onFailure(e);
+            });
     }
 
     /**
@@ -79,16 +85,22 @@ public class FirebaseProvider {
     /**
      * Saves the specified book to Firebase.
      *
-     * @param book The book.
+     * @param book              The book.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
      */
-    public void saveBook(Book book) {
+    public void saveBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("books")
             .document(book.getIsbn())
             .set(book.toFirestoreDocument())
             .addOnSuccessListener(aVoid -> {
                 Log.d(TAG, "Book created successfully.");
+                onSuccessListener.onSuccess(aVoid);
             })
-            .addOnFailureListener(e -> Log.w(TAG, "Error creating book.", e));
+            .addOnFailureListener(e -> {
+                Log.w(TAG, "Error creating book.", e);
+                onFailureListener.onFailure(e);
+            });
     }
 
     /**
