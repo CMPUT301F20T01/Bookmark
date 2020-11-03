@@ -28,7 +28,7 @@ public class FirebaseProvider {
      *
      * @return The instance.
      */
-    public FirebaseProvider getInstance() {
+    public static FirebaseProvider getInstance() {
         if (instance == null) {
             instance = new FirebaseProvider();
         }
