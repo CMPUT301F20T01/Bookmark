@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "588487302533",
+    "firebase_url": "https://cmput-301-project-bookmark.firebaseio.com",
+    "project_id": "cmput-301-project-bookmark",
+    "storage_bucket": "cmput-301-project-bookmark.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588487302533:android:dfe76a7b7f7e71a642b8ec",
+        "android_client_info": {
+          "package_name": "com.example.bookmark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588487302533-pk7nfvb68ril7ur34f2snldb0jnd7h7h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAncJ8eeijFPuMazRK_bIMN6E772RRZs_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588487302533-pk7nfvb68ril7ur34f2snldb0jnd7h7h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
