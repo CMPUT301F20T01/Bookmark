@@ -2,6 +2,7 @@ package com.example.bookmark.server;
 
 import android.util.Log;
 
+import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,6 +23,11 @@ public class FirebaseProvider {
         // Singleton class.
     }
 
+    /**
+     * Gets a singleton instance of the FirebaseProvider.
+     *
+     * @return The instance.
+     */
     public FirebaseProvider getInstance() {
         if (instance == null) {
             instance = new FirebaseProvider();
@@ -29,7 +35,12 @@ public class FirebaseProvider {
         return instance;
     }
 
-    public void createUser(User user) {
+    /**
+     * Saves the specified user to Firebase.
+     *
+     * @param user The user.
+     */
+    public void saveUser(User user) {
         db.collection("users")
             .document(user.getUsername())
             .set(user.toFirestoreDocument())
@@ -39,6 +50,13 @@ public class FirebaseProvider {
             .addOnFailureListener(e -> Log.w(TAG, "Error creating user.", e));
     }
 
+    /**
+     * Gets a user from Firebase.
+     *
+     * @param username          The user's username.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
     public void getUserByUsername(String username, OnSuccessListener<User> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("users")
             .document(username)
@@ -54,6 +72,47 @@ public class FirebaseProvider {
             })
             .addOnFailureListener(e -> {
                 Log.d(TAG, "getUserByUsername failed.", e);
+                onFailureListener.onFailure(e);
+            });
+    }
+
+    /**
+     * Saves the specified book to Firebase.
+     *
+     * @param book The book.
+     */
+    public void saveBook(Book book) {
+        db.collection("books")
+            .document(book.getIsbn())
+            .set(book.toFirestoreDocument())
+            .addOnSuccessListener(aVoid -> {
+                Log.d(TAG, "Book created successfully.");
+            })
+            .addOnFailureListener(e -> Log.w(TAG, "Error creating book.", e));
+    }
+
+    /**
+     * Gets a book from Firebase.
+     *
+     * @param isbn              The book's ISBN.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    public void getBookByIsbn(String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection("books")
+            .document(isbn)
+            .get()
+            .addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    Log.d(TAG, String.format("Retrieved book %s.", isbn));
+                    onSuccessListener.onSuccess(Book.fromFirestoreDocument(documentSnapshot.getData()));
+                } else {
+                    Log.d(TAG, String.format("No book with ISBN %s found.", isbn));
+                    onSuccessListener.onSuccess(null);
+                }
+            })
+            .addOnFailureListener(e -> {
+                Log.d(TAG, "getBookByIsbn failed.", e);
                 onFailureListener.onFailure(e);
             });
     }
