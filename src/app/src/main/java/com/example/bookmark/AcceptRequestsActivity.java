@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +16,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -31,6 +31,7 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
     private MapView mapView;
     private GoogleMap map;
     private Marker marker;
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +42,12 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
         mapView.onCreate(null);
         mapView.getMapAsync(this);
 
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-
     }
 
     @Override
     public void onMapReady(GoogleMap m) {
         map = m;
+
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
@@ -56,7 +55,24 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
         }
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location l) {
+                location = l;
+            }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        });
+
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         Double latitude;
         Double longitude;
         if (location == null) {
@@ -77,6 +93,7 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
             @Override
             public void onMapClick(LatLng latLng) {
                 marker.setPosition(latLng);
+                marker.setSnippet("Latitude: " + latLng.latitude + " Longitude: " + latLng.longitude);
             }
         });
     }
@@ -118,6 +135,10 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
     }
 
     public void on_done_press(View view) {
+        /**
+         * TODO: handle clicking done button to upload geolocation to request
+         * @author: Nayan Prakash
+         */
         LatLng meetingLocation = marker.getPosition();
     }
 }
