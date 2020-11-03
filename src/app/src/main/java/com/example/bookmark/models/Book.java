@@ -1,7 +1,8 @@
 package com.example.bookmark.models;
 
 /**
- * TODO: Description of class.
+ * Represents a book.
+ *
  * @author Kyle Hennig.
  */
 public class Book {
@@ -9,10 +10,10 @@ public class Book {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }
 
-    private String title;
-    private String author;
-    private String isbn;
-    private Owner owner;
+    private final String title;
+    private final String author;
+    private final String isbn;
+    private final Owner owner;
 
     private Photograph photograph = null;
     private String description = "";
