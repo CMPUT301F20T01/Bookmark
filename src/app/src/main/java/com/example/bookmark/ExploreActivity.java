@@ -77,8 +77,7 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
             String proof = bundle.getString("proof");
 
             Owner owner = new Owner("u", "fn", "ln",
-                "email", "pn",
-                new ArrayList<Book>(), new ArrayList<Request>());
+                "email", "pn");
 
             Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
             b1.setDescription(proof);

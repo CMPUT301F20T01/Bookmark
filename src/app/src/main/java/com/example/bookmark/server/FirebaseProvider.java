@@ -3,6 +3,7 @@ package com.example.bookmark.server;
 import android.util.Log;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,13 +37,13 @@ public class FirebaseProvider {
     }
 
     /**
-     * Saves the specified user to Firebase.
+     * Stores the specified user to Firebase.
      *
      * @param user              The user.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    public void saveUser(User user, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+    public void storeUser(User user, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("users")
             .document(user.getUsername())
             .set(user.toFirestoreDocument())
@@ -57,13 +58,13 @@ public class FirebaseProvider {
     }
 
     /**
-     * Gets a user from Firebase.
+     * Retrieves a user from Firebase.
      *
      * @param username          The user's username.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    public void getUserByUsername(String username, OnSuccessListener<User> onSuccessListener, OnFailureListener onFailureListener) {
+    public void retrieveUserByUsername(String username, OnSuccessListener<User> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("users")
             .document(username)
             .get()
@@ -83,13 +84,13 @@ public class FirebaseProvider {
     }
 
     /**
-     * Saves the specified book to Firebase.
+     * Stores the specified book to Firebase.
      *
      * @param book              The book.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    public void saveBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+    public void storeBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("books")
             .document(book.getIsbn())
             .set(book.toFirestoreDocument())
@@ -104,13 +105,13 @@ public class FirebaseProvider {
     }
 
     /**
-     * Gets a book from Firebase.
+     * Retrieves a book from Firebase.
      *
      * @param isbn              The book's ISBN.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    public void getBookByIsbn(String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+    public void retrieveBookByIsbn(String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("books")
             .document(isbn)
             .get()

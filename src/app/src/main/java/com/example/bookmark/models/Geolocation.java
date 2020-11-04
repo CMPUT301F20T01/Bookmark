@@ -1,31 +1,68 @@
 package com.example.bookmark.models;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
- * TODO: Description of class.
+ * Represents a geolocation.
+ *
  * @author Kyle Hennig.
  */
-public class Geolocation {
-    private float latitude;
-    private float longitude;
+public class Geolocation implements FirestoreSerializable {
+    private final float latitude;
+    private final float longitude;
 
+    /**
+     * Creates a Geolocation.
+     *
+     * @param latitude  The latitude.
+     * @param longitude The longitude.
+     */
     public Geolocation(float latitude, float longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
+    /**
+     * Gets the latitude.
+     *
+     * @return The latitude.
+     */
     public float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
-
+    /**
+     * Gets the longitude.
+     *
+     * @return The longitude.
+     */
     public float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
+    @Override
+    public Map<String, Object> toFirestoreDocument() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("latitude", latitude);
+        map.put("longitude", longitude);
+        return map;
+    }
+
+    public static Geolocation fromFirestoreDocument(Map<String, Object> map) {
+        return new Geolocation(
+            (float) map.get("latitude"),
+            (float) map.get("longitude")
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Geolocation that = (Geolocation) o;
+        return Float.compare(that.latitude, latitude) == 0 &&
+            Float.compare(that.longitude, longitude) == 0;
     }
 }
