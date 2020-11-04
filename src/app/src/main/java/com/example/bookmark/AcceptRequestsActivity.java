@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.bookmark.models.Geolocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -135,10 +137,21 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
     }
 
     public void on_done_press(View view) {
+        /* This returns the set Geolocation to the ManageRequestsActivity which can handle setting
+            the request object and passing to firebase
+        */
+        LatLng position = marker.getPosition();
+        Geolocation meetingLocation = new Geolocation((float) position.latitude, (float) position.longitude);
+
+        Intent intent = getIntent();
+        Bundle bundle = new Bundle();
         /**
-         * TODO: handle clicking done button to upload geolocation to request
+         * TODO: Confirm with Kyle Hennig that Geolocation's will be serializable
          * @author: Nayan Prakash
          */
-        LatLng meetingLocation = marker.getPosition();
+        bundle.putSerializable("Geolocation", meetingLocation);
+        intent.putExtras(bundle);
+        setResult(ManageRequestsActivity.RESULT_OK, intent);
+        finish();
     }
 }
