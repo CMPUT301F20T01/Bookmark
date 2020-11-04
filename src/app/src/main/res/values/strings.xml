@@ -12,4 +12,7 @@
     <string name="status">Status:</string>
     <string name="owner">Owner:</string>
     <string name="author">Author</string>
+
+    <string name="done">DONE</string>
+    <string name="choose_location">Choose meeting location</string>
 </resources>

@@ -1,15 +1,15 @@
 package com.example.bookmark.models;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Represents a geolocation.
  *
  * @author Kyle Hennig.
  */
-public class Geolocation implements FirestoreSerializable {
+public class Geolocation implements FirestoreSerializable, Serializable {
     private final float latitude;
     private final float longitude;
 
