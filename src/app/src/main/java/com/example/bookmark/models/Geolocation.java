@@ -1,10 +1,12 @@
 package com.example.bookmark.models;
 
+import java.io.Serializable;
+
 /**
  * TODO: Description of class.
  * @author Kyle Hennig.
  */
-public class Geolocation {
+public class Geolocation implements Serializable {
     private float latitude;
     private float longitude;
 
