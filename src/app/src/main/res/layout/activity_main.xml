@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="192dp"
         android:text="Bookmark"
-        android:textSize="24sp"
+        android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,27 +27,33 @@
         android:hint="Username"
         android:inputType="textPersonName"
         android:textSize="18sp"
+        android:background="@drawable/round_gray_border"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_title_text" />
 
     <Button
         android:id="@+id/login_sign_in_button"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginTop="24dp"
         android:text="Sign In"
+        android:textColor="@color/cardview_light_background"
+        android:background="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_username_edit_text" />
 
     <Button
         android:id="@+id/login_sign_up_button"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="64dp"
         android:text="Sign Up"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_username_edit_text" />
 

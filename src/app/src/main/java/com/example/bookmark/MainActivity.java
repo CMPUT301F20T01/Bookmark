@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                userNameEditText.setText("");
+                userNameEditText.setError(null); // hides error message
                 new SignupDialogFragment().show(getSupportFragmentManager(), "SIGN_UP");
             }
         });
