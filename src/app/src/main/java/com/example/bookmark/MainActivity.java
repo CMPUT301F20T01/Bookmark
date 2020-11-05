@@ -17,11 +17,6 @@ import com.example.bookmark.server.FirebaseProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Borrower;
-import com.example.bookmark.models.Request;
-import com.example.bookmark.server.FirebaseProvider;
-
 /**
  * Starting point of the application.
  * Allows the user to login with their username.
@@ -44,72 +39,62 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent i = new Intent(this, ManageRequestsActivity.class);
-        Book book = new Book("Code Complete 2", "Steve McConnell", "0-7356-1976-0", "jane.doe98");
-        Borrower borrower = new Borrower("john.smith42", "John", "Smith", "jsmith@ualberta.ca", "7801234567");
-//        Request request = new Request(book, borrower, null);
-//        FirebaseProvider.getInstance().storeRequest(request, null, null);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Book", book);
-        i.putExtras(bundle);
-        startActivity(i);
+        // Fetch relevant views
+        userNameEditText = findViewById(R.id.login_username_edit_text);
+        signInButton = findViewById(R.id.login_sign_in_button);
+        signUpButton = findViewById(R.id.login_sign_up_button);
 
-//        // Fetch relevant views
-//        userNameEditText = findViewById(R.id.login_username_edit_text);
-//        signInButton = findViewById(R.id.login_sign_in_button);
-//        signUpButton = findViewById(R.id.login_sign_up_button);
-//
-//        /**
-//         * Sign in button event listener
-//         */
-//        signInButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String username = userNameEditText.getText().toString();
-//                if (username.length() == 0) {
-//                    userNameEditText.setError("Please enter a username.");
-//                    return;
-//                }
-//                // check if username is valid user, if not fire small error notification ect
-//                firebaseProvider.retrieveUserByUsername(username,
-//                    new OnSuccessListener<User>() {
-//                        @Override
-//                        public void onSuccess(User user) {
-//                            if (user == null) {
-//                                userNameEditText.setError("Username not registered!\nPlease enter existing username.");
-//                            }
-//                            else {
-//                                // store user object in shared preferences
-//                                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-//                                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                                editor.putString("USER_NAME", user.getFirstName());
-//                                editor.commit();
-//                                // launch my books activity
-//                                Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        }
-//                    },
-//                    new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            userNameEditText.setError("Connection Error. Please Try again.");
-//                        }
-//                    });
-//            }
-//        });
-//
-//        /**
-//         * Sign up button event listener
-//         */
-//        signUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                userNameEditText.setText("");
-//                userNameEditText.setError(null); // hides error message
-//                new SignupDialogFragment().show(getSupportFragmentManager(), "SIGN_UP");
-//            }
-//        });
+        /**
+         * Sign in button event listener
+         */
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String username = userNameEditText.getText().toString();
+                if (username.length() == 0) {
+                    userNameEditText.setError("Please enter a username.");
+                    return;
+                }
+                // check if username is valid user, if not fire small error notification ect
+                firebaseProvider.retrieveUserByUsername(username,
+                    new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            if (user == null) {
+                                userNameEditText.setError("Username not registered!\nPlease enter existing username.");
+                            }
+                            else {
+                                // store user object in shared preferences
+                                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("USER_NAME", user.getFirstName());
+                                editor.commit();
+                                // launch my books activity
+                                Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                    },
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            userNameEditText.setError("Connection Error. Please Try again.");
+                        }
+                    });
+            }
+        });
+
+        /**
+         * Sign up button event listener
+         */
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userNameEditText.setText("");
+                userNameEditText.setError(null); // hides error message
+                new SignupDialogFragment().show(getSupportFragmentManager(), "SIGN_UP");
+            }
+        });
     }
 
     /**

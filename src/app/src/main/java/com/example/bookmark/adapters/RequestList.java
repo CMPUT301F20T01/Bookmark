@@ -19,6 +19,8 @@ import com.example.bookmark.ManageRequestsActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.server.FirebaseProvider;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,6 +76,17 @@ public class RequestList extends ArrayAdapter<Request> {
             @Override
             public void onClick(View v) {
                 Request r = requests.get(position);
+                FirebaseProvider.getInstance().storeRequest(r, new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                }, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
             }
         });
 
