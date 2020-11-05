@@ -81,8 +81,7 @@ public class MyBooksActivity extends AppCompatActivity implements SearchDialogFr
 
         //Temp add some books
         Owner owner = new Owner("u", "fn", "ln",
-            "email", "pn",
-            new ArrayList<Book>(), new ArrayList<Request>());
+            "email", "pn");
 
         Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
         b1.setDescription("Book 1 description");
