@@ -6,4 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".AcceptRequestsActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_location"
+            android:textSize="24sp" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6200EE"
+            android:onClick="on_done_press"
+            android:text="@string/done"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

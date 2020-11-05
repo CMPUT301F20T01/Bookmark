@@ -16,4 +16,7 @@
     <string name="request_string">Has requested to borrow this book.</string>
     <string name="accept_request">ACCEPT</string>
     <string name="reject_request">REJECT</string>
+
+    <string name="done">DONE</string>
+    <string name="choose_location">Choose meeting location</string>
 </resources>

@@ -70,8 +70,7 @@ public class PendingRequestsActivity extends AppCompatActivity implements Search
 
         // Proof of concept
         Owner owner = new Owner("u", "fn", "ln",
-            "email", "pn",
-            new ArrayList<Book>(), new ArrayList<Request>());
+            "email", "pn");
 
         Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
         b1.setDescription("Book 1 description");

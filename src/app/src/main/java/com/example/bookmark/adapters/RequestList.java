@@ -42,8 +42,8 @@ public class RequestList extends ArrayAdapter<Request> {
         TextView borrowerName = view.findViewById(R.id.borrower_text);
         TextView requestDate = view.findViewById(R.id.request_date_text);
 
-        borrowerName.setText(request.getRequester().getUsername());
-        requestDate.setText(request.getRequestDate());
+        borrowerName.setText(request.getRequester());
+        requestDate.setText(request.getCreatedDate().toString());
 
         return view;
     }
