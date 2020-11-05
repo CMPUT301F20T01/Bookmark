@@ -1,0 +1,265 @@
+package com.example.bookmark.fragments;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+
+import com.example.bookmark.R;
+import com.example.bookmark.models.User;
+
+import java.util.ArrayList;
+
+/**
+ * Creates a fragment that allows the user to create a new account
+ * This fragment performs a check against the database to ensure that the entered
+ * username is unique.
+ *
+ * @author Konrad Staniszewski.
+ */
+public class SignupDialogFragment extends DialogFragment {
+    private EditText userNameEditText;
+    private EditText firstNameEditText;
+    private EditText lastNameEditText;
+    private EditText emailAddressEditText;
+    private EditText phoneNumberEditText;
+    private Button signUpButton;
+    private Button cancelButton;
+
+    private OnFragmentInteractionListener listener;
+
+    /**
+     * this interface specifies what functions must be implemented by mainActivity to
+     * work with this dialog
+     */
+    public interface OnFragmentInteractionListener {
+        void onSignUpPressed(User user);
+    }
+
+    /**
+     * This function runs once the dialog fragment is attached and sets up the
+     * fragment interaction listener so that the main activity knows then the dialog
+     * buttons are pressed
+     * @param context
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            listener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                +"must implement OnFragmentInteractionListener");
+        }
+    }
+
+    /**
+     * This functin creates the dialog fragment and takes care of all of the form
+     * editing logic
+     * @param savedInstanceState
+     * @return Dialog
+     */
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        // Fetch relevant views
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_signup_dialog, null);
+        userNameEditText = view.findViewById(R.id.sign_up_username_edit_text);
+        firstNameEditText = view.findViewById(R.id.sign_up_firstname_edit_text);
+        lastNameEditText = view.findViewById(R.id.sign_up_lastname_edit_text);
+        emailAddressEditText = view.findViewById(R.id.sign_up_email_edit_text);
+        phoneNumberEditText = view.findViewById(R.id.sign_up_phonenumber_edit_text);
+        signUpButton = view.findViewById(R.id.sign_up_sign_up_button);
+        cancelButton = view.findViewById(R.id.sign_up_cancel_button);
+
+        // Build dialog fragment
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(view);
+        builder.setTitle("Sign Up");
+        final Dialog dialog = builder.create();
+
+        /**
+         * Sets behaviour for when signup button is pressed
+         * This includes checking hat all text boxes are filled, validating input
+         * and creates a user object to send back to the main activity.
+         */
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                ArrayList<EditText> formFields= new ArrayList<>();
+                formFields.add(userNameEditText);
+                formFields.add(firstNameEditText);
+                formFields.add(lastNameEditText);
+                formFields.add(emailAddressEditText);
+                formFields.add(phoneNumberEditText);
+
+                // double check all form fields filled
+                for (int i = 0; i < formFields.size(); i++) {
+                    checkEditTextEmpty(formFields.get(i), false);
+                    if (formFields.get(i).getError() != null) {
+                        return;
+                    }
+                }
+
+                // check email and phone validation
+                if (!checkIfEditTextValidEmail(emailAddressEditText, false)
+                    || !checkIfEditTextValidPhoneNumber(phoneNumberEditText, false)) {
+                    return;
+                }
+
+                // Get values from fields and create user object
+                String username = userNameEditText.getText().toString();
+                String firstName = firstNameEditText.getText().toString();
+                String lastName = lastNameEditText.getText().toString();
+                String emailAddress = emailAddressEditText.getText().toString();
+                String phoneNumber = phoneNumberEditText.getText().toString();
+
+                User user = new User(username, firstName, lastName, emailAddress, phoneNumber);
+                listener.onSignUpPressed(user);
+                dialog.dismiss();
+            }
+        });
+
+        /**
+         *
+         */
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        /**
+         * Listener to validate and remind user to fill text view
+         */
+        userNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                checkEditTextEmpty(userNameEditText, hasFocus);
+            }
+        });
+
+        /**
+         * Listener to validate and remind user to fill text view
+         */
+        firstNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                checkEditTextEmpty(firstNameEditText, hasFocus);
+            }
+        });
+
+        /**
+         * Listener to validate and remind user to fill text view
+         */
+        lastNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                checkEditTextEmpty(lastNameEditText, hasFocus);
+            }
+        });
+
+        /**
+         * Listener to validate and remind user to fill text view
+         */
+        emailAddressEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                checkEditTextEmpty(emailAddressEditText, hasFocus);
+                checkIfEditTextValidEmail(emailAddressEditText, hasFocus);
+            }
+        });
+
+        /**
+         * Listener to validate and remind user to fill text view
+         */
+        phoneNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                checkEditTextEmpty(phoneNumberEditText, hasFocus);
+                checkIfEditTextValidPhoneNumber(phoneNumberEditText, hasFocus);
+            }
+        });
+
+        return dialog;
+    }
+
+    /**
+     * Function to check if a EditText field is empty and float an error if it is.
+     * @args
+     * EditText editText: the text field to check
+     * boolean hasFocus: whether or not the text field has focus
+     * @returns
+     * boolean: whether or not the field is empty
+     * */
+    private boolean checkEditTextEmpty(EditText editText, boolean hasFocus) {
+        if(!hasFocus) {
+            String string = editText.getText().toString();
+            if (string.equals("")) {
+                editText.setError("This field cannot be left empty.");
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Function to check if a EditText field is a valid email and float an error if it is
+     * @args
+     * EditText editText: the text field to check
+     * boolean hasFocus: whether or not the text field has focus
+     * @returns
+     * boolean: whether or not the editText contains a valid email
+     * */
+    private boolean checkIfEditTextValidEmail(EditText editText, boolean hasFocus) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if (!hasFocus) {
+            String string = editText.getText().toString();
+            if (!string.matches(emailPattern) && string.length() > 0) {
+                editText.setError("Please enter a valid email address.");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Function to check if a EditText field is a valid phone number and float an error if it is
+     * @args
+     * EditText editText: the text field to check
+     * boolean hasFocus: whether or not the text field has focus
+     * @returns
+     * boolean: whether or not the editText contains a phone number
+     * */
+    private boolean checkIfEditTextValidPhoneNumber(EditText editText, boolean hasFocus) {
+        String phonePattern = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$";
+        if (!hasFocus) {
+            String string = editText.getText().toString();
+            if (!string.matches(phonePattern) && string.length() > 0) {
+                editText.setError("Please enter a valid phone number.");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+//    private boolean checkIfEditTextUniqueUsername(EditText editText, boolean hasFocus) {
+//        if (!hasFocus) {
+//            String string = editText.getText().toString();
+//            if ()
+//        }
+//    }
+}
