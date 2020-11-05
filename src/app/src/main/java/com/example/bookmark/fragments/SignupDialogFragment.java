@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -214,6 +216,32 @@ public class SignupDialogFragment extends DialogFragment {
             }
         });
 
+        phoneNumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkIfEditTextValidPhoneNumber(phoneNumberEditText, false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        emailAddressEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkIfEditTextValidEmail(emailAddressEditText, false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
         return dialog;
     }
 
@@ -267,7 +295,7 @@ public class SignupDialogFragment extends DialogFragment {
      * boolean: whether or not the editText contains a phone number
      * */
     private boolean checkIfEditTextValidPhoneNumber(EditText editText, boolean hasFocus) {
-        String phonePattern = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$";
+        String phonePattern = "^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$";
         if (!hasFocus) {
             String string = editText.getText().toString();
             if (!string.matches(phonePattern) && string.length() > 0) {
