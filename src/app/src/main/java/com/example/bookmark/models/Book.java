@@ -22,7 +22,6 @@ public class Book implements FirestoreSerializable, Serializable {
     private final String author;
     private final String isbn;
     private final String owner;
-    private final List<Request> requests = new ArrayList<>();
 
     private Photograph photograph = null;
     private String description = "";
@@ -145,24 +144,6 @@ public class Book implements FirestoreSerializable, Serializable {
         this.status = status;
     }
 
-    /**
-     * Gets the requests for this book.
-     *
-     * @return The requests.
-     */
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    /**
-     * Requests this book.
-     *
-     * @param requester The requester.
-     */
-    public void requestBook(Borrower requester) {
-        requests.add(new Request(this, requester, null));
-    }
-
     @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
@@ -170,7 +151,6 @@ public class Book implements FirestoreSerializable, Serializable {
         map.put("author", author);
         map.put("isbn", isbn);
         map.put("owner", owner);
-        map.put("requests", requests.stream().map(Request::toFirestoreDocument).collect(Collectors.toList()));
         // TODO: Photograph will likely have to be compressed and serialized due to size.
         map.put("photograph", photograph);
         map.put("description", description);
@@ -180,8 +160,6 @@ public class Book implements FirestoreSerializable, Serializable {
 
     public static Book fromFirestoreDocument(Map<String, Object> map) {
         Book book = new Book((String) map.get("title"), (String) map.get("author"), (String) map.get("isbn"), (String) map.get("owner"));
-        List<Request> requests = ((List<Map<String, Object>>) map.get("requests")).stream().map(Request::fromFirestoreDocument).collect(Collectors.toList());
-        book.requests.addAll(requests);
         book.photograph = (Photograph) map.get("photograph");
         book.description = (String) map.get("description");
         book.status = Status.valueOf((String) map.get("status"));
@@ -197,7 +175,6 @@ public class Book implements FirestoreSerializable, Serializable {
             Objects.equals(author, book.author) &&
             Objects.equals(isbn, book.isbn) &&
             Objects.equals(owner, book.owner) &&
-            Objects.equals(requests, book.requests) &&
             Objects.equals(photograph, book.photograph) &&
             Objects.equals(description, book.description) &&
             status == book.status;
