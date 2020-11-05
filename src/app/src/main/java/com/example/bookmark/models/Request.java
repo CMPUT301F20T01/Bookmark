@@ -2,6 +2,7 @@ package com.example.bookmark.models;
 
 import com.google.firebase.Timestamp;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Objects;
  *
  * @author Kyle Hennig.
  */
-public class Request implements FirestoreSerializable {
+public class Request implements FirestoreSerializable, Serializable {
     public enum Status {
         REQUESTED, ACCEPTED, BORROWED
     }

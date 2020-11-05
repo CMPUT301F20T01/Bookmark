@@ -1,6 +1,9 @@
 package com.example.bookmark.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.bookmark.AcceptRequestsActivity;
+import com.example.bookmark.ManageRequestsActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.server.FirebaseProvider;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class RequestList extends ArrayAdapter<Request> {
@@ -43,7 +49,33 @@ public class RequestList extends ArrayAdapter<Request> {
         TextView requestDate = view.findViewById(R.id.request_date_text);
 
         borrowerName.setText(request.getRequester());
-        requestDate.setText(request.getCreatedDate().toString());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        requestDate.setText(sdf.format(request.getCreatedDate()));
+
+        Button acceptButton = (Button) view.findViewById(R.id.accept_button);
+
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, AcceptRequestsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Request", requests.get(position));
+                i.putExtras(bundle);
+                Activity origin = (Activity) context;
+                origin.startActivityForResult(i, ManageRequestsActivity.GET_MEETING_LOCATION);
+            }
+        });
+
+        Button rejectButton = (Button) view.findViewById(R.id.reject_button);
+
+        rejectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Request r = requests.get(position);
+            }
+        });
 
         return view;
     }

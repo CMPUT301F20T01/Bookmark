@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.example.bookmark.adapters.RequestList;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Borrower;
+import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Description of class.
@@ -31,6 +33,8 @@ import java.util.ArrayList;
  * @author Nayan Prakash.
  */
 public class ManageRequestsActivity extends BackButtonActivity {
+
+    public static int GET_MEETING_LOCATION = 1;
 
     private Book book;
     private Owner owner;
@@ -43,10 +47,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_requests);
 
-        // TODO: make sure this matches with what Konrad is doing
-//        SharedPreferences mPrefs = getSharedPreferences("Key", MODE_PRIVATE);
-//        String username = mPrefs.getString("username", null);
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
@@ -58,6 +58,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
                 @Override
                 public void onSuccess(User user) {
                     owner = new Owner(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmailAddress(), user.getPhoneNumber());
+                    setRequestListener();
                 }
             };
             OnFailureListener onUserFailure = new OnFailureListener() {
@@ -77,30 +78,47 @@ public class ManageRequestsActivity extends BackButtonActivity {
         requestDataList = new ArrayList<>();
         requestAdapter = new RequestList(this, requestDataList);
         requestList.setAdapter(requestAdapter);
+    }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        final CollectionReference collectionReference = db.collection("Requests");
+        if (requestCode == ManageRequestsActivity.GET_MEETING_LOCATION) {
+            if (resultCode == AcceptRequestsActivity.RESULT_OK) {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    Geolocation geolocation = (Geolocation) bundle.getSerializable("Geolocation");
+                    Request request = (Request) bundle.getSerializable("Request");
+                    request.setLocation(geolocation);
+                    request.setStatus(Request.Status.ACCEPTED);
+                    FirebaseProvider.getInstance().storeRequest(request, new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
 
-        OnSuccessListener<Request> onSuccessListener = new OnSuccessListener<Request>() {
+                        }
+                    }, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    private void setRequestListener() {
+        OnSuccessListener<List<Request>> onSuccessListener = new OnSuccessListener<List<Request>>() {
             @Override
-            public void onSuccess(Request request) {
-//                OnSuccessListener<User> onRequesterSuccess = new OnSuccessListener<User>() {
-//                    @Override
-//                    public void onSuccess(User user) {
-//                        Borrower borrower = (Borrower) user
-//                    }
-//                };
-//                OnFailureListener onRequesterFailure = new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                    }
-//                };
-//                FirebaseProvider.getInstance().retrieveUserByUsername(request.getRequester(), onRequesterSuccess, onRequesterFailure);
-//                requestDataList.clear();
-                requestDataList.add(request);
-                requestAdapter.notifyDataSetChanged();
-//                request.getRequester();
+            public void onSuccess(List<Request> requestList) {
+                if (requestList != null) {
+                    requestDataList.clear();
+                    for (Request r: requestList) {
+                        requestDataList.add(r);
+                    }
+                    requestAdapter.notifyDataSetChanged();
+                }
             }
         };
         OnFailureListener onFailureListener = new OnFailureListener() {
@@ -109,36 +127,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
 
             }
         };
-        FirebaseProvider.getInstance().retrieveRequestsByUserAndBook(owner, book, onSuccessListener, onFailureListener);
-
-//        collectionReference
-//            .whereEqualTo("Owner", username)
-//            .whereEqualTo("BookTitle", book.getTitle())
-//            .addSnapshotListener((queryDocumentSnapshots, e) -> {
-//
-//            requestDataList.clear();
-//            for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-//                // TODO: clarify once Firebase is working as expected
-//                Owner requestOwner = (Owner) doc.getData().get("Owner");
-//                Book requestBook = (Book) doc.getData().get("Book");
-//                if (requestOwner.getUsername().equals(username) && requestBook.equals(book)) {
-//                    Borrower borrower = (Borrower) doc.getData().get("Requester");
-//                    String requestDate = doc.getData().get("Request Date").toString();
-//                    requestDataList.add(new Request(requestBook, borrower, null));
-//                }
-//            }
-//            requestAdapter.notifyDataSetChanged();
-//        });
-
-    }
-
-    public void accept_request(View v) {
-//        FirebaseProvider.getInstance().acceptRequest(request);
-        Intent i = new Intent(this, AcceptRequestsActivity.class);
-        startActivity(i);
-    }
-
-    public void reject_request(View v) {
-//        FirebaseProvider.getInstance().rejectRequest(request);
+        FirebaseProvider.getInstance().retrieveRequestByBook(book, onSuccessListener, onFailureListener);
     }
 }
