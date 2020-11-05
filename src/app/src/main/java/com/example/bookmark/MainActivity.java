@@ -3,10 +3,13 @@ package com.example.bookmark;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.bookmark.fragments.SignupDialogFragment;
 import com.example.bookmark.models.User;
@@ -48,13 +51,27 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
             @Override
             public void onClick(View view) {
                 String username = userNameEditText.getText().toString();
+                if (username.length() == 0) {
+                    userNameEditText.setError("Please enter a username.");
+                    return;
+                }
                 // check if username is valid user, if not fire small error notification ect
                 firebaseProvider.getUserByUsername(username,
                     new OnSuccessListener<User>() {
                         @Override
                         public void onSuccess(User user) {
-                            if (username.equals(user.getUsername())) {
-                                userNameEditText.setError("Success!");
+                            if (user == null) {
+                                userNameEditText.setError("Username not registered!\nPlease enter existing username.");
+                            }
+                            else {
+                                // store user object in shared preferences
+                                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("USER_NAME", user.getFirstName());
+                                editor.commit();
+                                // launch my books activity
+                                Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+                                startActivity(intent);
                             }
                         }
                     },
@@ -64,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
                             userNameEditText.setError("Connection Error. Please Try again.");
                         }
                     });
-                // if it is valid, store username and user object into a shared preference
-                // fire off the "my books" activity
             }
         });
 
@@ -97,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
             new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    ;
+                    Toast.makeText(getApplication().getBaseContext(), "Connection Error. Please Try again.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -105,5 +120,4 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         userNameEditText = findViewById(R.id.login_username_edit_text);
         userNameEditText.setText(user.getUsername());
     }
-
 }

@@ -130,30 +130,34 @@ public class SignupDialogFragment extends DialogFragment {
                     new OnSuccessListener<User>() {
                         @Override
                         public void onSuccess(User user) {
-                            Log.d("TEST", user.getUsername());
+                            if (user == null) {
+                                // Get values from fields and create user object
+                                String firstName = firstNameEditText.getText().toString();
+                                String lastName = lastNameEditText.getText().toString();
+                                String emailAddress = emailAddressEditText.getText().toString();
+                                String phoneNumber = phoneNumberEditText.getText().toString();
+
+                                User newUser = new User(username, firstName, lastName, emailAddress, phoneNumber);
+                                listener.onSignUpPressed(newUser);
+                                dialog.dismiss();
+                            }
+                            else {
+                                userNameEditText.setError("Username already registered. Please choose another");
+                                return;
+                            }
                         }
                     },
                     new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-
+                            Toast.makeText(getActivity(), "Connection Error. Please Try again.", Toast.LENGTH_LONG).show();
                         }
                     });
-
-                // Get values from fields and create user object
-                String firstName = firstNameEditText.getText().toString();
-                String lastName = lastNameEditText.getText().toString();
-                String emailAddress = emailAddressEditText.getText().toString();
-                String phoneNumber = phoneNumberEditText.getText().toString();
-
-                User user = new User(username, firstName, lastName, emailAddress, phoneNumber);
-                listener.onSignUpPressed(user);
-                dialog.dismiss();
             }
         });
 
         /**
-         *
+         * Listener
          */
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
