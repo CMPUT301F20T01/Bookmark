@@ -79,7 +79,8 @@ public class RequestList extends ArrayAdapter<Request> {
                 FirebaseProvider.getInstance().deleteRequest(r, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-
+                        requests.remove(position);
+                        notifyDataSetChanged();
                     }
                 }, new OnFailureListener() {
                     @Override

@@ -136,6 +136,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
 
             }
         };
-        FirebaseProvider.getInstance().retrieveRequestByBook(book, onSuccessListener, onFailureListener);
+        FirebaseProvider.getInstance().retrieveRequestsByBook(book, onSuccessListener, onFailureListener);
     }
 }
