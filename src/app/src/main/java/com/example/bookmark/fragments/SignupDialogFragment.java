@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.bookmark.R;
 import com.example.bookmark.models.User;
+import com.example.bookmark.server.FirebaseProvider;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
@@ -73,6 +77,9 @@ public class SignupDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        // fetch FirebaseProvider
+        FirebaseProvider firebaseProvider = FirebaseProvider.getInstance();
+
         // Fetch relevant views
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_signup_dialog, null);
         userNameEditText = view.findViewById(R.id.sign_up_username_edit_text);
@@ -117,8 +124,23 @@ public class SignupDialogFragment extends DialogFragment {
                     return;
                 }
 
-                // Get values from fields and create user object
+                // check username is not in db already
                 String username = userNameEditText.getText().toString();
+                firebaseProvider.getUserByUsername(username,
+                    new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            Log.d("TEST", user.getUsername());
+                        }
+                    },
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+
+                // Get values from fields and create user object
                 String firstName = firstNameEditText.getText().toString();
                 String lastName = lastNameEditText.getText().toString();
                 String emailAddress = emailAddressEditText.getText().toString();
@@ -255,11 +277,4 @@ public class SignupDialogFragment extends DialogFragment {
         }
         return false;
     }
-
-//    private boolean checkIfEditTextUniqueUsername(EditText editText, boolean hasFocus) {
-//        if (!hasFocus) {
-//            String string = editText.getText().toString();
-//            if ()
-//        }
-//    }
 }

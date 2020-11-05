@@ -1,5 +1,6 @@
 package com.example.bookmark;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,6 +10,9 @@ import android.widget.EditText;
 
 import com.example.bookmark.fragments.SignupDialogFragment;
 import com.example.bookmark.models.User;
+import com.example.bookmark.server.FirebaseProvider;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 /**
  * Starting point of the application.
@@ -16,6 +20,8 @@ import com.example.bookmark.models.User;
  * @author Konrad Staniszewski
  */
 public class MainActivity extends AppCompatActivity implements SignupDialogFragment.OnFragmentInteractionListener {
+
+    FirebaseProvider firebaseProvider = FirebaseProvider.getInstance();
 
     private EditText userNameEditText;
     private Button signInButton;
@@ -41,8 +47,23 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userName = userNameEditText.getText().toString();
+                String username = userNameEditText.getText().toString();
                 // check if username is valid user, if not fire small error notification ect
+                firebaseProvider.getUserByUsername(username,
+                    new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            if (username.equals(user.getUsername())) {
+                                userNameEditText.setError("Success!");
+                            }
+                        }
+                    },
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            userNameEditText.setError("Connection Error. Please Try again.");
+                        }
+                    });
                 // if it is valid, store username and user object into a shared preference
                 // fire off the "my books" activity
             }
@@ -66,7 +87,21 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
     @Override
     public void onSignUpPressed(User user) {
         // add user to database
+        firebaseProvider.saveUser(user,
+            new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    ;
+                }
+            },
+            new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    ;
+                }
+            });
 
+        // fill out field for easier sign in
         userNameEditText = findViewById(R.id.login_username_edit_text);
         userNameEditText.setText(user.getUsername());
     }
