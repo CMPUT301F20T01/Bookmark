@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
                     return;
                 }
                 // check if username is valid user, if not fire small error notification ect
-                firebaseProvider.getUserByUsername(username,
+                firebaseProvider.retrieveUserByUsername(username,
                     new OnSuccessListener<User>() {
                         @Override
                         public void onSuccess(User user) {
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
     @Override
     public void onSignUpPressed(User user) {
         // add user to database
-        firebaseProvider.saveUser(user,
+        firebaseProvider.storeUser(user,
             new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {

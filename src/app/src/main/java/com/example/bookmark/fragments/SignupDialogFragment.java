@@ -125,7 +125,7 @@ public class SignupDialogFragment extends DialogFragment {
 
                 // check username is not in db already
                 String username = userNameEditText.getText().toString();
-                firebaseProvider.getUserByUsername(username,
+                firebaseProvider.retrieveUserByUsername(username,
                     new OnSuccessListener<User>() {
                         @Override
                         public void onSuccess(User user) {
@@ -141,7 +141,7 @@ public class SignupDialogFragment extends DialogFragment {
                                 dialog.dismiss();
                             }
                             else {
-                                userNameEditText.setError("Username already registered. Please choose another");
+                                userNameEditText.setError("Username already registered.\nPlease choose another");
                                 return;
                             }
                         }
