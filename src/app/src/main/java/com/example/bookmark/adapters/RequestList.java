@@ -76,7 +76,7 @@ public class RequestList extends ArrayAdapter<Request> {
             @Override
             public void onClick(View v) {
                 Request r = requests.get(position);
-                FirebaseProvider.getInstance().storeRequest(r, new OnSuccessListener<Void>() {
+                FirebaseProvider.getInstance().deleteRequest(r, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
 
