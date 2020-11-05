@@ -1,9 +1,7 @@
 package com.example.bookmark;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,7 +10,6 @@ import androidx.annotation.NonNull;
 
 import com.example.bookmark.adapters.RequestList;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Borrower;
 import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
@@ -20,9 +17,6 @@ import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +36,11 @@ public class ManageRequestsActivity extends BackButtonActivity {
     private ArrayAdapter<Request> requestAdapter;
     private ArrayList<Request> requestDataList;
 
+    /**
+     * This function creates the ManageRequests view and retrieves the Owner from Firebase
+     * This function also sets the Book Title and sets the requestList adapter
+     * @param savedInstanceState an instance state that has the state of the ManageRequestsActivity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +79,13 @@ public class ManageRequestsActivity extends BackButtonActivity {
         requestList.setAdapter(requestAdapter);
     }
 
+    /**
+     * This function handles activity results from new activities. Specifically, this stores
+     * accepted Requests after retrieving meeting locations from AcceptRequestsActivity
+     * @param requestCode the requestCode of the activity result
+     * @param resultCode the resultCode of the activity result
+     * @param data the intent of the activity result
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -108,6 +114,9 @@ public class ManageRequestsActivity extends BackButtonActivity {
         }
     }
 
+    /**
+     * This functions sets the request listener for the book's list of requests from Firebase
+     */
     private void setRequestListener() {
         OnSuccessListener<List<Request>> onSuccessListener = new OnSuccessListener<List<Request>>() {
             @Override
