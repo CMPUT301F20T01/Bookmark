@@ -40,21 +40,21 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
     private Button actionButton;
 
-    private View.OnClickListener manageRequestsListener = new View.OnClickListener() {
+    private final View.OnClickListener manageRequestsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             manageRequests();
         }
     };
 
-    private View.OnClickListener giveBookListener = new View.OnClickListener() {
+    private final View.OnClickListener giveBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             giveBook();
         }
     };
 
-    private View.OnClickListener receiveBookListener = new View.OnClickListener() {
+    private final View.OnClickListener receiveBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             receiveBook();

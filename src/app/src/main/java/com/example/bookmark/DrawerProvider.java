@@ -1,7 +1,6 @@
 package com.example.bookmark;
 
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -26,31 +25,18 @@ public class DrawerProvider {
             .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                 @Override
                 public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                    String itemName= ((Nameable) drawerItem).getName().getText(activity);
-                    Toast.makeText(activity, itemName, Toast.LENGTH_SHORT).show();
                     if (drawerItem != null) {
                         Intent intent = null;
-                        switch (itemName) {
-                            case "My Books":
-                                if (!(activity instanceof MyBooksActivity)) {
-                                    intent = new Intent(activity, MyBooksActivity.class);
-                                }
-                            case "Borrowed":
-                                if (!(activity instanceof BorrowedActivity)) {
-                                    intent = new Intent(activity, BorrowedActivity.class);
-                                }
-//                            case "Pending Requests":
-//                                if (!(activity instanceof PendingRequestsActivity)) {
-//                                    intent = new Intent(activity, PendingRequestsActivity.class);
-//                                }
-//                            case "Explore":
-//                                if (!(activity instanceof ExploreActivity)) {
-//                                    intent = new Intent(activity, ExploreActivity.class);
-//                                }
-                            case "Profile":
-                                if (!(activity instanceof MyProfileActivity)) {
-                                    intent = new Intent(activity, MyProfileActivity.class);
-                                }
+                        if (position == 0 && !(activity instanceof MyBooksActivity)) {
+                            intent = new Intent(activity, MyBooksActivity.class);
+                        } else if (position == 1 && !(activity instanceof BorrowedActivity)) {
+                            intent = new Intent(activity, BorrowedActivity.class);
+                        } else if (position == 2 && !(activity instanceof PendingRequestsActivity)) {
+                            intent = new Intent(activity, PendingRequestsActivity.class);
+                        } else if (position == 3 && !(activity instanceof ExploreActivity)) {
+                            intent = new Intent(activity, ExploreActivity.class);
+                        } else if (position == 4 && !(activity instanceof MyProfileActivity)) {
+                            intent = new Intent(activity, MyProfileActivity.class);
                         }
                         if (intent != null) {
                             activity.startActivity(intent);

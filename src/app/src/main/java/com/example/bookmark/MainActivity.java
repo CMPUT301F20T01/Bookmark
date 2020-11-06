@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 /**
  * Starting point of the application.
  * Allows the user to login with their username.
+ *
  * @author Konrad Staniszewski
  */
 public class MainActivity extends AppCompatActivity implements SignupDialogFragment.OnFragmentInteractionListener {
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
 
     /**
      * This function creates the main activity view that contains the app's login page
+     *
      * @param savedInstanceState an instance state that has the state of the mainactivity
      */
     @Override
@@ -50,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), BorrowedActivity.class);
-                startActivity(intent);
                 String username = userNameEditText.getText().toString();
                 if (username.length() == 0) {
                     userNameEditText.setError("Please enter a username.");
@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
                         public void onSuccess(User user) {
                             if (user == null) {
                                 userNameEditText.setError("Username not registered!\nPlease enter existing username.");
-                            }
-                            else {
+                            } else {
                                 // store user object in shared preferences
                                 SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -101,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
 
     /**
      * Handles the logic for when signup is pressed in the SignupDialog
-     * @param  user: user object that was just added to the system
+     *
+     * @param user: user object that was just added to the system
      */
     @Override
     public void onSignUpPressed(User user) {
@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
             new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    ;
                 }
             },
             new OnFailureListener() {

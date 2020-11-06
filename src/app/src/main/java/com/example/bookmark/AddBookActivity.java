@@ -31,21 +31,21 @@ public class AddBookActivity extends BackButtonActivity {
     private EditText descriptionEditText;
 
 
-    private View.OnClickListener scanISBNListener = new View.OnClickListener() {
+    private final View.OnClickListener scanISBNListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             goToScanISBN();
         }
     };
 
-    private View.OnClickListener addPhotoListener = new View.OnClickListener() {
+    private final View.OnClickListener addPhotoListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             addPhoto();
         }
     };
 
-    private View.OnClickListener doneAddBookListener = new View.OnClickListener() {
+    private final View.OnClickListener doneAddBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             doneAddBook();

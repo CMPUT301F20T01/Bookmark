@@ -94,6 +94,16 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        //handle the back press :D close the drawer first and if the drawer is closed close the activity
+        if (navigationDrawer != null && navigationDrawer.isDrawerOpen()) {
+            navigationDrawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_filter_search_search_btn) {
             // Opens search fragment

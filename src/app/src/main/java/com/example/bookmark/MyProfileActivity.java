@@ -20,6 +20,7 @@ import com.mikepenz.materialdrawer.Drawer;
  * This activity shows a user all of their profile details.
  * It also allows them to access a page where they can edit all of their details
  * by going to the edit profile activity where they can modify their details
+ *
  * @author Konrad Staniszewski
  */
 public class MyProfileActivity extends AppCompatActivity implements MenuOptions {

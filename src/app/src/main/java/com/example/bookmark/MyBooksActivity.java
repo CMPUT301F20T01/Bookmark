@@ -37,7 +37,7 @@ public class MyBooksActivity extends AppCompatActivity
     implements SearchDialogFragment.OnFragmentInteractionListener, MenuOptions {
     // Going to need some sort of owner or uid
 
-    private List<Book> allBooks = new ArrayList<Book>();
+    private final List<Book> allBooks = new ArrayList<Book>();
     private List<Book> filteredBooks;
 
     private BookList booksAdapter;
@@ -46,7 +46,7 @@ public class MyBooksActivity extends AppCompatActivity
     FloatingActionButton addBookBtn;
     private Drawer navigationDrawer = null;
 
-    private View.OnClickListener addBookListener = new View.OnClickListener() {
+    private final View.OnClickListener addBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             goToAddBook();
