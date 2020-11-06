@@ -1,5 +1,6 @@
 package com.example.bookmark;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -91,7 +92,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ManageRequestsActivity.GET_MEETING_LOCATION) {
-            if (resultCode == AcceptRequestsActivity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
                     Geolocation geolocation = (Geolocation) bundle.getSerializable("Geolocation");

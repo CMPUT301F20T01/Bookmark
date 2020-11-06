@@ -1,6 +1,7 @@
 package com.example.bookmark;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -46,6 +47,7 @@ import java.util.concurrent.Executors;
  * @author Mitch Adam.
  */
 public class ScanIsbnActivity extends BackButtonActivity {
+
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
@@ -186,7 +188,7 @@ public class ScanIsbnActivity extends BackButtonActivity {
             // Return barcode
             Intent intent = new Intent();
             intent.putExtra("ISBN", barcode);
-            setResult(1, intent);
+            setResult(Activity.RESULT_OK, intent);
             finish(); //finishing activity
 
         } else {
