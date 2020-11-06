@@ -39,14 +39,14 @@ public class DrawerProvider {
                                 if (!(activity instanceof BorrowedActivity)) {
                                     intent = new Intent(activity, BorrowedActivity.class);
                                 }
-                            case "Pending Requests":
-                                if (!(activity instanceof PendingRequestsActivity)) {
-                                    intent = new Intent(activity, PendingRequestsActivity.class);
-                                }
-                            case "Explore":
-                                if (!(activity instanceof ExploreActivity)) {
-                                    intent = new Intent(activity, ExploreActivity.class);
-                                }
+//                            case "Pending Requests":
+//                                if (!(activity instanceof PendingRequestsActivity)) {
+//                                    intent = new Intent(activity, PendingRequestsActivity.class);
+//                                }
+//                            case "Explore":
+//                                if (!(activity instanceof ExploreActivity)) {
+//                                    intent = new Intent(activity, ExploreActivity.class);
+//                                }
                             case "Profile":
                                 if (!(activity instanceof MyProfileActivity)) {
                                     intent = new Intent(activity, MyProfileActivity.class);

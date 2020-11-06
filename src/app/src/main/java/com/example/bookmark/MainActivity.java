@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+                Intent intent = new Intent(getApplicationContext(), BorrowedActivity.class);
                 startActivity(intent);
                 String username = userNameEditText.getText().toString();
                 if (username.length() == 0) {
@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
                             }
                             else {
                                 // store user object in shared preferences
-                                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("USER_NAME", user.getFirstName());
+                                editor.putString("USER_NAME", user.getUsername());
                                 editor.commit();
                                 // launch my books activity
                                 Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
