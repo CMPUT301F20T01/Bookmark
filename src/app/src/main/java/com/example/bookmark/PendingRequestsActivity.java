@@ -15,7 +15,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Owner;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
@@ -72,10 +71,7 @@ public class PendingRequestsActivity extends AppCompatActivity implements Search
         //  user and firebase
 
         // Proof of concept
-        Owner owner = new Owner("u", "fn", "ln",
-            "email", "pn");
-
-        Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
+        Book b1 = new Book("Title 1", "Author 1", "1111111", "o");
         b1.setDescription("Book 1 description");
 
         requestedBooks.add(b1);

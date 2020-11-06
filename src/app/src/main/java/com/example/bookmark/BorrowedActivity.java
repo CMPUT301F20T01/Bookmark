@@ -73,10 +73,7 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
         //  current user and firebase
 
         // Proof of concept
-        Owner owner = new Owner("u", "fn", "ln",
-            "email", "pn");
-
-        Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
+        Book b1 = new Book("Title 1", "Author 1", "1111111", "o");
         b1.setDescription("Book 1 description");
 
         borrowedBooks.add(b1);
