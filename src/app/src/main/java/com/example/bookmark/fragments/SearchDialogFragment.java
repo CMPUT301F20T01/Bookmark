@@ -19,11 +19,12 @@ import com.example.bookmark.R;
  * Creates a fragment that allows the user to enter keywords and perform a
  * search - note any class that uses this fragment must implement the
  * OnFragmentInteractionListener interface (i.e. implement the
- * executeSearch(..) function which should perform a search of the database in
- * the desired way. The user is required to enter something in the search bar
+ * executeSearch(..) function which should pass the searched keywords as a
+ * string in an intent using the key "com.example.bookmark.SEARCH" to the
+ * ExploreActivity. The user is required to enter something in the search bar
  * editText if they want to perform a search (if they have not entered
  * anything and they try to press confirm the fragment will prompt them to do
- * so.
+ * so).
  *
  * @author Ryan Kortbeek.
  */
@@ -32,7 +33,7 @@ public class SearchDialogFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
 
     public interface OnFragmentInteractionListener {
-        void executeSearch(String searchString);
+        void sendSearchedKeywords(String searchString);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class SearchDialogFragment extends DialogFragment {
                     proceed = false;
                 }
                 if (proceed) {
-                    listener.executeSearch(searchEditText.getText().toString());
+                    listener.sendSearchedKeywords(searchEditText.getText().toString());
                     dialog.dismiss();
                 }
             }

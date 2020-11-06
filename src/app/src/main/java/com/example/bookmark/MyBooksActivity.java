@@ -16,7 +16,6 @@ import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.MenuOptions;
 import com.example.bookmark.models.Owner;
-import com.example.bookmark.models.Request;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.materialdrawer.Drawer;
 
@@ -29,12 +28,14 @@ import java.util.List;
  * They can also add a book from here
  * <p>
  * Outstanding Issues/TODOs
- *  Need to hook up to DB
+ * Need to hook up to DB
  *
  * @author Mitch Adam.
  */
 public class MyBooksActivity extends AppCompatActivity
     implements SearchDialogFragment.OnFragmentInteractionListener, MenuOptions {
+    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
+        ".SEARCH";
     // Going to need some sort of owner or uid
 
     private final List<Book> allBooks = new ArrayList<Book>();
@@ -146,17 +147,9 @@ public class MyBooksActivity extends AppCompatActivity
     }
 
     @Override
-    public void executeSearch(String searchString) {
-        // TODO call search method from singleton that interacts with firebase
-
+    public void sendSearchedKeywords(String searchString) {
         Intent intent = new Intent(MyBooksActivity.this, ExploreActivity.class);
-        // TODO put books that match the searched keyword(s) into intent that
-        //  is sent to the ExploreActivity which will display the search
-        //  results
-
-        // Proof of concept
-        intent.putExtra("proof", "Intent has been received!");
-
+        intent.putExtra(SEARCHED_KEYWORDS, searchString);
         startActivity(intent);
     }
 }
