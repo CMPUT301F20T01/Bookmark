@@ -13,6 +13,14 @@ import org.junit.Test;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+/**
+ * Perform intent testing on the MyBookDetailsActivity
+ * <p>
+ * Outstanding Issues/TODOs
+ * Test that the text values match title, author, etc
+ *
+ * @author Mitch Adam.
+ */
 public class MyBookDetailsActivityTest {
     private Solo solo;
     @Rule

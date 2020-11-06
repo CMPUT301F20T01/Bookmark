@@ -12,7 +12,7 @@ import android.widget.ImageButton;
  * This activity allows a user to edit the details of a book, remove a photo
  * and delete a book. Navigate here from the BookDetailsActivity
  * <p>
- * Current Issues
+ * Outstanding Issues/TODOs
  * Need to hook up to DB
  *
  * @author Mitch Adam.

@@ -18,6 +18,18 @@ import androidx.test.rule.ActivityTestRule;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+
+/**
+ * Perform intent testing on the MyBooks
+ * <p>
+ * Outstanding Issues/TODOs
+ * Test books correctly belong to user
+ * Test search
+ * Test filter
+ * Test click on book to view details
+ *
+ * @author Mitch Adam.
+ */
 @RunWith(AndroidJUnit4.class)
 public class MyBooksActivityTest {
     private Solo solo;

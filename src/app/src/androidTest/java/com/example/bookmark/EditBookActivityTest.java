@@ -13,6 +13,18 @@ import org.junit.Test;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+/**
+ * Perform intent testing on the EditBookActivity
+ * <p>
+ * Outstanding Issues/TODOs
+ * Test Data entry
+ * Test successfully edited book to correct user
+ * Test delete book
+ * Test delete photo
+ * Test add photo
+ *
+ * @author Mitch Adam.
+ */
 public class EditBookActivityTest {
     private Solo solo;
     @Rule

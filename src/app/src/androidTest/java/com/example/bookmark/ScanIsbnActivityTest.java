@@ -13,6 +13,15 @@ import org.junit.Test;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+
+/**
+ * Perform intent testing on the ScanIsbnActivity
+ * <p>
+ * Outstanding Issues/TODOs
+ * Test camera opens
+ *
+ * @author Mitch Adam.
+ */
 public class ScanIsbnActivityTest {
     private Solo solo;
     @Rule

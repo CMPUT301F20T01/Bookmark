@@ -14,7 +14,7 @@ import android.widget.ImageButton;
  * This activity allows a user to add a new book. It provides fields
  * to enter all book details, scan isbn and add a photo.
  *
- * Current Issues
+ * Outstanding Issues/TODOs
  * Need to hook up to DB
  * @author Mitch Adam.
  */
