@@ -2,23 +2,19 @@ package com.example.bookmark;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Owner;
-import com.example.bookmark.models.Request;
+import com.example.bookmark.server.FirebaseProvider;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
@@ -33,6 +29,7 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public class ExploreActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
+    public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
 
     List<Book> searchResults = new ArrayList<>();
     BookList searchResultsAdapter;
@@ -45,52 +42,22 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-
         // setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
+        Toolbar toolbar = findViewById(R.id.explore_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Explore");
         navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
 
         searchResultsListView = findViewById(R.id.search_results_listview);
 
-        getSearchResults(getIntent());
+        executeSearch("");
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
-        searchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ExploreActivity.this,
-                    ExploreBookDetailsActivity.class);
-                // TODO decide how the book data is to be sent to the
-                //  ExploreBookDetailsActivity
-                intent.putExtra("selected-book",
-                    (Parcelable) searchResults.get(i));
-                startActivity(intent);
-            }
+        searchResultsListView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(this, ExploreBookDetailsActivity.class);
+            intent.putExtra(EXTRA_BOOK, searchResults.get(position));
+            startActivity(intent);
         });
-    }
-
-    private void getSearchResults(Intent intent) {
-        // TODO get books from intent that match the searched keyword(s) -
-        //  this should be passed from the activity that started this
-        //  activity (i.e. the class that implements the executeSearch(..)
-        //  function from the interface in the SearchDialogFragment should
-        //  perform the search and pass the results to this activity)
-
-        // Proof of concept
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            String proof = bundle.getString("proof");
-
-            Owner owner = new Owner("u", "fn", "ln",
-                "email", "pn");
-
-            Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
-            b1.setDescription(proof);
-
-            searchResults.add(b1);
-        }
     }
 
     @Override
@@ -126,16 +93,21 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
 
     @Override
     public void executeSearch(String searchString) {
-        // TODO call search method from singleton that interacts with firebase
-
-        Intent intent = new Intent(ExploreActivity.this, ExploreActivity.class);
-        // TODO put books that match the searched keyword(s) into intent that
-        //  is sent to the ExploreActivity which will display the search
-        //  results
-
-        // Proof of concept
-        intent.putExtra("proof", "Intent has been received!");
-
-        startActivity(intent);
+        FirebaseProvider.getInstance().retrieveBooks(books -> {
+            searchResults.clear();
+            for (Book book : books) {
+                if (book.getDescription().contains(searchString)) {
+                    searchResults.add(book);
+                }
+            }
+            searchResultsAdapter.notifyDataSetChanged();
+        }, e -> {
+            new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(String.format("An error occurred: %s", e))
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+        });
     }
 }
