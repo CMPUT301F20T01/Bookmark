@@ -10,16 +10,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bookmark.models.MenuOptions;
+
 /**
  * This activity shows the details of a book. Depending on the
  * status of the book the user can then take some action. A user
  * can also navigate to the edit book activity from here.
  * <p>
- * TODO: Add more to these? Classes/Listeners?
+ * Outstanding Issues/TODOs
+ * Need to hook up to DB
  *
  * @author Mitch Adam.
  */
-public class MyBookDetailsActivity extends BackButtonActivity {
+public class MyBookDetailsActivity extends BackButtonActivity implements MenuOptions {
 
     String isbn;
     String title;
@@ -28,12 +31,12 @@ public class MyBookDetailsActivity extends BackButtonActivity {
     String status;
     //Image image;
 
-    private TextView titleEditText;
-    private TextView authorEditText;
-    private TextView isbnEditText;
-    private TextView descriptionEditText;
+    private TextView titleTextView;
+    private TextView authorTextView;
+    private TextView isbnTextView;
+    private TextView descriptionTextView;
     private ImageView imageView;
-    private TextView statusText;
+    private TextView statusTextView;
 
     private Button actionButton;
 
@@ -70,12 +73,12 @@ public class MyBookDetailsActivity extends BackButtonActivity {
         Intent myIntent = getIntent(); // gets the previously created intent
         isbn = myIntent.getStringExtra("ISBN");
 
-        titleEditText = findViewById(R.id.book_details_title_text);
-        authorEditText = findViewById(R.id.book_details_author_text);
-        isbnEditText = findViewById(R.id.book_details_isbn_text);
-        descriptionEditText = findViewById(R.id.book_details_description_text);
+        titleTextView = findViewById(R.id.book_details_title_text);
+        authorTextView = findViewById(R.id.book_details_author_text);
+        isbnTextView = findViewById(R.id.book_details_isbn_text);
+        descriptionTextView = findViewById(R.id.book_details_description_text);
         imageView = findViewById(R.id.book_details_book_image);
-        statusText = findViewById(R.id.book_details_book_status_text);
+        statusTextView = findViewById(R.id.book_details_book_status_text);
 
         actionButton = findViewById(R.id.book_details_action_btn);
 
@@ -94,12 +97,12 @@ public class MyBookDetailsActivity extends BackButtonActivity {
     }
 
     private void fillBookDetails() {
-        titleEditText.setText(title);
-        authorEditText.setText(author);
-        isbnEditText.setText("ISBN: " + isbn);
-        descriptionEditText.setText("Description: " + description);
+        titleTextView.setText(title);
+        authorTextView.setText(author);
+        isbnTextView.setText("ISBN: " + isbn);
+        descriptionTextView.setText("Description: " + description);
         //imageView.setImageBitmap();
-        statusText.setText("Status: " + status);
+        statusTextView.setText("Status: " + status);
     }
 
     private void configureActionButton() {
@@ -146,7 +149,7 @@ public class MyBookDetailsActivity extends BackButtonActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_filter_search_search_btn:
+            case R.id.menu_edit_edit_btn:
                 Intent intent = new Intent(MyBookDetailsActivity.this, EditBookActivity.class);
                 intent.putExtra("ISBN", isbn);
                 startActivity(intent);

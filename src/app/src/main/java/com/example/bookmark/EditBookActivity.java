@@ -12,16 +12,17 @@ import android.widget.ImageButton;
  * This activity allows a user to edit the details of a book, remove a photo
  * and delete a book. Navigate here from the BookDetailsActivity
  * <p>
- * TODO: Add more to these? Classes/Listeners?
+ * Outstanding Issues/TODOs
+ * Need to hook up to DB
  *
  * @author Mitch Adam.
  */
 public class EditBookActivity extends BackButtonActivity {
 
-    String isbn;
-    String title;
-    String author;
-    String description;
+    private String isbn;
+    private String title;
+    private String author;
+    private String description;
 
     private ImageButton scanISBNButton;
     private ImageButton addPhotoButton;
