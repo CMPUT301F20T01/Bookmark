@@ -25,7 +25,7 @@ import com.example.bookmark.fragments.ImageSelectDialogFragment;
  *
  * @author Mitch Adam.
  */
-public class AddBookActivity extends AppCompatActivity implements ImageSelectDialogFragment.ImageSelectListener {
+public class AddBookActivity extends BackButtonActivity implements ImageSelectDialogFragment.ImageSelectListener {
     private static final int ISBN_REQUEST_CODE = 100;
     private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
@@ -44,9 +44,6 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
         getSupportActionBar().setTitle("Add Book");
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         scanISBNButton = findViewById(R.id.add_book_scan_isbn_btn);
         scanISBNButton.setOnClickListener(v -> goToScanISBN());
@@ -106,17 +103,6 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
         if (requestCode == ISBN_REQUEST_CODE) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 }
