@@ -43,6 +43,7 @@ public class PendingRequestsActivity extends AppCompatActivity implements Search
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.navigationActivity);
         setContentView(R.layout.activity_pending_requests);
 
         // toolbar setup
