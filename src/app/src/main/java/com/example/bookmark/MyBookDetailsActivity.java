@@ -17,7 +17,7 @@ import com.example.bookmark.models.MenuOptions;
  * status of the book the user can then take some action. A user
  * can also navigate to the edit book activity from here.
  * <p>
- * TODO: Add more to these? Classes/Listeners?
+ * Need to hook up to DB
  *
  * @author Mitch Adam.
  */

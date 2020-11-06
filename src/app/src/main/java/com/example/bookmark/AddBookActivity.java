@@ -13,9 +13,9 @@ import android.widget.ImageButton;
 /**
  * This activity allows a user to add a new book. It provides fields
  * to enter all book details, scan isbn and add a photo.
- * <p>
- * TODO: Add more to these? Classes/Listeners?
  *
+ * Current Issues
+ * Need to hook up to DB
  * @author Mitch Adam.
  */
 public class AddBookActivity extends BackButtonActivity {

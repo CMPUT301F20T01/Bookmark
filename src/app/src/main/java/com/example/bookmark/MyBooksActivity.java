@@ -26,7 +26,7 @@ import java.util.List;
  * They can select a book to see and edit the details of a book.
  * They can also add a book from here
  * <p>
- * TODO: Add more to these? Classes/Listeners?
+ *  Need to hook up to DB
  *
  * @author Mitch Adam.
  */

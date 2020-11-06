@@ -40,7 +40,8 @@ import java.util.concurrent.Executors;
  * user to scan a barcode using Google's ML kit. Upon success
  * the isbn will be returned.
  * <p>
- * TODO: Add more to these? Classes/Listeners? More about libraries used?
+ * <p>
+ * Outstanding Issues
  *
  * @author Mitch Adam.
  */
