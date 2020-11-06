@@ -41,6 +41,7 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.navigationActivity);
         setContentView(R.layout.activity_explore);
 
         // setup toolbar
