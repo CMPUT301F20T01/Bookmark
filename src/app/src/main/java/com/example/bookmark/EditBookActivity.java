@@ -44,42 +44,6 @@ public class EditBookActivity extends BackButtonActivity implements ImageSelectD
     private EditText descriptionEditText;
 
 
-    private final View.OnClickListener scanISBNListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            goToScanISBN();
-        }
-    };
-
-    private final View.OnClickListener addPhotoListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            addPhoto();
-        }
-    };
-
-    private final View.OnClickListener deletePhotoListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            deletePhoto();
-        }
-    };
-
-    private final View.OnClickListener doneAddBookListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            doneAddBook();
-        }
-    };
-
-    private final View.OnClickListener deleteBookListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            deleteBook();
-        }
-    };
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,19 +57,19 @@ public class EditBookActivity extends BackButtonActivity implements ImageSelectD
         isbn = myIntent.getStringExtra("ISBN");
 
         scanISBNButton = findViewById(R.id.edit_book_scan_isbn_btn);
-        scanISBNButton.setOnClickListener(scanISBNListener);
+        scanISBNButton.setOnClickListener(v -> goToScanISBN());
 
         addPhotoButton = findViewById(R.id.edit_book_add_photo_btn);
-        addPhotoButton.setOnClickListener(addPhotoListener);
+        addPhotoButton.setOnClickListener(v -> addPhoto());
 
         deletePhotoButton = findViewById(R.id.edit_book_delete_photo_btn);
-        deletePhotoButton.setOnClickListener(deletePhotoListener);
+        deletePhotoButton.setOnClickListener(v -> deletePhoto());
 
         doneAddBookButton = findViewById(R.id.edit_book_done_btn);
-        doneAddBookButton.setOnClickListener(doneAddBookListener);
+        doneAddBookButton.setOnClickListener(v -> doneAddBook());
 
         deleteBookButton = findViewById(R.id.edit_book_delete_book_btn);
-        deleteBookButton.setOnClickListener(deleteBookListener);
+        deleteBookButton.setOnClickListener(v -> deleteBook());
 
         titleEditText = findViewById(R.id.edit_book_title_field);
         authorEditText = findViewById(R.id.edit_book_author_field);
