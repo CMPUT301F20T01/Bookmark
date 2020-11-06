@@ -1,6 +1,7 @@
 package com.example.bookmark;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,7 +29,9 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
 
     private ImageButton scanISBNButton;
     private ImageButton addPhotoButton;
+    private ImageButton deletePhotoButton;
     private Button doneAddBookButton;
+
 
     private EditText titleEditText;
     private EditText authorEditText;
@@ -47,6 +50,13 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
         @Override
         public void onClick(View v) {
             addPhoto();
+        }
+    };
+
+    private View.OnClickListener deletePhotoListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            deletePhoto();
         }
     };
 
@@ -73,6 +83,9 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
         addPhotoButton = findViewById(R.id.add_book_add_photo_btn);
         addPhotoButton.setOnClickListener(addPhotoListener);
 
+        deletePhotoButton = findViewById(R.id.add_book_delete_photo_btn);
+        deletePhotoButton.setOnClickListener(deletePhotoListener);
+
         doneAddBookButton = findViewById((R.id.add_book_done_btn));
         doneAddBookButton.setOnClickListener(doneAddBookListener);
 
@@ -94,6 +107,15 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
     public void onImageSelect(Uri uri) {
         // TODO: Save URI for when creating a book class
         addPhotoButton.setImageURI(uri);
+        deletePhotoButton.setVisibility(View.VISIBLE);
+    }
+
+    private void deletePhoto() {
+        // TODO: Sync up with Kyle on Firebase stuff
+        // TODO: Properly clear the image instead of replacing it with original drawable
+        // TODO: Clear saved URI
+        addPhotoButton.setImageDrawable(ContextCompat.getDrawable(this, android.R.drawable.ic_menu_add));
+        deletePhotoButton.setVisibility(View.GONE);
     }
 
     private void doneAddBook() {
