@@ -33,9 +33,9 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
 
-    List<Book> searchResults = new ArrayList<>();
-    BookList searchResultsAdapter;
-    ListView searchResultsListView;
+    private List<Book> searchResults = new ArrayList<>();
+    private BookList searchResultsAdapter;
+    private ListView searchResultsListView;
 
     private Drawer navigationDrawer = null;
 

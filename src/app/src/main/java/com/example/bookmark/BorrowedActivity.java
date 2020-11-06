@@ -15,7 +15,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Owner;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
@@ -35,9 +34,9 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
 
-    List<Book> borrowedBooks = new ArrayList<>();
-    BookList borrowedBooksAdapter;
-    ListView borrowedBooksListView;
+    private List<Book> borrowedBooks = new ArrayList<>();
+    private BookList borrowedBooksAdapter;
+    private ListView borrowedBooksListView;
 
     private Drawer navigationDrawer = null;
 
