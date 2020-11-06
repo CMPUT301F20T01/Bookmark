@@ -25,17 +25,36 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+/**
+ * This is a custom adapter to show requests in a list view. The layout used
+ * is request_content.xml
+ *
+ * @author Nayan Prakash
+ */
 public class RequestList extends ArrayAdapter<Request> {
 
     private ArrayList<Request> requests;
     private Context context;
 
+    /**
+     * Creates a RequestList.
+     *
+     * @param context  The context in which the RequestList is made
+     * @param requests The ArrayList of Requests used by this RequestList
+     */
     public RequestList(Context context, ArrayList<Request> requests) {
         super(context, 0, requests);
         this.requests = requests;
         this.context = context;
     }
 
+    /**
+     * Returns the view for each Request in the request List
+     *
+     * @param position The position of the Request within the requests ArrayList
+     * @param convertView the old view to reuse if possible
+     * @param parent the parent of this view
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
