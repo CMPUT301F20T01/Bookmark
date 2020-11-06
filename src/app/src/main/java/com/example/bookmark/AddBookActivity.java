@@ -17,13 +17,12 @@ import com.example.bookmark.fragments.ImageSelectDialogFragment;
 /**
  * This activity allows a user to add a new book. It provides fields
  * to enter all book details, scan isbn and add a photo.
- * <p>
- * TODO: Add more to these? Classes/Listeners?
  *
+ * Outstanding Issues/TODOs
+ * Need to hook up to DB
  * @author Mitch Adam.
  */
 public class AddBookActivity extends AppCompatActivity implements ImageSelectDialogFragment.ImageSelectListener {
-    // TODO: Figure out the back navigation
     private static final int ISBN_REQUEST_CODE = 100;
     private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 

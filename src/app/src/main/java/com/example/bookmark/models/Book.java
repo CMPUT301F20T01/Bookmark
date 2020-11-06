@@ -1,5 +1,6 @@
 package com.example.bookmark.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  *
  * @author Kyle Hennig.
  */
-public class Book implements FirestoreSerializable {
+public class Book implements FirestoreSerializable, Serializable {
     public enum Status {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }

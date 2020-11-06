@@ -12,6 +12,14 @@
     <string name="status">Status:</string>
     <string name="owner">Owner:</string>
     <string name="author">Author</string>
+    <string name="isbn">ISBN</string>
+    <string name="delete">Delete</string>
+
+
+    <string name="request_string">Has requested to borrow this book.</string>
+    <string name="accept_request">ACCEPT</string>
+    <string name="reject_request">REJECT</string>
+
     <string name="done">DONE</string>
     <string name="cancel">Cancel</string>
     <string name="choose_location">Choose meeting location</string>
