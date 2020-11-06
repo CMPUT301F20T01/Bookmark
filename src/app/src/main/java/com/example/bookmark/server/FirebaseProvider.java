@@ -56,7 +56,7 @@ public class FirebaseProvider {
                 onSuccessListener.onSuccess(aVoid);
             })
             .addOnFailureListener(e -> {
-                Log.w(TAG, "Error creating user.", e);
+                Log.w(TAG, "Error creating user: ", e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -77,12 +77,12 @@ public class FirebaseProvider {
                     Log.d(TAG, String.format("Retrieved user %s.", username));
                     onSuccessListener.onSuccess(User.fromFirestoreDocument(documentSnapshot.getData()));
                 } else {
-                    Log.d(TAG, String.format("No user with username %s found.", username));
+                    Log.d(TAG, String.format("No user %s found.", username));
                     onSuccessListener.onSuccess(null);
                 }
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, "retrieveUserByUsername failed.", e);
+                Log.d(TAG, String.format("Error retrieving user %s: ", username), e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -103,7 +103,7 @@ public class FirebaseProvider {
                 onSuccessListener.onSuccess(aVoid);
             })
             .addOnFailureListener(e -> {
-                Log.w(TAG, "Error creating book.", e);
+                Log.w(TAG, "Error creating book: ", e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -126,7 +126,7 @@ public class FirebaseProvider {
                 onSuccessListener.onSuccess(books);
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, "Retrieving all books failed: ", e);
+                Log.d(TAG, "Error retrieving all books: ", e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -147,12 +147,12 @@ public class FirebaseProvider {
                     Log.d(TAG, String.format("Retrieved book %s.", isbn));
                     onSuccessListener.onSuccess(Book.fromFirestoreDocument(documentSnapshot.getData()));
                 } else {
-                    Log.d(TAG, String.format("No book with ISBN %s found.", isbn));
+                    Log.d(TAG, String.format("No book %s found.", isbn));
                     onSuccessListener.onSuccess(null);
                 }
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, "retrieveBookByIsbn failed.", e);
+                Log.d(TAG, String.format("Error retrieving book %s: ", isbn), e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -173,7 +173,7 @@ public class FirebaseProvider {
                 onSuccessListener.onSuccess(aVoid);
             })
             .addOnFailureListener(e -> {
-                Log.w(TAG, "Error creating request.", e);
+                Log.w(TAG, "Error creating request: ", e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -196,12 +196,12 @@ public class FirebaseProvider {
                     Log.d(TAG, String.format("Retrieved request %s.", requestId));
                     onSuccessListener.onSuccess(Request.fromFirestoreDocument(documentSnapshot.getData()));
                 } else {
-                    Log.d(TAG, String.format("No request with user %s and book %s found.", user.getUsername(), book.getIsbn()));
+                    Log.d(TAG, String.format("No request %s found.", requestId));
                     onSuccessListener.onSuccess(null);
                 }
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, "retrieveRequestByUserAndBook failed.", e);
+                Log.d(TAG, String.format("Error retrieving request %s: ", requestId), e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -226,7 +226,7 @@ public class FirebaseProvider {
                 onSuccessListener.onSuccess(requests);
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, "retrieveRequestByUser failed.", e);
+                Log.d(TAG, String.format("Error retrieving requests made by user %s: ", user.getUsername()), e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -251,7 +251,7 @@ public class FirebaseProvider {
                 onSuccessListener.onSuccess(requests);
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, "retrieveRequestByBook failed.", e);
+                Log.d(TAG, String.format("Error retrieving requests made for book %s: ", book.getIsbn()), e);
                 onFailureListener.onFailure(e);
             });
     }
@@ -273,7 +273,7 @@ public class FirebaseProvider {
                 onSuccessListener.onSuccess(aVoid);
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, "deleteRequestByUserAndBook failed.", e);
+                Log.d(TAG, String.format("Error deleting request %s: ", requestId), e);
                 onFailureListener.onFailure(e);
             });
     }
