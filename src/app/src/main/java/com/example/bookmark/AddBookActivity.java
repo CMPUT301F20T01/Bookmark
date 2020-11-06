@@ -2,13 +2,17 @@ package com.example.bookmark;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import com.example.bookmark.fragments.ImageSelectDialogFragment;
 
 /**
  * This activity allows a user to add a new book. It provides fields
@@ -18,13 +22,14 @@ import android.widget.ImageButton;
  *
  * @author Mitch Adam.
  */
-public class AddBookActivity extends AppCompatActivity {
+public class AddBookActivity extends AppCompatActivity implements ImageSelectDialogFragment.ImageSelectListener {
     // TODO: Figure out the back navigation
+    private static final int ISBN_REQUEST_CODE = 100;
+    private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
     private ImageButton scanISBNButton;
     private ImageButton addPhotoButton;
     private Button doneAddBookButton;
-
 
     private EditText titleEditText;
     private EditText authorEditText;
@@ -80,13 +85,16 @@ public class AddBookActivity extends AppCompatActivity {
 
     private void goToScanISBN() {
         Intent intent = new Intent(AddBookActivity.this, ScanIsbnActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, ISBN_REQUEST_CODE);
     }
 
     private void addPhoto() {
-        // TODO: I think Eric is doing this?
-        Log.d("Add Book", "Click add photo");
+       ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
+    }
 
+    public void onImageSelect(Uri uri) {
+        // TODO: Save for when creating/returning a book class
+        addPhotoButton.setImageURI(uri);
     }
 
     private void doneAddBook() {
@@ -97,9 +105,10 @@ public class AddBookActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) { return; }
 
         // Get ISBN
-        if (requestCode == 1) {
+        if (requestCode == ISBN_REQUEST_CODE) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
         }

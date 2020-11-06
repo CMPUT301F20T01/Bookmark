@@ -1,12 +1,16 @@
 package com.example.bookmark;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import com.example.bookmark.fragments.ImageSelectDialogFragment;
 
 /**
  * This activity allows a user to edit the details of a book, remove a photo
@@ -16,7 +20,9 @@ import android.widget.ImageButton;
  *
  * @author Mitch Adam.
  */
-public class EditBookActivity extends BackButtonActivity {
+public class EditBookActivity extends BackButtonActivity implements ImageSelectDialogFragment.ImageSelectListener {
+    private static final int ISBN_REQUEST_CODE = 100;
+    private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
     String isbn;
     String title;
@@ -127,8 +133,12 @@ public class EditBookActivity extends BackButtonActivity {
     }
 
     private void addPhoto() {
-        // TODO: I think Eric is doing this
-        Log.d("Edit Book", "Click add photo");
+        ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
+    }
+
+    public void onImageSelect(Uri uri) {
+        // TODO: Save for when creating/returning a book class
+        addPhotoButton.setImageURI(uri);
     }
 
     private void deletePhoto() {
@@ -149,9 +159,10 @@ public class EditBookActivity extends BackButtonActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) { return; }
 
         // Get ISBN
-        if (requestCode == 1) {
+        if (requestCode == ISBN_REQUEST_CODE) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
         }
