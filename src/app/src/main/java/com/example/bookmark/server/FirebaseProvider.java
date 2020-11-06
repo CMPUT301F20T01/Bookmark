@@ -190,7 +190,7 @@ public class FirebaseProvider {
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    public void retrieveRequestByUser(User user, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
+    public void retrieveRequestsByUser(User user, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("requests")
             .whereEqualTo("requester", user.getUsername())
             .get()
@@ -215,7 +215,7 @@ public class FirebaseProvider {
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    public void retrieveRequestByBook(Book book, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
+    public void retrieveRequestsByBook(Book book, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection("requests")
             .whereEqualTo("book", book.getIsbn())
             .get()
@@ -229,6 +229,28 @@ public class FirebaseProvider {
             })
             .addOnFailureListener(e -> {
                 Log.d(TAG, "retrieveRequestByBook failed.", e);
+                onFailureListener.onFailure(e);
+            });
+    }
+
+    /**
+     * Deletes a request from Firebase.
+     *
+     * @param request           The request.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    public void deleteRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        String requestId = String.format("%s:%s", request.getRequester(), request.getBook());
+        db.collection("requests")
+            .document(requestId)
+            .delete()
+            .addOnSuccessListener(aVoid -> {
+                Log.d(TAG, String.format("Successfully deleted request %s.", requestId));
+                onSuccessListener.onSuccess(aVoid);
+            })
+            .addOnFailureListener(e -> {
+                Log.d(TAG, "deleteRequestByUserAndBook failed.", e);
                 onFailureListener.onFailure(e);
             });
     }
