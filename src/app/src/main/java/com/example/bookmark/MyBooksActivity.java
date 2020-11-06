@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
@@ -17,6 +18,7 @@ import com.example.bookmark.models.MenuOptions;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class MyBooksActivity extends AppCompatActivity
     private ListView booksListView;
 
     FloatingActionButton addBookBtn;
+    private Drawer navigationDrawer = null;
 
     private View.OnClickListener addBookListener = new View.OnClickListener() {
         @Override
@@ -55,7 +58,12 @@ public class MyBooksActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_books);
 
+        // setup toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_books_toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("My Books");
+        navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
+
 
         booksListView = findViewById(R.id.my_books_listview);
 
