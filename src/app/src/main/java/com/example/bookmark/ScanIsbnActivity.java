@@ -1,6 +1,7 @@
 package com.example.bookmark;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -40,7 +41,8 @@ import java.util.concurrent.Executors;
  * user to scan a barcode using Google's ML kit. Upon success
  * the isbn will be returned.
  * <p>
- * TODO: Add more to these? Classes/Listeners? More about libraries used?
+ * <p>
+ * Outstanding Issues/TODOs
  *
  * @author Mitch Adam.
  */
@@ -52,13 +54,13 @@ public class ScanIsbnActivity extends BackButtonActivity {
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
 
-    PreviewView mPreviewView;
-    BarcodeScanner scanner;
+    private PreviewView mPreviewView;
+    private BarcodeScanner scanner;
 
     // Used to compare barcode readings to increase accuracy
-    int numRequiredSameBarcodes = 5;
-    int barcodesIndex = 0;
-    String[] barcodes = new String[numRequiredSameBarcodes - 1];
+    private int numRequiredSameBarcodes = 5;
+    private int barcodesIndex = 0;
+    private String[] barcodes = new String[numRequiredSameBarcodes - 1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
