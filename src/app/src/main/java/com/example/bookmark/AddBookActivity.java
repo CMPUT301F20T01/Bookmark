@@ -93,12 +93,13 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
     }
 
     public void onImageSelect(Uri uri) {
-        // TODO: Save for when creating/returning a book class
+        // TODO: Save URI for when creating a book class
         addPhotoButton.setImageURI(uri);
     }
 
     private void doneAddBook() {
         // TODO: Create a book class and return isbn possibly?
+        // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
         Log.d("Add Book", "Click done add book");
     }
 

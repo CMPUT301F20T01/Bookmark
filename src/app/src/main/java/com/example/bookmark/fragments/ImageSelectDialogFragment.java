@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.bookmark.R;
+import com.example.bookmark.models.Photograph;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,8 +69,26 @@ public class ImageSelectDialogFragment extends DialogFragment {
      * Listener interface for when an image is chosen
      */
     public interface ImageSelectListener {
-        // TODO: Currently passing back uri. Maybe pass back photo instead?
+
+        /**
+         * Fired when an image is selected.
+         * @param uri The URI of the selected imaged
+         */
         void onImageSelect(Uri uri);
+
+        /**
+         * Utility function for converting an image URI to a Photograph object. Note that this
+         * function is relatively expensive, so extraneous calls should be avoided.
+         * @param uri The URI of the selected imaged
+         * @return Photograph object with data from URI
+         */
+        default Photograph uriToPhotograph(Uri uri) {
+            // TODO: Convert Uri to Bitmap and create Photograph
+            // Use https://developer.android.com/reference/android/graphics/BitmapFactory or
+            // https://developer.android.com/reference/android/graphics/BitmapRegionDecoder if image
+            // size is known. Be wary of out-of-memory when converting.
+            return null;
+        }
     }
 
 

@@ -137,7 +137,7 @@ public class EditBookActivity extends BackButtonActivity implements ImageSelectD
     }
 
     public void onImageSelect(Uri uri) {
-        // TODO: Save for when creating/returning a book class
+        // TODO: Save URI for when creating a book class
         addPhotoButton.setImageURI(uri);
     }
 
@@ -148,6 +148,7 @@ public class EditBookActivity extends BackButtonActivity implements ImageSelectD
 
     private void doneAddBook() {
         // TODO: Need the book class
+        // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
         Log.d("Edit Book", "Click done add book");
     }
 
