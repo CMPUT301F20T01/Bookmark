@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#6200EE"
-            android:onClick="on_done_press"
+            android:onClick="onDonePress"
             android:text="@string/done"
             android:textColor="#FFFFFF" />
     </LinearLayout>

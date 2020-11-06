@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -191,7 +192,7 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
      * location and returns it to the previous activity (ManageRequestsActivity)
      * @param view This is the view of the done button
      */
-    public void on_done_press(View view) {
+    public void onDonePress(View view) {
         /* This returns the set Geolocation to the ManageRequestsActivity which can handle setting
             the request object and passing to firebase
         */
@@ -202,7 +203,7 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
         Bundle bundle = new Bundle();
         bundle.putSerializable("Geolocation", meetingLocation);
         intent.putExtras(bundle);
-        setResult(ManageRequestsActivity.RESULT_OK, intent);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 }

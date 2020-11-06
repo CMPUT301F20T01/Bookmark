@@ -48,6 +48,7 @@ import java.util.concurrent.Executors;
  */
 public class ScanIsbnActivity extends BackButtonActivity {
 
+
     private Executor executor = Executors.newSingleThreadExecutor();
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
