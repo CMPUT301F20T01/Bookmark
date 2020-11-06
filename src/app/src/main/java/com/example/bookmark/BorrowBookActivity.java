@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public static final int GET_ISBN = 1;
+    public static final int BOOK_BORROWED_SUCCESSFULLY_RESULT = 1;
 
     private MapView mapView;
     private GoogleMap map;
@@ -76,22 +77,23 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
                     FirebaseProvider.getInstance().storeRequest(request, new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-
-                        }
-                    }, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
-                    FirebaseProvider.getInstance().retrieveBookByIsbn(ISBN, new OnSuccessListener<Book>() {
-                        @Override
-                        public void onSuccess(Book book) {
-                            book.setStatus(Book.Status.BORROWED);
-                            FirebaseProvider.getInstance().storeBook(book, new OnSuccessListener<Void>() {
+                            FirebaseProvider.getInstance().retrieveBookByIsbn(ISBN, new OnSuccessListener<Book>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
+                                public void onSuccess(Book book) {
+                                    book.setStatus(Book.Status.BORROWED);
+                                    FirebaseProvider.getInstance().storeBook(book, new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Intent intent = getIntent();
+                                            setResult(BorrowBookActivity.BOOK_BORROWED_SUCCESSFULLY_RESULT, intent);
+                                            finish();
+                                        }
+                                    }, new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
 
+                                        }
+                                    });
                                 }
                             }, new OnFailureListener() {
                                 @Override
