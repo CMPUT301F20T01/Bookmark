@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+                startActivity(intent);
                 String username = userNameEditText.getText().toString();
                 if (username.length() == 0) {
                     userNameEditText.setError("Please enter a username.");

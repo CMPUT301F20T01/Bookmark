@@ -3,11 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/activity1"
-        android:title="activity1"
+        android:id="@+id/my_books_menu"
+        android:title="My Books"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/activity2"
-        android:title="activity2"
+        android:id="@+id/borrowed_book_menu"
+        android:title="Borrowed"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/pending_requests_menu"
+        android:title="Pending Requests"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/explore_menu"
+        android:title="Explore"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/my_profile_menu"
+        android:title="Profile"
         app:showAsAction="never"/>
 </menu>

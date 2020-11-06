@@ -19,40 +19,6 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 public class DrawerProvider {
     public static Drawer getDrawer(final Activity activity, Toolbar toolbar) {
-        //if you want to update the items at a later time it is recommended to keep it in a variable
-        PrimaryDrawerItem drawerEmptyItem= new PrimaryDrawerItem().withIdentifier(0).withName("");
-        drawerEmptyItem.withEnabled(false);
-
-        PrimaryDrawerItem drawerItem1 = new PrimaryDrawerItem().withIdentifier(1).withName("TEST").withIcon(R.drawable.ic_bookmark);
-        PrimaryDrawerItem drawerItem2 = new PrimaryDrawerItem().withIdentifier(2).withName("TEST").withIcon(R.drawable.ic_bookmark);
-
-        //create the drawer and remember the `Drawer` result object
-//        Drawer result = new DrawerBuilder()
-//            .withActivity(activity)
-//            .withToolbar(toolbar)
-//            .withActionBarDrawerToggle(true)
-//            .withActionBarDrawerToggleAnimated(true)
-//            .withCloseOnClick(true)
-//            .withSelectedItem(-1)
-//            .addDrawerItems(
-//                drawerEmptyItem,drawerEmptyItem,drawerEmptyItem,
-//                drawerItem1,
-//                drawerItem2
-//            )
-//            .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-//                @Override
-//                public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-//                    if (drawerItem.getIdentifier() == 2 && !(activity instanceof TestActivity2)) {
-//                        // load tournament screen
-//                        Intent intent = new Intent(activity, TestActivity1.class);
-//                        view.getContext().startActivity(intent);
-//                    }
-//                    return true;
-//                }
-//            })
-//            .build();
-
-
         Drawer result = new DrawerBuilder()
             .withActivity(activity)
             .withToolbar(toolbar)
@@ -60,10 +26,36 @@ public class DrawerProvider {
             .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                 @Override
                 public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                    if (drawerItem instanceof Nameable) {
-                        Toast.makeText(activity, ((Nameable) drawerItem).getName().getText(activity), Toast.LENGTH_SHORT).show();
+                    String itemName= ((Nameable) drawerItem).getName().getText(activity);
+                    Toast.makeText(activity, itemName, Toast.LENGTH_SHORT).show();
+                    if (drawerItem != null) {
+                        Intent intent = null;
+                        switch (itemName) {
+                            case "My Books":
+                                if (!(activity instanceof MyBooksActivity)) {
+                                    intent = new Intent(activity, MyBooksActivity.class);
+                                }
+                            case "Borrowed":
+                                if (!(activity instanceof BorrowedActivity)) {
+                                    intent = new Intent(activity, BorrowedActivity.class);
+                                }
+                            case "Pending Requests":
+                                if (!(activity instanceof PendingRequestsActivity)) {
+                                    intent = new Intent(activity, PendingRequestsActivity.class);
+                                }
+                            case "Explore":
+                                if (!(activity instanceof ExploreActivity)) {
+                                    intent = new Intent(activity, ExploreActivity.class);
+                                }
+                            case "Profile":
+                                if (!(activity instanceof MyProfileActivity)) {
+                                    intent = new Intent(activity, MyProfileActivity.class);
+                                }
+                        }
+                        if (intent != null) {
+                            activity.startActivity(intent);
+                        }
                     }
-
                     return false;
                 }
             }).build();
