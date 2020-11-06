@@ -1,19 +1,19 @@
 package com.example.bookmark;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.bookmark.models.MenuOptions;
+import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.util.DialogUtil;
 import com.mikepenz.materialdrawer.Drawer;
 
 /**
@@ -26,8 +26,6 @@ import com.mikepenz.materialdrawer.Drawer;
 public class MyProfileActivity extends AppCompatActivity implements MenuOptions {
 
     private Drawer navigationDrawer = null;
-
-    TextView username, userRegDate, firstName, lastName, emailAddress, phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +40,14 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
 
         SharedPreferences sharedPref = this.getSharedPreferences("LOGGED_IN_USER", Context.MODE_PRIVATE);
         String username = sharedPref.getString("USER_NAME", "ERROR_NO_USER");
-        Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
+
+        FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
+            ((TextView) findViewById(R.id.username_textView)).setText(user.getUsername());
+            ((TextView) findViewById(R.id.firstName_textView)).setText(user.getFirstName());
+            ((TextView) findViewById(R.id.lastName_textView)).setText(user.getLastName());
+            ((TextView) findViewById(R.id.emailAddress_textView)).setText(user.getEmailAddress());
+            ((TextView) findViewById(R.id.phoneNumber_textView)).setText(user.getPhoneNumber());
+        }, e -> DialogUtil.showErrorDialog(this, e));
     }
 
     @Override

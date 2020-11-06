@@ -15,6 +15,7 @@ import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.util.DialogUtil;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
@@ -101,13 +102,6 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
                 }
             }
             searchResultsAdapter.notifyDataSetChanged();
-        }, e -> {
-            new AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage(String.format("An error occurred: %s", e))
-                .setPositiveButton(android.R.string.ok, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-        });
+        }, e -> DialogUtil.showErrorDialog(this, e));
     }
 }
