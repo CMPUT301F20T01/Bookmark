@@ -30,6 +30,8 @@ import java.util.List;
  */
 public class ExploreActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
+    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
+        ".SEARCH";
 
     List<Book> searchResults = new ArrayList<>();
     BookList searchResultsAdapter;
@@ -50,7 +52,14 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
 
         searchResultsListView = findViewById(R.id.search_results_listview);
 
-        executeSearch("");
+        Intent searchIntent = getIntent();
+        String searchedKeywords =
+            searchIntent.getStringExtra(SEARCHED_KEYWORDS);
+
+        // TODO remove line below when we want to start using search
+        searchedKeywords = "";
+
+        executeSearch(searchedKeywords);
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
         searchResultsListView.setOnItemClickListener((parent, view, position, id) -> {
@@ -92,11 +101,17 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
     }
 
     @Override
-    public void executeSearch(String searchString) {
+    public void sendSearchedKeywords(String searchString) {
+        // Instead of sending intent to this same activity just calls
+        // executeSearch again
+        executeSearch(searchString);
+    }
+
+    public void executeSearch(String searchedKeywords) {
         FirebaseProvider.getInstance().retrieveBooks(books -> {
             searchResults.clear();
             for (Book book : books) {
-                if (book.getDescription().contains(searchString)) {
+                if (book.getDescription().contains(searchedKeywords)) {
                     searchResults.add(book);
                 }
             }

@@ -2,7 +2,6 @@ package com.example.bookmark;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -18,7 +16,6 @@ import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Owner;
-import com.example.bookmark.models.Request;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
@@ -34,6 +31,9 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public class BorrowedActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
+    public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
+    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
+        ".SEARCH";
 
     List<Book> borrowedBooks = new ArrayList<>();
     BookList borrowedBooksAdapter;
@@ -63,10 +63,7 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(BorrowedActivity.this,
                     BorrowedBookDetailsActivity.class);
-                // TODO decide how the book data is to be sent to the
-                //  BorrowedBookDetailsActivity
-                intent.putExtra("selected-book",
-                    (Parcelable) borrowedBooks.get(i));
+                intent.putExtra(EXTRA_BOOK, borrowedBooks.get(i));
                 startActivity(intent);
             }
         });
@@ -114,17 +111,9 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
     }
 
     @Override
-    public void executeSearch(String searchString) {
-        // TODO call search method from singleton that interacts with firebase
-
+    public void sendSearchedKeywords(String searchString) {
         Intent intent = new Intent(BorrowedActivity.this, ExploreActivity.class);
-        // TODO put books that match the searched keyword(s) into intent that
-        //  is sent to the ExploreActivity which will display the search
-        //  results
-
-        // Proof of concept
-        intent.putExtra("proof", "Intent has been received!");
-
+        intent.putExtra(SEARCHED_KEYWORDS, searchString);
         startActivity(intent);
     }
 }
