@@ -52,8 +52,8 @@ public class Geolocation implements FirestoreSerializable, Serializable {
 
     public static Geolocation fromFirestoreDocument(Map<String, Object> map) {
         return new Geolocation(
-            (float) map.get("latitude"),
-            (float) map.get("longitude")
+            (float) ((double) map.get("latitude")),
+            (float) ((double) map.get("longitude"))
         );
     }
 
