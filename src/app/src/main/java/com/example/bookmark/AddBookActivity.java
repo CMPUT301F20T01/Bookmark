@@ -18,9 +18,10 @@ import com.example.bookmark.fragments.ImageSelectDialogFragment;
 /**
  * This activity allows a user to add a new book. It provides fields
  * to enter all book details, scan isbn and add a photo.
- *
+ * <p>
  * Outstanding Issues/TODOs
  * Need to hook up to DB
+ *
  * @author Mitch Adam.
  */
 public class AddBookActivity extends AppCompatActivity implements ImageSelectDialogFragment.ImageSelectListener {
@@ -32,34 +33,10 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
     private ImageButton deletePhotoButton;
     private Button doneAddBookButton;
 
-
     private EditText titleEditText;
     private EditText authorEditText;
     private EditText isbnEditText;
     private EditText descriptionEditText;
-
-
-    private final View.OnClickListener scanISBNListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            goToScanISBN();
-        }
-    };
-
-    private final View.OnClickListener addPhotoListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            addPhoto();
-        }
-    };
-
-    private final View.OnClickListener doneAddBookListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            doneAddBook();
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +48,16 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         scanISBNButton = findViewById(R.id.add_book_scan_isbn_btn);
-        scanISBNButton.setOnClickListener(scanISBNListener);
+        scanISBNButton.setOnClickListener(v -> goToScanISBN());
 
         addPhotoButton = findViewById(R.id.add_book_add_photo_btn);
-        addPhotoButton.setOnClickListener(addPhotoListener);
+        addPhotoButton.setOnClickListener(v -> addPhoto());
 
         deletePhotoButton = findViewById(R.id.add_book_delete_photo_btn);
-        deletePhotoButton.setOnClickListener(deletePhotoListener);
+        deletePhotoButton.setOnClickListener(v -> deletePhoto());
 
         doneAddBookButton = findViewById((R.id.add_book_done_btn));
-        doneAddBookButton.setOnClickListener(doneAddBookListener);
+        doneAddBookButton.setOnClickListener(v -> doneAddBook());
 
         titleEditText = findViewById(R.id.add_book_title_field);
         authorEditText = findViewById(R.id.add_book_author_field);
@@ -94,7 +71,7 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
     }
 
     private void addPhoto() {
-       ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
+        ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
     }
 
     public void onImageSelect(Uri uri) {
@@ -120,7 +97,9 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) { return; }
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
 
         // Get ISBN
         if (requestCode == ISBN_REQUEST_CODE) {
