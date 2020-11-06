@@ -1,8 +1,11 @@
 package com.example.bookmark.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Represents a book.
@@ -28,7 +31,7 @@ public class Book implements FirestoreSerializable {
      *
      * @param title  The title.
      * @param author The author.
-     * @param isbn   This ISBN.
+     * @param isbn   The ISBN.
      * @param owner  The owner.
      */
     public Book(String title, String author, String isbn, Owner owner) {
@@ -40,7 +43,7 @@ public class Book implements FirestoreSerializable {
      *
      * @param title  The title.
      * @param author The author.
-     * @param isbn   This ISBN.
+     * @param isbn   The ISBN.
      * @param owner  The username of the owner.
      */
     public Book(String title, String author, String isbn, String owner) {
