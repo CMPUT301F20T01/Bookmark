@@ -191,7 +191,7 @@ public class AcceptRequestsActivity extends AppCompatActivity implements OnMapRe
      * location and returns it to the previous activity (ManageRequestsActivity)
      * @param view This is the view of the done button
      */
-    public void on_done_press(View view) {
+    public void onDonePress(View view) {
         /* This returns the set Geolocation to the ManageRequestsActivity which can handle setting
             the request object and passing to firebase
         */

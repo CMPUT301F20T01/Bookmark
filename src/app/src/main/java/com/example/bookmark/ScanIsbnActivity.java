@@ -46,6 +46,8 @@ import java.util.concurrent.Executors;
  */
 public class ScanIsbnActivity extends BackButtonActivity {
 
+    public static final int ISBN_RESULT_OK = 1;
+
     private Executor executor = Executors.newSingleThreadExecutor();
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
@@ -185,7 +187,7 @@ public class ScanIsbnActivity extends BackButtonActivity {
             // Return barcode
             Intent intent = new Intent();
             intent.putExtra("ISBN", barcode);
-            setResult(1, intent);
+            setResult(ScanIsbnActivity.ISBN_RESULT_OK, intent);
             finish(); //finishing activity
 
         } else {
