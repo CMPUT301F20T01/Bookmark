@@ -1,6 +1,9 @@
 package com.example.bookmark;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
  * @author Ryan Kortbeek.
  */
 public class BackButtonActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        super.onCreate(savedInstanceState);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         Intent intent = getIntent();
