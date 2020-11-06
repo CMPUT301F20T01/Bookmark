@@ -21,5 +21,9 @@
     <string name="reject_request">REJECT</string>
 
     <string name="done">DONE</string>
+    <string name="cancel">Cancel</string>
     <string name="choose_location">Choose meeting location</string>
+    <string name="choose_book_image">Choose Book Image</string>
+    <string name="choose_from_gallery">Choose From Gallery</string>
+    <string name="take_photo">Take Photo</string>
 </resources>
