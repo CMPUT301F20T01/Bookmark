@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -105,6 +106,17 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
         if (requestCode == ISBN_REQUEST_CODE) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
