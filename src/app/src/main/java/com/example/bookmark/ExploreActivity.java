@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -105,7 +104,10 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
     public void sendSearchedKeywords(String searchString) {
         // Instead of sending intent to this same activity just calls
         // executeSearch again
-        executeSearch(searchString);
+
+        // TODO replace line below with searchString when we want to start
+        //  using search
+        executeSearch("");
     }
 
     public void executeSearch(String searchedKeywords) {
