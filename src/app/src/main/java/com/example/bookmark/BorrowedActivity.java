@@ -52,7 +52,6 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
         getSupportActionBar().setTitle("Borrowed");
         navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
 
-
         borrowedBooksListView = findViewById(R.id.borrowed_books_listview);
 
         getBorrowedBooks();
