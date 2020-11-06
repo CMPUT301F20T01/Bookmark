@@ -48,7 +48,6 @@ import java.util.concurrent.Executors;
  */
 public class ScanIsbnActivity extends BackButtonActivity {
 
-    public static final int ISBN_RESULT_OK = 1;
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
@@ -189,7 +188,7 @@ public class ScanIsbnActivity extends BackButtonActivity {
             // Return barcode
             Intent intent = new Intent();
             intent.putExtra("ISBN", barcode);
-            setResult(ScanIsbnActivity.ISBN_RESULT_OK, intent);
+            setResult(Activity.RESULT_OK, intent);
             finish(); //finishing activity
 
         } else {

@@ -3,6 +3,7 @@ package com.example.bookmark;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +31,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public static final int GET_ISBN = 1;
-    public static final int BOOK_BORROWED_SUCCESSFULLY_RESULT = 1;
 
     private MapView mapView;
     private GoogleMap map;
@@ -70,7 +70,7 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == BorrowBookActivity.GET_ISBN) {
-            if (resultCode == ScanIsbnActivity.ISBN_RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 String ISBN = data.getStringExtra("ISBN");
                 if (ISBN.equals(request.getBook())) {
                     request.setStatus(Request.Status.BORROWED);
@@ -85,7 +85,7 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Intent intent = getIntent();
-                                            setResult(BorrowBookActivity.BOOK_BORROWED_SUCCESSFULLY_RESULT, intent);
+                                            setResult(Activity.RESULT_OK, intent);
                                             finish();
                                         }
                                     }, new OnFailureListener() {
