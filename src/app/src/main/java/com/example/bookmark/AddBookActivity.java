@@ -41,6 +41,7 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.navigationActivity);
         setContentView(R.layout.activity_add_book);
         getSupportActionBar().setTitle("Add Book");
 
