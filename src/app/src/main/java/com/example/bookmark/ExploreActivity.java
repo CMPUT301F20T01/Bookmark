@@ -36,6 +36,7 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public class ExploreActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
+    public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
 
     List<Book> searchResults = new ArrayList<>();
     BookList searchResultsAdapter;
@@ -59,17 +60,10 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
         executeSearch("");
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
-        searchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ExploreActivity.this,
-                    ExploreBookDetailsActivity.class);
-                // TODO decide how the book data is to be sent to the
-                //  ExploreBookDetailsActivity
-                intent.putExtra("selected-book",
-                    (Parcelable) searchResults.get(i));
-                startActivity(intent);
-            }
+        searchResultsListView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(this, ExploreBookDetailsActivity.class);
+            intent.putExtra(EXTRA_BOOK, searchResults.get(position));
+            startActivity(intent);
         });
     }
 
