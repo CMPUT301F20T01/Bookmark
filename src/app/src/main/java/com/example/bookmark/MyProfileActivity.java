@@ -30,6 +30,7 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.navigationActivity);
         setContentView(R.layout.activity_my_profile);
 
         // setup toolbar

@@ -56,6 +56,7 @@ public class MyBooksActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.navigationActivity);
         setContentView(R.layout.activity_my_books);
 
         // setup toolbar
