@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.bookmark.fragments.ImageSelectDialogFragment;
 
 /**
@@ -140,11 +142,15 @@ public class EditBookActivity extends BackButtonActivity implements ImageSelectD
     public void onImageSelect(Uri uri) {
         // TODO: Save URI for when creating a book class
         addPhotoButton.setImageURI(uri);
+        deletePhotoButton.setVisibility(View.VISIBLE);
     }
 
     private void deletePhoto() {
         // TODO: Sync up with Kyle on Firebase stuff
-        Log.d("Edit Book", "Click delete photo");
+        // TODO: Properly clear the image instead of replacing it with original drawable
+        // TODO: Clear saved URI
+        addPhotoButton.setImageDrawable(ContextCompat.getDrawable(this, android.R.drawable.ic_menu_add));
+        deletePhotoButton.setVisibility(View.GONE);
     }
 
     private void doneAddBook() {
