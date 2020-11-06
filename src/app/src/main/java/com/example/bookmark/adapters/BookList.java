@@ -26,11 +26,11 @@ import java.util.List;
  */
 public class BookList extends ArrayAdapter<Book> {
 
-    private List<Book> booksList;
-    private Context context;
+    private final List<Book> booksList;
+    private final Context context;
 
-    private boolean showOwner;
-    private boolean showStatus;
+    private final boolean showOwner;
+    private final boolean showStatus;
 
     private TextView owner;
     private TextView status;

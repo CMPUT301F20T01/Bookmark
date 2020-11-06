@@ -33,8 +33,8 @@ import java.util.ArrayList;
  */
 public class RequestList extends ArrayAdapter<Request> {
 
-    private ArrayList<Request> requests;
-    private Context context;
+    private final ArrayList<Request> requests;
+    private final Context context;
 
     /**
      * Creates a RequestList.

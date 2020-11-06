@@ -4,8 +4,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public interface MenuOptions {
-    public boolean onCreateOptionsMenu(Menu menu);
+    boolean onCreateOptionsMenu(Menu menu);
 
-    public boolean onOptionsItemSelected(MenuItem item);
+    boolean onOptionsItemSelected(MenuItem item);
 
 }

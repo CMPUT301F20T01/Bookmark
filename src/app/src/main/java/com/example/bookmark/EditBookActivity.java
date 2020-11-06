@@ -44,35 +44,35 @@ public class EditBookActivity extends BackButtonActivity implements ImageSelectD
     private EditText descriptionEditText;
 
 
-    private View.OnClickListener scanISBNListener = new View.OnClickListener() {
+    private final View.OnClickListener scanISBNListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             goToScanISBN();
         }
     };
 
-    private View.OnClickListener addPhotoListener = new View.OnClickListener() {
+    private final View.OnClickListener addPhotoListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             addPhoto();
         }
     };
 
-    private View.OnClickListener deletePhotoListener = new View.OnClickListener() {
+    private final View.OnClickListener deletePhotoListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             deletePhoto();
         }
     };
 
-    private View.OnClickListener doneAddBookListener = new View.OnClickListener() {
+    private final View.OnClickListener doneAddBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             doneAddBook();
         }
     };
 
-    private View.OnClickListener deleteBookListener = new View.OnClickListener() {
+    private final View.OnClickListener deleteBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             deleteBook();
