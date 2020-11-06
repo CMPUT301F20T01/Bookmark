@@ -100,4 +100,16 @@
         app:layout_constraintTop_toBottomOf="@+id/add_book_author_field"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
+    <ImageButton
+        android:id="@+id/add_book_delete_photo_btn"
+        android:layout_width="51dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="137dp"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/add_book_add_photo_btn"
+        app:layout_constraintTop_toBottomOf="@+id/add_book_description_field"
+        app:srcCompat="@android:drawable/ic_delete" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
