@@ -109,6 +109,29 @@ public class FirebaseProvider {
     }
 
     /**
+     * Retrieves all the books from Firebase.
+     *
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    public void retrieveBooks(OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection("books")
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                List<Book> books = new ArrayList<>();
+                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                    books.add(Book.fromFirestoreDocument(queryDocumentSnapshot.getData()));
+                }
+                Log.d(TAG, "Retrieved all books.");
+                onSuccessListener.onSuccess(books);
+            })
+            .addOnFailureListener(e -> {
+                Log.d(TAG, "Retrieving all books failed: ", e);
+                onFailureListener.onFailure(e);
+            });
+    }
+
+    /**
      * Retrieves a book from Firebase.
      *
      * @param isbn              The book's ISBN.
