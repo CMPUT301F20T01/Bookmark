@@ -18,8 +18,7 @@ import android.widget.ImageButton;
  *
  * @author Mitch Adam.
  */
-public class AddBookActivity extends AppCompatActivity {
-    // TODO: Figure out the back navigation
+public class AddBookActivity extends BackButtonActivity {
 
     private ImageButton scanISBNButton;
     private ImageButton addPhotoButton;

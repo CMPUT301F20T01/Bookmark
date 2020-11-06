@@ -18,10 +18,10 @@ import android.widget.ImageButton;
  */
 public class EditBookActivity extends BackButtonActivity {
 
-    String isbn;
-    String title;
-    String author;
-    String description;
+    private String isbn;
+    private String title;
+    private String author;
+    private String description;
 
     private ImageButton scanISBNButton;
     private ImageButton addPhotoButton;

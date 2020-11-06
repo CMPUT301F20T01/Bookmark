@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.MenuOptions;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,15 +30,15 @@ import java.util.List;
  *
  * @author Mitch Adam.
  */
-public class MyBooksActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
-    // TODO: Figure out the back navigation
+public class MyBooksActivity extends AppCompatActivity
+    implements SearchDialogFragment.OnFragmentInteractionListener, MenuOptions {
     // Going to need some sort of owner or uid
 
-    List<Book> allBooks = new ArrayList<Book>();
-    List<Book> filteredBooks;
+    private List<Book> allBooks = new ArrayList<Book>();
+    private List<Book> filteredBooks;
 
-    BookList booksAdapter;
-    ListView booksListView;
+    private BookList booksAdapter;
+    private ListView booksListView;
 
     FloatingActionButton addBookBtn;
 

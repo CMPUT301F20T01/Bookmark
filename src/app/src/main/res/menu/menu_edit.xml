@@ -5,7 +5,7 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/menu_filter_search_search_btn"
+        android:id="@+id/menu_edit_edit_btn"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/edit"
         app:showAsAction="always" />
