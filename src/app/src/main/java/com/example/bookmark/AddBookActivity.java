@@ -39,28 +39,21 @@ public class AddBookActivity extends AppCompatActivity implements ImageSelectDia
     private EditText descriptionEditText;
 
 
-    private View.OnClickListener scanISBNListener = new View.OnClickListener() {
+    private final View.OnClickListener scanISBNListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             goToScanISBN();
         }
     };
 
-    private View.OnClickListener addPhotoListener = new View.OnClickListener() {
+    private final View.OnClickListener addPhotoListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             addPhoto();
         }
     };
 
-    private View.OnClickListener deletePhotoListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            deletePhoto();
-        }
-    };
-
-    private View.OnClickListener doneAddBookListener = new View.OnClickListener() {
+    private final View.OnClickListener doneAddBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             doneAddBook();

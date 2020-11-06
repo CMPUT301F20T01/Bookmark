@@ -12,12 +12,14 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
+import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +39,19 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
     BookList borrowedBooksAdapter;
     ListView borrowedBooksListView;
 
-    ActionBar borrowedActionBar;
+    private Drawer navigationDrawer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrowed);
 
+        // setup toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.borrowed_toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Borrowed");
+        navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
+
 
         borrowedBooksListView = findViewById(R.id.borrowed_books_listview);
 
@@ -85,6 +92,16 @@ public class BorrowedActivity extends AppCompatActivity implements SearchDialogF
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //handle the back press :D close the drawer first and if the drawer is closed close the activity
+        if (navigationDrawer != null && navigationDrawer.isDrawerOpen()) {
+            navigationDrawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

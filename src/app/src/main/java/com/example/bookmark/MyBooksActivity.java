@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
@@ -17,6 +18,7 @@ import com.example.bookmark.models.MenuOptions;
 import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +37,16 @@ public class MyBooksActivity extends AppCompatActivity
     implements SearchDialogFragment.OnFragmentInteractionListener, MenuOptions {
     // Going to need some sort of owner or uid
 
-    private List<Book> allBooks = new ArrayList<Book>();
+    private final List<Book> allBooks = new ArrayList<Book>();
     private List<Book> filteredBooks;
 
     private BookList booksAdapter;
     private ListView booksListView;
 
     FloatingActionButton addBookBtn;
+    private Drawer navigationDrawer = null;
 
-    private View.OnClickListener addBookListener = new View.OnClickListener() {
+    private final View.OnClickListener addBookListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             goToAddBook();
@@ -55,7 +58,12 @@ public class MyBooksActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_books);
 
+        // setup toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_books_toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("My Books");
+        navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
+
 
         booksListView = findViewById(R.id.my_books_listview);
 
@@ -111,6 +119,16 @@ public class MyBooksActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_filter_search, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //handle the back press :D close the drawer first and if the drawer is closed close the activity
+        if (navigationDrawer != null && navigationDrawer.isDrawerOpen()) {
+            navigationDrawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
