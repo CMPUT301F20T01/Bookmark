@@ -54,17 +54,9 @@ public class ImageSelectDialogFragment extends DialogFragment {
     };
     private static final int TAKE_PHOTO_REQUEST_CODE = 300;
     private static final int TAKE_PHOTO_PERMISSIONS_REQUEST_CODE = 301;
-    // For getExternalFilesDir()
     private static final String[] TAKE_PHOTO_PERMISSIONS = new String[]{
         Manifest.permission.CAMERA
     };
-    // For getExternalStoragePublicDirectory()
-    // private static final String[] TAKE_PHOTO_PERMISSIONS = new String[] {
-    //     Manifest.permission.CAMERA,
-    //     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    //     // TODO: May need this if not passing back URI
-    //     Manifest.permission.READ_EXTERNAL_STORAGE
-    // };
 
     private ImageSelectListener listener;
     private Context context;
@@ -176,15 +168,10 @@ public class ImageSelectDialogFragment extends DialogFragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         String filename = sdf.format(new Date());
-        // Use getExternalStoragePublicDirectory for API<=28 support
-        // File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(filename, ".jpg", storageDir);
 
-        // Save a file: path for use with ACTION_VIEW intents
-        Log.d(TAG, "Image saved to " + image.getAbsolutePath());
-        // currentPhotoPath = image.getAbsolutePath();
-        return image;
+        // Use getExternalFilesDir for API<=28 support
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(filename, ".jpg", storageDir);
     }
 
     /**

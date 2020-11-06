@@ -129,7 +129,7 @@ public class EditBookActivity extends BackButtonActivity implements ImageSelectD
 
     private void goToScanISBN() {
         Intent intent = new Intent(EditBookActivity.this, ScanIsbnActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, ISBN_REQUEST_CODE);
     }
 
     private void addPhoto() {

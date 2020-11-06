@@ -1,6 +1,7 @@
 package com.example.bookmark;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -185,7 +186,7 @@ public class ScanIsbnActivity extends BackButtonActivity {
             // Return barcode
             Intent intent = new Intent();
             intent.putExtra("ISBN", barcode);
-            setResult(1, intent);
+            setResult(Activity.RESULT_OK, intent);
             finish(); //finishing activity
 
         } else {

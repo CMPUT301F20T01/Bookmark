@@ -13,7 +13,7 @@
         android:id="@+id/button_gallery_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Choose from gallery" />
+        android:text="@string/choose_from_gallery" />
 
     <Button
         android:id="@+id/button_take_photo"
