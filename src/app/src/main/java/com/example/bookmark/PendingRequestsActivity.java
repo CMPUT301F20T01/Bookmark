@@ -33,9 +33,9 @@ public class PendingRequestsActivity extends AppCompatActivity implements Search
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
 
-    List<Book> requestedBooks = new ArrayList<>();
-    BookList requestedBooksAdapter;
-    ListView requestedBooksListView;
+    private List<Book> requestedBooks = new ArrayList<>();
+    private BookList requestedBooksAdapter;
+    private ListView requestedBooksListView;
 
     private Drawer navigationDrawer = null;
 
