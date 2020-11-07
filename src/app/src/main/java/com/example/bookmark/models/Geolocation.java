@@ -4,6 +4,7 @@ import com.example.bookmark.server.FirestoreSerializable;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -42,6 +43,11 @@ public class Geolocation implements FirestoreSerializable, Serializable {
      */
     public float getLongitude() {
         return longitude;
+    }
+
+    @Override
+    public String getId() {
+        return String.format(Locale.CANADA, "%f:%f", latitude, longitude);
     }
 
     @Override

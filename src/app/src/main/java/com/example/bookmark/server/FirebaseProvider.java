@@ -120,6 +120,18 @@ public class FirebaseProvider {
     }
 
     /**
+     * Retrieves a request from Firebase.
+     *
+     * @param book              The book the request was for.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    public void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
+        String id = String.format("%s:%s", book.getId(), requester.getId());
+        retrieveEntity(Collection.REQUESTS, id, Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    }
+
+    /**
      * Retrieves the list of requests for a book from Firebase.
      *
      * @param book              The book the request was for.

@@ -1,7 +1,6 @@
 package com.example.bookmark;
 
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Borrower;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
@@ -20,7 +19,7 @@ public class FirebaseProviderTest {
     @Test
     public void testCreateAndGetUser() {
         Semaphore semaphore = new Semaphore(0);
-        User user = new User("john.smith42", "John", "Smith", "jsmith@ualberta.ca", "7801234567");
+        User user = mockUser();
         FirebaseProvider.getInstance().storeUser(user, aVoid -> {
             FirebaseProvider.getInstance().retrieveUserByUsername(user.getUsername(), user2 -> {
                 assertEquals(user, user2);
@@ -47,9 +46,10 @@ public class FirebaseProviderTest {
     @Test
     public void testCreateAndGetBook() {
         Semaphore semaphore = new Semaphore(0);
-        Book book = new Book("Code Complete 2", "Steve McConnell", "0-7356-1976-0", "john.smith42");
+        User owner = mockUser();
+        Book book = new Book(owner, "Code Complete 2", "Steve McConnell", "0-7356-1976-0");
         FirebaseProvider.getInstance().storeBook(book, aVoid -> {
-            FirebaseProvider.getInstance().retrieveBookByIsbn(book.getIsbn(), book2 -> {
+            FirebaseProvider.getInstance().retrieveBook(owner, book.getIsbn(), book2 -> {
                 assertEquals(book, book2);
                 semaphore.release();
             }, e -> {
@@ -74,15 +74,15 @@ public class FirebaseProviderTest {
     @Test
     public void testCreateAndGetAndDeleteRequest() {
         Semaphore semaphore = new Semaphore(0);
-        Borrower borrower = new Borrower("mary.jane9", "Mary", "Jane", "mjane@ualberta.ca", "7809999999");
-        Book book = new Book("Programming Pearls", "Jon Bentley", "978-0-201-65788-3", "john.smith42");
+        User owner = mockUser();
+        User borrower = mockBorrower();
+        Book book = new Book(owner, "Programming Pearls", "Jon Bentley", "978-0-201-65788-3");
         Request request = new Request(book, borrower, null);
         FirebaseProvider.getInstance().storeRequest(request, aVoid -> {
-            FirebaseProvider.getInstance().retrieveRequestByUserAndBook(borrower, book, request2 -> {
+            FirebaseProvider.getInstance().retrieveRequest(book, borrower, request2 -> {
                 assertEquals(request, request2);
-                FirebaseProvider.getInstance().deleteRequest(request, aVoid2 -> {
-                    semaphore.release();
-                }, e -> {
+                FirebaseProvider.getInstance().deleteRequest(request, aVoid2 ->
+                    semaphore.release(), e -> {
                     fail("An error occurred while deleting the request");
                 });
             }, e -> {
@@ -99,5 +99,13 @@ public class FirebaseProviderTest {
                 // Ignores interruptions.
             }
         }
+    }
+
+    private User mockUser() {
+        return new User("john.smith42", "John", "Smith", "jsmith@ualberta.ca", "7801234567");
+    }
+
+    private User mockBorrower() {
+        return new User("mary.jane9", "Mary", "Jane", "mjane@ualberta.ca", "7809999999");
     }
 }

@@ -34,7 +34,7 @@ public class Book implements FirestoreSerializable, Serializable {
      * @param author The author.
      * @param isbn   The ISBN.
      */
-    public Book(Owner owner, String title, String author, String isbn) {
+    public Book(User owner, String title, String author, String isbn) {
         this(owner.getId(), title, author, isbn);
     }
 
@@ -46,7 +46,7 @@ public class Book implements FirestoreSerializable, Serializable {
      * @param author  The author.
      * @param isbn    The ISBN.
      */
-    public Book(String ownerId, String title, String author, String isbn) {
+    private Book(String ownerId, String title, String author, String isbn) {
         this.ownerId = ownerId;
         this.title = title;
         this.author = author;
@@ -145,7 +145,7 @@ public class Book implements FirestoreSerializable, Serializable {
 
     @Override
     public String getId() {
-        return ownerId + isbn;
+        return String.format("%s:%s", ownerId, isbn);
     }
 
     @Override

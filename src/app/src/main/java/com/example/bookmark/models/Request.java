@@ -33,7 +33,7 @@ public class Request implements FirestoreSerializable, Serializable {
      * @param requester The requester.
      * @param location  The pickup location.
      */
-    public Request(Book book, Borrower requester, Geolocation location) {
+    public Request(Book book, User requester, Geolocation location) {
         this(book.getId(), requester.getId(), new Date(), location);
     }
 
@@ -117,7 +117,7 @@ public class Request implements FirestoreSerializable, Serializable {
 
     @Override
     public String getId() {
-        return bookId + requesterId;
+        return String.format("%s:%s", bookId, requesterId);
     }
 
     @Override
