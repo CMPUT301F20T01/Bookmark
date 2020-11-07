@@ -1,4 +1,4 @@
-package com.example.bookmark.models;
+package com.example.bookmark;
 
 import android.view.Menu;
 import android.view.MenuItem;

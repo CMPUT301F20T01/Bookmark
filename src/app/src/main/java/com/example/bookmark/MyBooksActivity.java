@@ -14,7 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.MenuOptions;
 import com.example.bookmark.models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.materialdrawer.Drawer;
