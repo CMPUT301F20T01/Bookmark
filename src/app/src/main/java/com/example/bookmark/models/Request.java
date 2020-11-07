@@ -1,5 +1,6 @@
 package com.example.bookmark.models;
 
+import com.example.bookmark.server.FirestoreSerializable;
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
@@ -18,8 +19,8 @@ public class Request implements FirestoreSerializable, Serializable {
         REQUESTED, ACCEPTED, BORROWED
     }
 
-    private final String book;
-    private final String requester;
+    private final String bookId;
+    private final String requesterId;
     private final Date createdDate;
 
     private Geolocation location;
@@ -33,40 +34,40 @@ public class Request implements FirestoreSerializable, Serializable {
      * @param location  The pickup location.
      */
     public Request(Book book, Borrower requester, Geolocation location) {
-        this(book.getIsbn(), requester.getUsername(), new Date(), location);
+        this(book.getId(), requester.getId(), new Date(), location);
     }
 
     /**
      * Creates a Request.
      *
-     * @param book        The requested book ISBN.
-     * @param requester   The requester's username.
+     * @param bookId      The id of the requested book.
+     * @param requesterId The id of the requester.
      * @param createdDate The date the request was created.
      * @param location    The pickup location.
      */
-    private Request(String book, String requester, Date createdDate, Geolocation location) {
-        this.book = book;
-        this.requester = requester;
+    private Request(String bookId, String requesterId, Date createdDate, Geolocation location) {
+        this.bookId = bookId;
+        this.requesterId = requesterId;
         this.createdDate = createdDate;
         this.location = location;
     }
 
     /**
-     * Gets the requested book's ISBN.
+     * Gets the id of the requested book.
      *
-     * @return The requested book's ISBN.
+     * @return The id of the requested book.
      */
-    public String getBook() {
-        return book;
+    public String getBookId() {
+        return bookId;
     }
 
     /**
-     * Gets the requester's username.
+     * Gets the id of the requester.
      *
-     * @return The requester's username.
+     * @return The id of the requester.
      */
-    public String getRequester() {
-        return requester;
+    public String getRequesterId() {
+        return requesterId;
     }
 
     /**
@@ -115,10 +116,15 @@ public class Request implements FirestoreSerializable, Serializable {
     }
 
     @Override
+    public String getId() {
+        return bookId + requesterId;
+    }
+
+    @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
-        map.put("book", book);
-        map.put("requester", requester);
+        map.put("bookId", bookId);
+        map.put("requesterId", requesterId);
         map.put("createdDate", createdDate);
         map.put("location", location == null ? null : location.toFirestoreDocument());
         map.put("status", status);
@@ -131,7 +137,7 @@ public class Request implements FirestoreSerializable, Serializable {
         if (locationMap != null) {
             location = Geolocation.fromFirestoreDocument(locationMap);
         }
-        Request request = new Request((String) map.get("book"), (String) map.get("requester"), ((Timestamp) map.get("createdDate")).toDate(), location);
+        Request request = new Request((String) map.get("bookId"), (String) map.get("requesterId"), ((Timestamp) map.get("createdDate")).toDate(), location);
         request.status = Status.valueOf((String) map.get("status"));
         return request;
     }
@@ -141,8 +147,8 @@ public class Request implements FirestoreSerializable, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Request request = (Request) o;
-        return Objects.equals(book, request.book) &&
-            Objects.equals(requester, request.requester) &&
+        return Objects.equals(bookId, request.bookId) &&
+            Objects.equals(requesterId, request.requesterId) &&
             Objects.equals(createdDate, request.createdDate) &&
             Objects.equals(location, request.location) &&
             status == request.status;

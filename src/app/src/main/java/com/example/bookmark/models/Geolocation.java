@@ -1,5 +1,7 @@
 package com.example.bookmark.models;
 
+import com.example.bookmark.server.FirestoreSerializable;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
