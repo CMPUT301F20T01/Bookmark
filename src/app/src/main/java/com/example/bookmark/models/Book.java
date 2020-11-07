@@ -17,10 +17,10 @@ public class Book implements FirestoreSerializable, Serializable {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }
 
+    private final String ownerId;
     private final String title;
     private final String author;
     private final String isbn;
-    private final String ownerId;
 
     private Photograph photograph = null;
     private String description = "";
@@ -54,6 +54,15 @@ public class Book implements FirestoreSerializable, Serializable {
     }
 
     /**
+     * Gets the id of the owner.
+     *
+     * @return The id of the owner.
+     */
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    /**
      * Gets the title.
      *
      * @return The title.
@@ -78,15 +87,6 @@ public class Book implements FirestoreSerializable, Serializable {
      */
     public String getIsbn() {
         return isbn;
-    }
-
-    /**
-     * Gets the id of the owner.
-     *
-     * @return The id of the owner.
-     */
-    public String getOwnerId() {
-        return ownerId;
     }
 
     /**

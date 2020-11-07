@@ -95,10 +95,10 @@ public class MyBooksActivity extends AppCompatActivity
         Owner owner = new Owner("u", "fn", "ln",
             "email", "pn");
 
-        Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
+        Book b1 = new Book(owner, "Title 1", "Author 1", "1111111");
         b1.setDescription("Book 1 description");
 
-        Book b2 = new Book("Title 2", "Author 2", "22222", owner);
+        Book b2 = new Book(owner, "Title 2", "Author 2", "22222");
         b2.setDescription("Book 2 description");
 
         allBooks.add(b1);

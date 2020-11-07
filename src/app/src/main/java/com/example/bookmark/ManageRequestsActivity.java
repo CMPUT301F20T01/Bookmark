@@ -67,7 +67,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
                     owner = null;
                 }
             };
-            FirebaseProvider.getInstance().retrieveUserByUsername(book.getOwner(), onUserSuccess, onUserFailure);
+            FirebaseProvider.getInstance().retrieveUserByUsername(book.getOwnerId(), onUserSuccess, onUserFailure);
             bookTitle = book.getTitle();
         }
 

@@ -2,6 +2,7 @@ package com.example.bookmark.models;
 
 import com.example.bookmark.server.FirestoreSerializable;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -11,7 +12,7 @@ import java.util.Objects;
  *
  * @author Kyle Hennig.
  */
-public class User implements FirestoreSerializable {
+public class User implements FirestoreSerializable, Serializable {
     private final String username;
     private String firstName;
     private String lastName;

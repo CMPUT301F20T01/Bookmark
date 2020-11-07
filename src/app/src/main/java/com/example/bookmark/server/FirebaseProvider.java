@@ -86,6 +86,19 @@ public class FirebaseProvider {
     }
 
     /**
+     * Retrieves a book from Firebase.
+     *
+     * @param owner             The owner of the book.
+     * @param isbn              The book's ISBN.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    public void retrieveBook(User owner, String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+        String id = String.format("%s:%s", owner.getId(), isbn);
+        retrieveEntity(Collection.BOOKS, id, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    }
+
+    /**
      * Retrieves all the books from Firebase.
      *
      * @param onSuccessListener Callback to run on success.
@@ -125,7 +138,7 @@ public class FirebaseProvider {
      * @param onFailureListener Callback to run on failure.
      */
     public void retrieveRequestsByRequester(User requester, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("user", requester.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requester", requester.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     /**
