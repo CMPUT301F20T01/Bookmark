@@ -46,11 +46,6 @@ public class Geolocation implements FirestoreSerializable, Serializable {
     }
 
     @Override
-    public String getId() {
-        return String.format(Locale.CANADA, "%f:%f", latitude, longitude);
-    }
-
-    @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
         map.put("latitude", latitude);
@@ -59,9 +54,12 @@ public class Geolocation implements FirestoreSerializable, Serializable {
     }
 
     public static Geolocation fromFirestoreDocument(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
         return new Geolocation(
-            (float) ((double) map.get("latitude")),
-            (float) ((double) map.get("longitude"))
+            (float) map.get("latitude"),
+            (float) map.get("longitude")
         );
     }
 

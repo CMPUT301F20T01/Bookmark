@@ -1,6 +1,6 @@
 package com.example.bookmark.models;
 
-import com.example.bookmark.server.FirestoreSerializable;
+import com.example.bookmark.server.FirestoreIndexable;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author Kyle Hennig.
  */
-public class Book implements FirestoreSerializable, Serializable {
+public class Book implements FirestoreIndexable, Serializable {
     public enum Status {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }
@@ -38,14 +38,6 @@ public class Book implements FirestoreSerializable, Serializable {
         this(owner.getId(), title, author, isbn);
     }
 
-    /**
-     * Creates a Book.
-     *
-     * @param ownerId The id of the owner.
-     * @param title   The title.
-     * @param author  The author.
-     * @param isbn    The ISBN.
-     */
     private Book(String ownerId, String title, String author, String isbn) {
         this.ownerId = ownerId;
         this.title = title;
@@ -155,16 +147,18 @@ public class Book implements FirestoreSerializable, Serializable {
         map.put("author", author);
         map.put("isbn", isbn);
         map.put("ownerId", ownerId);
-        // TODO: Photograph will likely have to be compressed and serialized due to size.
-        map.put("photograph", photograph);
+        map.put("photograph", photograph != null ? photograph.toFirestoreDocument() : null);
         map.put("description", description);
         map.put("status", status);
         return map;
     }
 
     public static Book fromFirestoreDocument(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
         Book book = new Book((String) map.get("ownerId"), (String) map.get("title"), (String) map.get("author"), (String) map.get("isbn"));
-        book.photograph = (Photograph) map.get("photograph");
+        book.photograph = Photograph.fromFirestoreDocument((Map<String, Object>) map.get("photograph"));
         book.description = (String) map.get("description");
         book.status = Status.valueOf((String) map.get("status"));
         return book;

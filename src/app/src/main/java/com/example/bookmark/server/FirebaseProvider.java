@@ -164,7 +164,7 @@ public class FirebaseProvider {
         deleteEntity(Collection.REQUESTS, request.getId(), onSuccessListener, onFailureListener);
     }
 
-    private void storeEntity(Collection collection, FirestoreSerializable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+    private void storeEntity(Collection collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection(collection.name)
             .document(entity.getId())
             .set(entity.toFirestoreDocument())

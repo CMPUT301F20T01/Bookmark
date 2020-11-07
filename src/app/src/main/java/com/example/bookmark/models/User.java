@@ -1,6 +1,6 @@
 package com.example.bookmark.models;
 
-import com.example.bookmark.server.FirestoreSerializable;
+import com.example.bookmark.server.FirestoreIndexable;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author Kyle Hennig.
  */
-public class User implements FirestoreSerializable, Serializable {
+public class User implements FirestoreIndexable, Serializable {
     private final String username;
     private String firstName;
     private String lastName;
@@ -134,6 +134,9 @@ public class User implements FirestoreSerializable, Serializable {
     }
 
     public static User fromFirestoreDocument(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
         return new User(
             (String) map.get("username"),
             (String) map.get("firstName"),

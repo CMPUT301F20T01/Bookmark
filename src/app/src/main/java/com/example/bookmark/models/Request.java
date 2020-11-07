@@ -1,6 +1,6 @@
 package com.example.bookmark.models;
 
-import com.example.bookmark.server.FirestoreSerializable;
+import com.example.bookmark.server.FirestoreIndexable;
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @author Kyle Hennig.
  */
-public class Request implements FirestoreSerializable, Serializable {
+public class Request implements FirestoreIndexable, Serializable {
     public enum Status {
         REQUESTED, ACCEPTED, BORROWED
     }
@@ -37,14 +37,6 @@ public class Request implements FirestoreSerializable, Serializable {
         this(book.getId(), requester.getId(), new Date(), location);
     }
 
-    /**
-     * Creates a Request.
-     *
-     * @param bookId      The id of the requested book.
-     * @param requesterId The id of the requester.
-     * @param createdDate The date the request was created.
-     * @param location    The pickup location.
-     */
     private Request(String bookId, String requesterId, Date createdDate, Geolocation location) {
         this.bookId = bookId;
         this.requesterId = requesterId;
@@ -126,17 +118,16 @@ public class Request implements FirestoreSerializable, Serializable {
         map.put("bookId", bookId);
         map.put("requesterId", requesterId);
         map.put("createdDate", createdDate);
-        map.put("location", location == null ? null : location.toFirestoreDocument());
+        map.put("location", location != null ? location.toFirestoreDocument() : null);
         map.put("status", status);
         return map;
     }
 
     public static Request fromFirestoreDocument(Map<String, Object> map) {
-        Map<String, Object> locationMap = (Map<String, Object>) map.get("location");
-        Geolocation location = null;
-        if (locationMap != null) {
-            location = Geolocation.fromFirestoreDocument(locationMap);
+        if (map == null) {
+            return null;
         }
+        Geolocation location = Geolocation.fromFirestoreDocument((Map<String, Object>) map.get("location"));
         Request request = new Request((String) map.get("bookId"), (String) map.get("requesterId"), ((Timestamp) map.get("createdDate")).toDate(), location);
         request.status = Status.valueOf((String) map.get("status"));
         return request;
