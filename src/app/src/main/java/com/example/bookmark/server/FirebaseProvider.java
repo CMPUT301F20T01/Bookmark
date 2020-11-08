@@ -248,7 +248,7 @@ public class FirebaseProvider {
             });
     }
 
-    public void deleteEntity(Collection collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+    private void deleteEntity(Collection collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection(collection.name)
             .document(id)
             .delete()
