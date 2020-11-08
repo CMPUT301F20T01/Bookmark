@@ -59,7 +59,7 @@ public class SignupActivity extends BackButtonActivity {
         formLayouts.add(firstNameLayout);
         formLayouts.add(lastNameLayout);
 
-        signUpButton.setOnClickListener(view -> {
+         signUpButton.setOnClickListener(view -> {
             boolean invalidField = false;
             // double check all form fields filled
             for (int i = 0; i < formTexts.size(); i++) {
@@ -136,29 +136,11 @@ public class SignupActivity extends BackButtonActivity {
         });
 
         // focus change listeners
-        userNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                userNameLayout.setError(null);
-            } else {
-                validateEditTextEmpty(userNameEditText, userNameLayout);
-            }
-        });
-
-        firstNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                firstNameLayout.setError(null);
-            } else {
-                validateEditTextEmpty(firstNameEditText, firstNameLayout);
-            }
-        });
-
-        lastNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                lastNameLayout.setError(null);
-            } else {
-                validateEditTextEmpty(lastNameEditText, lastNameLayout);
-            }
-        });
+        for (int i = 0; i < formTexts.size(); i++) {
+            EditText text = formTexts.get(i);
+            TextInputLayout layout = formLayouts.get(i);
+            formTexts.get(i).setOnFocusChangeListener(new EmptyTextFocusListener(text, layout));
+        }
 
         emailAddressEditText.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -196,5 +178,23 @@ public class SignupActivity extends BackButtonActivity {
             aVoid -> {
             },
             e -> Toast.makeText(SignupActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
+    }
+}
+
+class EmptyTextFocusListener implements View.OnFocusChangeListener {
+    EditText text;
+    TextInputLayout layout;
+
+    public EmptyTextFocusListener(EditText ptext, TextInputLayout playout){
+        this.text = ptext;
+        this.layout = playout;
+    }
+
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            this.layout.setError(null);
+        } else {
+            validateEditTextEmpty(this.text, this.layout);
+        }
     }
 }
