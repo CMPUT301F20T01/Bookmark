@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
     FirebaseProvider firebaseProvider = FirebaseProvider.getInstance();
 
     private EditText userNameEditText;
-    private Button signInButton;
+    private Button loginButton;
     private Button signUpButton;
 
     /**
@@ -42,14 +42,14 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         setContentView(R.layout.activity_main);
 
         // Fetch relevant views
-        userNameEditText = findViewById(R.id.login_username_edit_text);
-        signInButton = findViewById(R.id.login_sign_in_button);
-        signUpButton = findViewById(R.id.login_sign_up_button);
+        userNameEditText = findViewById(R.id.login_username_textInput);
+        loginButton = findViewById(R.id.login_login_button);
+        signUpButton = findViewById(R.id.login_signup_button);
 
         /**
          * Sign in button event listener
          */
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username = userNameEditText.getText().toString();
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
             });
 
         // fill out field for easier sign in
-        userNameEditText = findViewById(R.id.login_username_edit_text);
+        userNameEditText = findViewById(R.id.login_username_textInput);
         userNameEditText.setText(user.getUsername());
     }
 }
