@@ -12,9 +12,14 @@ import android.widget.Toast;
 
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.util.FormValidator;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+
+import static com.example.bookmark.util.FormValidator.checkIfEditTextValidEmail;
+import static com.example.bookmark.util.FormValidator.checkIfEditTextValidPhoneNumber;
+import static com.example.bookmark.util.FormValidator.validateEditTextEmpty;
 
 public class SignupActivity extends BackButtonActivity {
     private EditText userNameEditText, firstNameEditText, lastNameEditText, emailAddressEditText, phoneNumberEditText;
@@ -191,66 +196,5 @@ public class SignupActivity extends BackButtonActivity {
             aVoid -> {
             },
             e -> Toast.makeText(SignupActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
-    }
-
-    /**
-     * Function to check if a EditText field is empty and float an error if it is.
-     *
-     * @args EditText editText: the text field to check
-     * boolean hasFocus: whether or not the text field has focus
-     * @returns boolean: whether or not the field is empty
-     */
-    private boolean validateEditTextEmpty(EditText editText, TextInputLayout layout) {
-        if (editText.getText().toString().equals("")) {
-            layout.setError("This field cannot be left empty.");
-            return false;
-        } else {
-            layout.setError(null);
-            return true;
-        }
-    }
-
-    /**
-     * Function to check if a EditText field is a valid email and float an error if it is
-     *
-     * @args EditText editText: the text field to check
-     * boolean hasFocus: whether or not the text field has focus
-     * @returns boolean: whether or not the editText contains a valid email
-     */
-    private boolean checkIfEditTextValidEmail(EditText editText, TextInputLayout layout) {
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-        String string = editText.getText().toString();
-        if (string.equals("")) {
-            layout.setError("This field cannot be left empty");
-            return false;
-        } else if (!string.matches(emailPattern)) {
-            layout.setError("Please enter a valid email address.");
-            return false;
-        } else {
-            layout.setError(null);
-            return true;
-        }
-    }
-
-    /**
-     * Function to check if a EditText field is a valid phone number and float an error if it is
-     *
-     * @args EditText editText: the text field to check
-     * boolean hasFocus: whether or not the text field has focus
-     * @returns boolean: whether or not the editText contains a phone number
-     */
-    private boolean checkIfEditTextValidPhoneNumber(EditText editText, TextInputLayout layout) {
-        String phonePattern = "^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$";
-        String string = editText.getText().toString();
-        if (string.equals("")) {
-            layout.setError("This field cannot be left empty");
-            return false;
-        } else if (!string.matches(phonePattern)) {
-            layout.setError("Please enter a valid phone number.");
-            return false;
-        } else {
-            layout.setError(null);
-            return true;
-        }
     }
 }

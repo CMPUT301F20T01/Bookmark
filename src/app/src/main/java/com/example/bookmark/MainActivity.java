@@ -13,9 +13,12 @@ import android.widget.Toast;
 
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.util.FormValidator;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+
+import static com.example.bookmark.util.FormValidator.validateEditTextEmpty;
 
 /**
  * Starting point of the application.
@@ -56,14 +59,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /**
+         * username EditText onFocus listener
+         */
+        userNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                userNameLayout.setError(null);
+            } else {
+                validateEditTextEmpty(userNameEditText, userNameLayout);
+            }
+        });
+
+        /**
          * Sign in button event listener
          */
         loginButton.setOnClickListener(view -> {
             String username = userNameEditText.getText().toString();
-            if (username.length() == 0) {
-                userNameLayout.setError("Please enter a username.");
+            if (!validateEditTextEmpty(userNameEditText, userNameLayout)) {
                 return;
             }
+
             // check if username is valid user, if not fire small error notification ect
             firebaseProvider.retrieveUserByUsername(username,
                 user -> {
