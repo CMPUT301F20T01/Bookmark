@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,12 +14,12 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        app:errorEnabled="true"
+        app:helperText="Username"
+        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:helperTextEnabled="true"
-        app:helperText="Username"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signup_username_edit_text"
@@ -38,12 +37,12 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        app:errorEnabled="true"
+        app:helperText="First Name"
+        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_username_textInputLayout"
-        app:helperTextEnabled="true"
-        app:helperText="First Name"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/signup_username_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signup_firstname_edit_text"
@@ -61,12 +60,12 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        app:errorEnabled="true"
+        app:helperText="Last Name"
+        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_firstname_textInputLayout"
-        app:helperTextEnabled="true"
-        app:helperText="Last Name"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/signup_firstname_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signup_lastname_edit_text"
@@ -84,12 +83,12 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        app:errorEnabled="true"
+        app:helperText="Email"
+        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_lastname_textInputLayout"
-        app:helperTextEnabled="true"
-        app:helperText="Email"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/signup_lastname_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signup_email_edit_text"
@@ -107,12 +106,12 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        app:errorEnabled="true"
+        app:helperText="Phone Number"
+        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_email_textInputLayout"
-        app:helperTextEnabled="true"
-        app:helperText="Phone Number"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/signup_email_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signup_phonenumber_edit_text"

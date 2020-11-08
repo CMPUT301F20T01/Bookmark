@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-//import com.example.bookmark.fragments.SignupDialogFragment;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -59,53 +58,39 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Sign in button event listener
          */
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = userNameEditText.getText().toString();
-                if (username.length() == 0) {
-                    userNameLayout.setError("Please enter a username.");
-                    return;
-                }
-                // check if username is valid user, if not fire small error notification ect
-                firebaseProvider.retrieveUserByUsername(username,
-                    new OnSuccessListener<User>() {
-                        @Override
-                        public void onSuccess(User user) {
-                            if (user == null) {
-                                userNameLayout.setError("User not registered!");
-                            } else {
-                                // store user object in shared preferences
-                                SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("USER_NAME", user.getUsername());
-                                editor.commit();
-                                // launch my books activity
-                                Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-                    },
-                    new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(MainActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show();
-                        }
-                    });
+        loginButton.setOnClickListener(view -> {
+            String username = userNameEditText.getText().toString();
+            if (username.length() == 0) {
+                userNameLayout.setError("Please enter a username.");
+                return;
             }
+            // check if username is valid user, if not fire small error notification ect
+            firebaseProvider.retrieveUserByUsername(username,
+                user -> {
+                    if (user == null) {
+                        userNameLayout.setError("User not registered!");
+                    } else {
+                        // store user object in shared preferences
+                        SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("USER_NAME", user.getUsername());
+                        editor.commit();
+                        // launch my books activity
+                        Intent intent1 = new Intent(getApplicationContext(), MyBooksActivity.class);
+                        startActivity(intent1);
+                    }
+                },
+                e -> Toast.makeText(MainActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
         });
 
         /**
          * Sign up button event listener
          */
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userNameEditText.setText("");
-                userNameLayout.setError(null); // hides error message
-                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
-                startActivity(intent);
-            }
+        signUpButton.setOnClickListener(view -> {
+            userNameEditText.setText("");
+            userNameLayout.setError(null); // hides error message
+            Intent intent12 = new Intent(MainActivity.this, SignupActivity.class);
+            startActivity(intent12);
         });
     }
 }

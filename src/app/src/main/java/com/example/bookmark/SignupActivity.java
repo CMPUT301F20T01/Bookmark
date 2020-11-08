@@ -101,7 +101,8 @@ public class SignupActivity extends BackButtonActivity {
         // allows user to see if their email address is valid as they type
         phoneNumberEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -109,13 +110,15 @@ public class SignupActivity extends BackButtonActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // allows user to see if their phone number is valid as they type
         emailAddressEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -123,69 +126,55 @@ public class SignupActivity extends BackButtonActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // focus change listeners
-        userNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    userNameLayout.setError(null);
+        userNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                userNameLayout.setError(null);
+            } else {
+                validateEditTextEmpty(userNameEditText, userNameLayout);
+            }
+        });
+
+        firstNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                firstNameLayout.setError(null);
+            } else {
+                validateEditTextEmpty(firstNameEditText, firstNameLayout);
+            }
+        });
+
+        lastNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                lastNameLayout.setError(null);
+            } else {
+                validateEditTextEmpty(lastNameEditText, lastNameLayout);
+            }
+        });
+
+        emailAddressEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                emailAddressLayout.setError(null);
+            } else {
+                if (emailAddressEditText.getText().toString().equals("")) {
+                    validateEditTextEmpty(emailAddressEditText, emailAddressLayout);
                 } else {
-                    validateEditTextEmpty(userNameEditText, userNameLayout);
+                    checkIfEditTextValidEmail(emailAddressEditText, emailAddressLayout);
                 }
             }
         });
 
-        firstNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    firstNameLayout.setError(null);
+        phoneNumberEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                phoneNumberLayout.setError(null);
+            } else {
+                if (phoneNumberEditText.getText().toString().equals("")) {
+                    validateEditTextEmpty(phoneNumberEditText, phoneNumberLayout);
                 } else {
-                    validateEditTextEmpty(firstNameEditText, firstNameLayout);
-                }
-            }
-        });
-
-        lastNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    lastNameLayout.setError(null);
-                } else {
-                    validateEditTextEmpty(lastNameEditText, lastNameLayout);
-                }
-            }
-        });
-
-        emailAddressEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    emailAddressLayout.setError(null);
-                } else {
-                    if (emailAddressEditText.getText().toString().equals("")) {
-                        validateEditTextEmpty(emailAddressEditText, emailAddressLayout);
-                    } else {
-                        checkIfEditTextValidEmail(emailAddressEditText, emailAddressLayout);
-                    }
-                }
-            }
-        });
-
-        phoneNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    phoneNumberLayout.setError(null);
-                } else {
-                    if (phoneNumberEditText.getText().toString().equals("")) {
-                        validateEditTextEmpty(phoneNumberEditText, phoneNumberLayout);
-                    } else {
-                        checkIfEditTextValidPhoneNumber(phoneNumberEditText, phoneNumberLayout);
-                    }
+                    checkIfEditTextValidPhoneNumber(phoneNumberEditText, phoneNumberLayout);
                 }
             }
         });
@@ -193,6 +182,7 @@ public class SignupActivity extends BackButtonActivity {
 
     /**
      * Function to abstract away simply adding the user to firestore database
+     *
      * @param user
      * @param firebaseProvider
      */
@@ -205,12 +195,11 @@ public class SignupActivity extends BackButtonActivity {
 
     /**
      * Function to check if a EditText field is empty and float an error if it is.
-     * @args
-     * EditText editText: the text field to check
+     *
+     * @args EditText editText: the text field to check
      * boolean hasFocus: whether or not the text field has focus
-     * @returns
-     * boolean: whether or not the field is empty
-     * */
+     * @returns boolean: whether or not the field is empty
+     */
     private boolean validateEditTextEmpty(EditText editText, TextInputLayout layout) {
         if (editText.getText().toString().equals("")) {
             layout.setError("This field cannot be left empty.");
@@ -223,12 +212,11 @@ public class SignupActivity extends BackButtonActivity {
 
     /**
      * Function to check if a EditText field is a valid email and float an error if it is
-     * @args
-     * EditText editText: the text field to check
+     *
+     * @args EditText editText: the text field to check
      * boolean hasFocus: whether or not the text field has focus
-     * @returns
-     * boolean: whether or not the editText contains a valid email
-     * */
+     * @returns boolean: whether or not the editText contains a valid email
+     */
     private boolean checkIfEditTextValidEmail(EditText editText, TextInputLayout layout) {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         String string = editText.getText().toString();
@@ -246,12 +234,11 @@ public class SignupActivity extends BackButtonActivity {
 
     /**
      * Function to check if a EditText field is a valid phone number and float an error if it is
-     * @args
-     * EditText editText: the text field to check
+     *
+     * @args EditText editText: the text field to check
      * boolean hasFocus: whether or not the text field has focus
-     * @returns
-     * boolean: whether or not the editText contains a phone number
-     * */
+     * @returns boolean: whether or not the editText contains a phone number
+     */
     private boolean checkIfEditTextValidPhoneNumber(EditText editText, TextInputLayout layout) {
         String phonePattern = "^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$";
         String string = editText.getText().toString();
