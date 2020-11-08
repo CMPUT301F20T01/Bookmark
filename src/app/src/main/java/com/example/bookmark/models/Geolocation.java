@@ -4,7 +4,6 @@ import com.example.bookmark.server.FirestoreSerializable;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -13,8 +12,8 @@ import java.util.Map;
  * @author Kyle Hennig.
  */
 public class Geolocation implements FirestoreSerializable, Serializable {
-    private final float latitude;
-    private final float longitude;
+    private final double latitude;
+    private final double longitude;
 
     /**
      * Creates a Geolocation.
@@ -22,7 +21,7 @@ public class Geolocation implements FirestoreSerializable, Serializable {
      * @param latitude  The latitude.
      * @param longitude The longitude.
      */
-    public Geolocation(float latitude, float longitude) {
+    public Geolocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -32,7 +31,7 @@ public class Geolocation implements FirestoreSerializable, Serializable {
      *
      * @return The latitude.
      */
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -41,7 +40,7 @@ public class Geolocation implements FirestoreSerializable, Serializable {
      *
      * @return The longitude.
      */
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -58,8 +57,8 @@ public class Geolocation implements FirestoreSerializable, Serializable {
             return null;
         }
         return new Geolocation(
-            (float) map.get("latitude"),
-            (float) map.get("longitude")
+            (double) map.get("latitude"),
+            (double) map.get("longitude")
         );
     }
 
@@ -68,7 +67,7 @@ public class Geolocation implements FirestoreSerializable, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Geolocation that = (Geolocation) o;
-        return Float.compare(that.latitude, latitude) == 0 &&
-            Float.compare(that.longitude, longitude) == 0;
+        return Double.compare(that.latitude, latitude) == 0 &&
+            Double.compare(that.longitude, longitude) == 0;
     }
 }
