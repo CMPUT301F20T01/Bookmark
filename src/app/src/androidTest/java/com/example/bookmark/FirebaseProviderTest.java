@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.Query;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.concurrent.Semaphore;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -65,105 +67,202 @@ public class FirebaseProviderTest {
     private static final FirebaseProvider firebaseProvider = MockFirebaseProvider.getInstance();
 
     /**
-     * Tests the creation of a user.
+     * Creates and populates the database prior to each test.
      */
-    @Test
-    public void testStoreAndRetrieveUser() {
+    @Before
+    public void createDatabase() {
         Semaphore semaphore = new Semaphore(0);
-        User user = mockUser1();
-        firebaseProvider.storeUser(user, aVoid -> {
-            firebaseProvider.retrieveUserByUsername(user.getUsername(), user2 -> {
-                assertEquals(user, user2);
-                semaphore.release();
-            }, e -> {
-                fail("An error occurred while retrieving the user.");
-            });
-        }, e -> {
-            fail("An error occurred while storing the user.");
-        });
+
+        User owner = mockOwner();
+        firebaseProvider.storeUser(owner, aVoid -> semaphore.release(), e -> fail("An error occurred while storing the owner."));
+        acquire(semaphore);
+
+        User requester = mockRequester();
+        firebaseProvider.storeUser(requester, aVoid -> semaphore.release(), e -> fail("An error occurred while storing the requester."));
+        acquire(semaphore);
+
+        Book book1 = mockBook1(owner);
+        firebaseProvider.storeBook(book1, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 1."));
+        acquire(semaphore);
+
+        Book book2 = mockBook2(owner);
+        firebaseProvider.storeBook(book2, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 2."));
+        acquire(semaphore);
+
+        Request request1 = mockRequest(book1, requester);
+        firebaseProvider.storeRequest(request1, aVoid -> semaphore.release(), e -> fail("An error occurred while storing request 1."));
+        acquire(semaphore);
+
+        Request request2 = mockRequest(book2, requester);
+        firebaseProvider.storeRequest(request2, aVoid -> semaphore.release(), e -> fail("An error occurred while storing request 2."));
         acquire(semaphore);
     }
 
     /**
-     * Tests the creation of a book.
+     * Tests retrieving a user.
      */
     @Test
-    public void testStoreAndRetrieveBook() {
+    public void testRetrieveUser() {
         Semaphore semaphore = new Semaphore(0);
-        User owner = mockUser1();
+        User user = mockOwner();
+        firebaseProvider.retrieveUserByUsername(user.getUsername(), user2 -> {
+            assertEquals(user, user2);
+            semaphore.release();
+        }, e -> fail("An error occurred while retrieving the user."));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests retrieving a book.
+     */
+    @Test
+    public void testRetrieveBook() {
+        Semaphore semaphore = new Semaphore(0);
+        User owner = mockOwner();
         Book book = mockBook1(owner);
-        firebaseProvider.storeBook(book, aVoid -> {
-            firebaseProvider.retrieveBook(owner, book.getIsbn(), book2 -> {
-                assertEquals(book, book2);
-                semaphore.release();
-            }, e -> {
-                fail("An error occurred while retrieving the book.");
-            });
-        }, e -> {
-            fail("An error occurred while storing the book.");
-        });
+        firebaseProvider.retrieveBook(owner, book.getIsbn(), book2 -> {
+            assertEquals(book, book2);
+            semaphore.release();
+        }, e -> fail("An error occurred while retrieving the book."));
         acquire(semaphore);
     }
 
     /**
-     * Tests the creation of multiple books.
+     * Tests retrieving multiple books.
      */
     @Test
-    public void testStoreAndRetrieveMultipleBooks() {
+    public void testRetrieveMultipleBooks() {
         Semaphore semaphore = new Semaphore(0);
-        User owner = mockUser1();
+        User owner = mockOwner();
         Book book1 = mockBook1(owner);
         Book book2 = mockBook2(owner);
-        firebaseProvider.storeBook(book1, aVoid -> {
-            firebaseProvider.storeBook(book2, aVoid2 -> {
-                firebaseProvider.retrieveBooks(books -> {
-                    assertTrue(books.contains(book1));
-                    assertTrue(books.contains(book2));
-                    semaphore.release();
-                }, e -> {
-                    fail("An error occurred while retrieving the books.");
-                });
-            }, e -> {
-                fail("An error occurred while storing book 1.");
-            });
+        firebaseProvider.retrieveBooks(books -> {
+            assertTrue(books.contains(book1));
+            assertTrue(books.contains(book2));
+            semaphore.release();
+        }, e -> fail("An error occurred while retrieving the books."));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests retrieving multiple books by owner.
+     */
+    @Test
+    public void testRetrieveMultipleBooksByOwner() {
+        Semaphore semaphore = new Semaphore(0);
+        User owner = mockOwner();
+        Book book1 = mockBook1(owner);
+        Book book2 = mockBook2(owner);
+        firebaseProvider.retrieveBooksByOwner(owner, books -> {
+            assertTrue(books.contains(book1));
+            assertTrue(books.contains(book2));
+            semaphore.release();
+        }, e -> fail("An error occurred while retrieving the books by owner."));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests retrieving multiple books by requester.
+     */
+    @Test
+    public void testRetrieveMultipleBooksByRequester() {
+        Semaphore semaphore = new Semaphore(0);
+        User owner = mockOwner();
+        Book book1 = mockBook1(owner);
+        Book book2 = mockBook2(owner);
+        User requester = mockRequester();
+        firebaseProvider.retrieveBooksByRequester(requester, books -> {
+            assertTrue(books.contains(book1));
+            assertTrue(books.contains(book2));
+            semaphore.release();
+        }, e -> fail("An error occurred while retrieving the books by requester."));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests retrieving a request.
+     */
+    @Test
+    public void testRetrieveRequest() {
+        Semaphore semaphore = new Semaphore(0);
+        User owner = mockOwner();
+        Book book = mockBook1(owner);
+        User requester = mockRequester();
+        Request request = mockRequest(book, requester);
+        firebaseProvider.retrieveRequest(book, requester, request2 -> {
+            assertEquals(request, request2);
+            semaphore.release();
+        }, e -> fail("An error occurred while retrieving the request."));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests deleting a request.
+     */
+    @Test
+    public void testDeleteRequest() {
+        Semaphore semaphore = new Semaphore(0);
+        User owner = mockOwner();
+        Book book = mockBook1(owner);
+        User requester = mockRequester();
+        Request request = mockRequest(book, requester);
+        firebaseProvider.deleteRequest(request, aVoid2 -> {
+            firebaseProvider.retrieveRequest(book, requester, request2 -> {
+                assertNull(request2);
+                semaphore.release();
+            }, e -> fail("An error occurred while retrieving the deleted request."));
+        }, e -> fail("An error occurred while deleting the request"));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests retrieving multiple requests by book.
+     */
+    @Test
+    public void testRetrieveMultipleRequestsByBook() {
+        Semaphore semaphore = new Semaphore(0);
+        User owner = mockOwner();
+        Book book = mockBook1(owner);
+        User requester = mockRequester();
+        Request request1 = mockRequest(book, requester);
+        Request request2 = mockRequest(book, requester);
+        firebaseProvider.retrieveRequestsByBook(book, requests -> {
+            assertTrue(requests.contains(request1));
+            assertTrue(requests.contains(request2));
+            semaphore.release();
         }, e -> {
-            fail("An error occurred while storing book 2.");
+            fail("An error occurred while retrieving the requests by book.");
         });
         acquire(semaphore);
     }
 
     /**
-     * Tests the creation and deletion of a request.
+     * Tests retrieving multiple requests by requester.
      */
     @Test
-    public void testStoreAndRetrieveAndDeleteRequest() {
+    public void testRetrieveMultipleRequestsByRequester() {
         Semaphore semaphore = new Semaphore(0);
-        User owner = mockUser1();
-        Book book = mockBook1(owner);
-        User requester = mockUser2();
-        Request request = mockRequest(book, requester);
-        firebaseProvider.storeRequest(request, aVoid -> {
-            firebaseProvider.retrieveRequest(book, requester, request2 -> {
-                assertEquals(request, request2);
-                firebaseProvider.deleteRequest(request, aVoid2 -> {
-                    semaphore.release();
-                }, e -> {
-                    fail("An error occurred while deleting the request");
-                });
-            }, e -> {
-                fail("An error occurred while retrieving the request.");
-            });
+        User owner = mockOwner();
+        Book book1 = mockBook1(owner);
+        Book book2 = mockBook2(owner);
+        User requester = mockRequester();
+        Request request1 = mockRequest(book1, requester);
+        Request request2 = mockRequest(book2, requester);
+        firebaseProvider.retrieveRequestsByRequester(requester, requests -> {
+            assertTrue(requests.contains(request1));
+            assertTrue(requests.contains(request2));
+            semaphore.release();
         }, e -> {
-            fail("An error occurred while storing the request.");
+            fail("An error occurred while retrieving the requests by requester.");
         });
         acquire(semaphore);
     }
 
-    private User mockUser1() {
+    private User mockOwner() {
         return new User("john.smith42", "John", "Smith", "jsmith@ualberta.ca", "7801234567");
     }
 
-    private User mockUser2() {
+    private User mockRequester() {
         return new User("mary.jane9", "Mary", "Jane", "mjane@ualberta.ca", "7809999999");
     }
 
