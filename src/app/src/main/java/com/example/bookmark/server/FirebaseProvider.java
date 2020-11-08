@@ -22,24 +22,18 @@ import java.util.function.Function;
  * @author Kyle Hennig.
  */
 public class FirebaseProvider {
-    private enum Collection {
-        USERS("users"),
-        BOOKS("books"),
-        REQUESTS("requests");
-
-        private final String name;
-
-        Collection(String name) {
-            this.name = name;
-        }
+    private static class Collection {
+        private static final String USERS = "users";
+        private static final String BOOKS = "books";
+        private static final String REQUESTS = "requests";
     }
 
-    private static final String TAG = "FirebaseProvider";
     private static final FirebaseProvider instance = new FirebaseProvider();
+    private static final String TAG = "FirebaseProvider";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private FirebaseProvider() {
+    protected FirebaseProvider() {
         // Singleton class.
     }
 
@@ -201,28 +195,22 @@ public class FirebaseProvider {
         deleteEntity(Collection.REQUESTS, request.getId(), onSuccessListener, onFailureListener);
     }
 
-    private void storeEntity(Collection collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection.name)
+    protected void storeEntity(String collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(collection)
             .document(entity.getId())
             .set(entity.toFirestoreDocument())
             .addOnSuccessListener(aVoid -> {
-                Log.d(TAG, String.format("Stored %s with id %s to collection %s.", entity.getClass().getName().toLowerCase(), entity.getId(), collection.name));
+                Log.d(TAG, String.format("Stored %s with id %s to collection %s.", entity.getClass().getName().toLowerCase(), entity.getId(), collection));
                 onSuccessListener.onSuccess(aVoid);
             })
             .addOnFailureListener(e -> {
-                Log.w(TAG, String.format("Error storing %s with id %s to collection %s.: ", entity.getClass().getName().toLowerCase(), entity.getId(), collection.name), e);
+                Log.w(TAG, String.format("Error storing %s with id %s to collection %s.: ", entity.getClass().getName().toLowerCase(), entity.getId(), collection), e);
                 onFailureListener.onFailure(e);
             });
     }
 
-    private <T> void retrieveEntity(
-        Collection collection,
-        String id,
-        Function<Map<String, Object>, T> fromFirestoreDocument,
-        OnSuccessListener<T> onSuccessListener,
-        OnFailureListener onFailureListener
-    ) {
-        db.collection(collection.name)
+    protected <T> void retrieveEntity(String collection, String id, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(collection)
             .document(id)
             .get()
             .addOnSuccessListener(documentSnapshot -> {
@@ -240,13 +228,8 @@ public class FirebaseProvider {
             });
     }
 
-    private <T> void retrieveEntities(
-        Collection collection,
-        Function<Map<String, Object>, T> fromFirestoreDocument,
-        OnSuccessListener<List<T>> onSuccessListener,
-        OnFailureListener onFailureListener
-    ) {
-        db.collection(collection.name)
+    protected <T> void retrieveEntities(String collection, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(collection)
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
@@ -262,14 +245,8 @@ public class FirebaseProvider {
             });
     }
 
-    private <T> void retrieveEntitiesMatching(
-        Collection collection,
-        Function<Query, Query> conditions,
-        Function<Map<String, Object>, T> fromFirestoreDocument,
-        OnSuccessListener<List<T>> onSuccessListener,
-        OnFailureListener onFailureListener
-    ) {
-        conditions.apply(db.collection(collection.name))
+    protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+        conditions.apply(db.collection(collection))
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
@@ -285,8 +262,8 @@ public class FirebaseProvider {
             });
     }
 
-    private void deleteEntity(Collection collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection.name)
+    protected void deleteEntity(String collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(collection)
             .document(id)
             .delete()
             .addOnSuccessListener(aVoid -> {
