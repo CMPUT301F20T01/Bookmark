@@ -11,11 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.bookmark.fragments.SignupDialogFragment;
+//import com.example.bookmark.fragments.SignupDialogFragment;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 
 /**
  * Starting point of the application.
@@ -23,11 +24,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
  *
  * @author Konrad Staniszewski
  */
-public class MainActivity extends AppCompatActivity implements SignupDialogFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     FirebaseProvider firebaseProvider = FirebaseProvider.getInstance();
 
     private EditText userNameEditText;
+    private TextInputLayout userNameLayout;
     private Button loginButton;
     private Button signUpButton;
 
@@ -43,8 +45,16 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
 
         // Fetch relevant views
         userNameEditText = findViewById(R.id.login_username_textInput);
+        userNameLayout = findViewById(R.id.login_username_textInputLayout);
         loginButton = findViewById(R.id.login_login_button);
         signUpButton = findViewById(R.id.login_signup_button);
+
+        // pre-fill username if just signed up
+        Intent intent = getIntent();
+        String signedUpUsername = intent.getStringExtra("SIGNED_UP_USERNAME");
+        if (signedUpUsername != null) {
+            userNameEditText.setText(signedUpUsername);
+        }
 
         /**
          * Sign in button event listener
@@ -54,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
             public void onClick(View view) {
                 String username = userNameEditText.getText().toString();
                 if (username.length() == 0) {
-                    userNameEditText.setError("Please enter a username.");
+                    userNameLayout.setError("Please enter a username.");
                     return;
                 }
                 // check if username is valid user, if not fire small error notification ect
@@ -63,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
                         @Override
                         public void onSuccess(User user) {
                             if (user == null) {
-                                userNameEditText.setError("Username not registered!\nPlease enter existing username.");
+                                userNameLayout.setError("User not registered!");
                             } else {
                                 // store user object in shared preferences
                                 SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
@@ -79,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
                     new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            userNameEditText.setError("Connection Error. Please Try again.");
+                            Toast.makeText(MainActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show();
                         }
                     });
             }
@@ -92,35 +102,10 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
             @Override
             public void onClick(View view) {
                 userNameEditText.setText("");
-                userNameEditText.setError(null); // hides error message
-                new SignupDialogFragment().show(getSupportFragmentManager(), "SIGN_UP");
+                userNameLayout.setError(null); // hides error message
+                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                startActivity(intent);
             }
         });
-    }
-
-    /**
-     * Handles the logic for when signup is pressed in the SignupDialog
-     *
-     * @param user: user object that was just added to the system
-     */
-    @Override
-    public void onSignUpPressed(User user) {
-        // add user to database
-        firebaseProvider.storeUser(user,
-            new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                }
-            },
-            new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplication().getBaseContext(), "Connection Error. Please Try again.", Toast.LENGTH_LONG).show();
-                }
-            });
-
-        // fill out field for easier sign in
-        userNameEditText = findViewById(R.id.login_username_textInput);
-        userNameEditText.setText(user.getUsername());
     }
 }
