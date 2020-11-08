@@ -170,7 +170,7 @@ public class FirebaseProvider {
      * @param onFailureListener Callback to run on failure.
      */
     public void retrieveRequestsByBook(Book book, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("book", book.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("bookId", book.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     /**
@@ -181,7 +181,7 @@ public class FirebaseProvider {
      * @param onFailureListener Callback to run on failure.
      */
     public void retrieveRequestsByRequester(User requester, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requester", requester.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requesterId", requester.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     /**
