@@ -10,7 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.Query;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
@@ -67,10 +67,10 @@ public class FirebaseProviderTest {
     private static final FirebaseProvider firebaseProvider = MockFirebaseProvider.getInstance();
 
     /**
-     * Creates and populates the database prior to each test.
+     * Creates and populates the database before the tests are run.
      */
-    @Before
-    public void createDatabase() {
+    @BeforeClass
+    public static void createDatabase() {
         Semaphore semaphore = new Semaphore(0);
 
         User owner = mockOwner();
@@ -206,10 +206,12 @@ public class FirebaseProviderTest {
         Book book = mockBook1(owner);
         User requester = mockRequester();
         Request request = mockRequest(book, requester);
-        firebaseProvider.deleteRequest(request, aVoid2 -> {
+        firebaseProvider.deleteRequest(request, aVoid -> {
             firebaseProvider.retrieveRequest(book, requester, request2 -> {
-                assertNull(request2);
-                semaphore.release();
+                firebaseProvider.storeRequest(request, aVoid2 -> {
+                    assertNull(request2);
+                    semaphore.release();
+                }, e -> fail("An error occurred while recreating the deleted request."));
             }, e -> fail("An error occurred while retrieving the deleted request."));
         }, e -> fail("An error occurred while deleting the request"));
         acquire(semaphore);
@@ -258,27 +260,27 @@ public class FirebaseProviderTest {
         acquire(semaphore);
     }
 
-    private User mockOwner() {
+    private static User mockOwner() {
         return new User("john.smith42", "John", "Smith", "jsmith@ualberta.ca", "7801234567");
     }
 
-    private User mockRequester() {
+    private static User mockRequester() {
         return new User("mary.jane9", "Mary", "Jane", "mjane@ualberta.ca", "7809999999");
     }
 
-    private Book mockBook1(User owner) {
+    private static Book mockBook1(User owner) {
         return new Book(owner, "Code Complete 2", "Steve McConnell", "0-7356-1976-0");
     }
 
-    private Book mockBook2(User owner) {
+    private static Book mockBook2(User owner) {
         return new Book(owner, "Programming Pearls", "Jon Bentley", "978-0-201-65788-3");
     }
 
-    private Request mockRequest(Book book, User requester) {
+    private static Request mockRequest(Book book, User requester) {
         return new Request(book, requester, new Geolocation(53.5461, -113.4938));
     }
 
-    private void acquire(Semaphore semaphore) {
+    private static void acquire(Semaphore semaphore) {
         while (true) {
             try {
                 semaphore.acquire();
