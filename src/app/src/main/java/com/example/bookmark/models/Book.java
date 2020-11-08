@@ -143,10 +143,10 @@ public class Book implements FirestoreIndexable, Serializable {
     @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
+        map.put("ownerId", ownerId);
         map.put("title", title);
         map.put("author", author);
         map.put("isbn", isbn);
-        map.put("ownerId", ownerId);
         map.put("photograph", photograph != null ? photograph.toFirestoreDocument() : null);
         map.put("description", description);
         map.put("status", status);

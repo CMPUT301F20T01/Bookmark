@@ -53,7 +53,7 @@ public class FirebaseProvider {
     }
 
     /**
-     * Stores the specified user to Firebase.
+     * Stores a user to Firebase.
      *
      * @param user              The user.
      * @param onSuccessListener Callback to run on success.
@@ -66,7 +66,7 @@ public class FirebaseProvider {
     /**
      * Retrieves a user from Firebase.
      *
-     * @param username          The user's username.
+     * @param username          The username of the user.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
@@ -75,7 +75,7 @@ public class FirebaseProvider {
     }
 
     /**
-     * Stores the specified book to Firebase.
+     * Stores a book to Firebase.
      *
      * @param book              The book.
      * @param onSuccessListener Callback to run on success.
@@ -89,7 +89,7 @@ public class FirebaseProvider {
      * Retrieves a book from Firebase.
      *
      * @param owner             The owner of the book.
-     * @param isbn              The book's ISBN.
+     * @param isbn              The ISBN of the book.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
@@ -109,7 +109,43 @@ public class FirebaseProvider {
     }
 
     /**
-     * Stores the specified request to Firebase.
+     * Retrieves the books owned by a user.
+     *
+     * @param owner             The owner of the books.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    public void retrieveBooksByOwner(User owner, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveEntitiesMatching(Collection.BOOKS, query -> query.whereEqualTo("ownerId", owner.getId()), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    }
+
+    /**
+     * Retrieves the books requested by a user.
+     *
+     * @param requester         The requester of the books.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    public void retrieveBooksByRequester(User requester, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveRequestsByRequester(requester, requests -> {
+            List<String> bookIds = new ArrayList<>();
+            for (Request request : requests) {
+                bookIds.add(request.getBookId());
+            }
+            retrieveBooks(books -> {
+                List<Book> booksByRequester = new ArrayList<>();
+                for (Book book : books) {
+                    if (bookIds.contains(book.getId())) {
+                        booksByRequester.add(book);
+                    }
+                }
+                onSuccessListener.onSuccess(booksByRequester);
+            }, onFailureListener);
+        }, onFailureListener);
+    }
+
+    /**
+     * Stores a request to Firebase.
      *
      * @param request           The request.
      * @param onSuccessListener Callback to run on success.
@@ -123,6 +159,7 @@ public class FirebaseProvider {
      * Retrieves a request from Firebase.
      *
      * @param book              The book the request was for.
+     * @param requester         The user who made the request.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
@@ -132,7 +169,7 @@ public class FirebaseProvider {
     }
 
     /**
-     * Retrieves the list of requests for a book from Firebase.
+     * Retrieves the requests for a book from Firebase.
      *
      * @param book              The book the request was for.
      * @param onSuccessListener Callback to run on success.
@@ -143,7 +180,7 @@ public class FirebaseProvider {
     }
 
     /**
-     * Retrieves the list of requests made by a requester from Firebase.
+     * Retrieves the requests made by a requester from Firebase.
      *
      * @param requester         The user who made the request.
      * @param onSuccessListener Callback to run on success.
