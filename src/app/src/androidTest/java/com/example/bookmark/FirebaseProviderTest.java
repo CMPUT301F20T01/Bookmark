@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.Query;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -80,14 +79,7 @@ public class FirebaseProviderTest {
         }, e -> {
             fail("An error occurred while creating the user.");
         });
-        while (true) {
-            try {
-                semaphore.acquire();
-                break;
-            } catch (InterruptedException e) {
-                // Ignores interruptions.
-            }
-        }
+        acquire(semaphore);
     }
 
     /**
@@ -108,14 +100,7 @@ public class FirebaseProviderTest {
         }, e -> {
             fail("An error occurred while creating the book.");
         });
-        while (true) {
-            try {
-                semaphore.acquire();
-                break;
-            } catch (InterruptedException e) {
-                // Ignores interruptions.
-            }
-        }
+        acquire(semaphore);
     }
 
     /**
@@ -131,8 +116,9 @@ public class FirebaseProviderTest {
         firebaseProvider.storeRequest(request, aVoid -> {
             firebaseProvider.retrieveRequest(book, borrower, request2 -> {
                 assertEquals(request, request2);
-                firebaseProvider.deleteRequest(request, aVoid2 ->
-                    semaphore.release(), e -> {
+                firebaseProvider.deleteRequest(request, aVoid2 -> {
+                    semaphore.release();
+                }, e -> {
                     fail("An error occurred while deleting the request");
                 });
             }, e -> {
@@ -141,14 +127,7 @@ public class FirebaseProviderTest {
         }, e -> {
             fail("An error occurred while creating the request.");
         });
-        while (true) {
-            try {
-                semaphore.acquire();
-                break;
-            } catch (InterruptedException e) {
-                // Ignores interruptions.
-            }
-        }
+        acquire(semaphore);
     }
 
     private User mockUser() {
@@ -157,5 +136,16 @@ public class FirebaseProviderTest {
 
     private User mockBorrower() {
         return new User("mary.jane9", "Mary", "Jane", "mjane@ualberta.ca", "7809999999");
+    }
+
+    private void acquire(Semaphore semaphore) {
+        while (true) {
+            try {
+                semaphore.acquire();
+                break;
+            } catch (InterruptedException e) {
+                // Ignores interruptions.
+            }
+        }
     }
 }
