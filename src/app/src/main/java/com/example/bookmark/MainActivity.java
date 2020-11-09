@@ -1,24 +1,20 @@
 package com.example.bookmark;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
-import com.example.bookmark.util.FormValidator;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 
-import static com.example.bookmark.util.FormValidator.validateEditTextEmpty;
+import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEmpty;
 
 /**
  * Starting point of the application.
@@ -70,15 +66,33 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /**
+         * username EditText textChangeListener
+         */
+        userNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                userNameLayout.setError(null);
+            }
+        });
+
+        /**
          * Sign in button event listener
          */
         loginButton.setOnClickListener(view -> {
-            String username = userNameEditText.getText().toString();
             if (!validateEditTextEmpty(userNameEditText, userNameLayout)) {
                 return;
             }
 
             // check if username is valid user, if not fire small error notification ect
+            String username = userNameEditText.getText().toString();
             firebaseProvider.retrieveUserByUsername(username,
                 user -> {
                     if (user == null) {

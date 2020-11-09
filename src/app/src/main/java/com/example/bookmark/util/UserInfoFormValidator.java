@@ -4,12 +4,12 @@ import android.widget.EditText;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-public class FormValidator {
+public class UserInfoFormValidator {
     /**
      * Function to check if a EditText field is empty and float an error if it is.
      *
      * @args EditText editText: the text field to check
-     * boolean hasFocus: whether or not the text field has focus
+     * TextInputLayout layout: layout containing textfield
      * @returns boolean: whether or not the field is empty
      */
     public static boolean validateEditTextEmpty(EditText editText, TextInputLayout layout) {
@@ -26,7 +26,7 @@ public class FormValidator {
      * Function to check if a EditText field is a valid email and float an error if it is
      *
      * @args EditText editText: the text field to check
-     * boolean hasFocus: whether or not the text field has focus
+     * TextInputLayout layout: layout containing textfield
      * @returns boolean: whether or not the editText contains a valid email
      */
     public static boolean checkIfEditTextValidEmail(EditText editText, TextInputLayout layout) {
@@ -48,7 +48,7 @@ public class FormValidator {
      * Function to check if a EditText field is a valid phone number and float an error if it is
      *
      * @args EditText editText: the text field to check
-     * boolean hasFocus: whether or not the text field has focus
+     * TextInputLayout layout: layout containing textfield
      * @returns boolean: whether or not the editText contains a phone number
      */
     public static boolean checkIfEditTextValidPhoneNumber(EditText editText, TextInputLayout layout) {

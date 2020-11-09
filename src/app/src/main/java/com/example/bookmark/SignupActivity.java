@@ -2,6 +2,7 @@ package com.example.bookmark;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -12,14 +13,13 @@ import android.widget.Toast;
 
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
-import com.example.bookmark.util.FormValidator;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
-import static com.example.bookmark.util.FormValidator.checkIfEditTextValidEmail;
-import static com.example.bookmark.util.FormValidator.checkIfEditTextValidPhoneNumber;
-import static com.example.bookmark.util.FormValidator.validateEditTextEmpty;
+import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidEmail;
+import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidPhoneNumber;
+import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEmpty;
 
 public class SignupActivity extends BackButtonActivity {
     private EditText userNameEditText, firstNameEditText, lastNameEditText, emailAddressEditText, phoneNumberEditText;
@@ -59,7 +59,7 @@ public class SignupActivity extends BackButtonActivity {
         formLayouts.add(firstNameLayout);
         formLayouts.add(lastNameLayout);
 
-         signUpButton.setOnClickListener(view -> {
+        signUpButton.setOnClickListener(view -> {
             boolean invalidField = false;
             // double check all form fields filled
             for (int i = 0; i < formTexts.size(); i++) {
@@ -67,7 +67,6 @@ public class SignupActivity extends BackButtonActivity {
                     invalidField = true;
                 }
             }
-            // check email and phone validation
             if (!checkIfEditTextValidEmail(emailAddressEditText, emailAddressLayout)) {
                 invalidField = true;
             }
@@ -91,13 +90,15 @@ public class SignupActivity extends BackButtonActivity {
 
                         // add user and go back to main activity
                         User newUser = new User(username, firstName, lastName, emailAddress, phoneNumber);
-                        addUser(newUser, firebaseProvider);
+                        firebaseProvider.storeUser(newUser,
+                            aVoid -> {
+                            },
+                            e -> Toast.makeText(SignupActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
                         Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                         intent.putExtra("SIGNED_UP_USERNAME", username);
                         startActivity(intent);
                     } else {
                         userNameLayout.setError("Username already registered. Please choose another");
-                        return;
                     }
                 },
                 e -> Toast.makeText(SignupActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
@@ -118,6 +119,8 @@ public class SignupActivity extends BackButtonActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        phoneNumberEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         // allows user to see if their phone number is valid as they type
         emailAddressEditText.addTextChangedListener(new TextWatcher() {
@@ -166,28 +169,19 @@ public class SignupActivity extends BackButtonActivity {
             }
         });
     }
-
-    /**
-     * Function to abstract away simply adding the user to firestore database
-     *
-     * @param user
-     * @param firebaseProvider
-     */
-    private void addUser(User user, FirebaseProvider firebaseProvider) {
-        firebaseProvider.storeUser(user,
-            aVoid -> {
-            },
-            e -> Toast.makeText(SignupActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
-    }
 }
 
+/**
+ * Custom OnFocusChangeListener to eliminate super repetitive listener
+ * declarations for all "empty text" checking situations.
+ */
 class EmptyTextFocusListener implements View.OnFocusChangeListener {
     EditText text;
     TextInputLayout layout;
 
-    public EmptyTextFocusListener(EditText ptext, TextInputLayout playout){
-        this.text = ptext;
-        this.layout = playout;
+    public EmptyTextFocusListener(EditText text, TextInputLayout layout) {
+        this.text = text;
+        this.layout = layout;
     }
 
     public void onFocusChange(View v, boolean hasFocus) {
