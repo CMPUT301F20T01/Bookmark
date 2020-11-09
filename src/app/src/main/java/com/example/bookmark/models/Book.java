@@ -1,27 +1,26 @@
 package com.example.bookmark.models;
 
+import com.example.bookmark.server.FirestoreIndexable;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Represents a book.
  *
  * @author Kyle Hennig.
  */
-public class Book implements FirestoreSerializable, Serializable {
+public class Book implements FirestoreIndexable, Serializable {
     public enum Status {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }
 
+    private final String ownerId;
     private final String title;
     private final String author;
     private final String isbn;
-    private final String owner;
 
     private Photograph photograph = null;
     private String description = "";
@@ -30,28 +29,29 @@ public class Book implements FirestoreSerializable, Serializable {
     /**
      * Creates a Book.
      *
+     * @param owner  The owner.
      * @param title  The title.
      * @param author The author.
      * @param isbn   The ISBN.
-     * @param owner  The owner.
      */
-    public Book(String title, String author, String isbn, Owner owner) {
-        this(title, author, isbn, owner.getUsername());
+    public Book(User owner, String title, String author, String isbn) {
+        this(owner.getId(), title, author, isbn);
     }
 
-    /**
-     * Creates a Book.
-     *
-     * @param title  The title.
-     * @param author The author.
-     * @param isbn   The ISBN.
-     * @param owner  The username of the owner.
-     */
-    public Book(String title, String author, String isbn, String owner) {
+    private Book(String ownerId, String title, String author, String isbn) {
+        this.ownerId = ownerId;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-        this.owner = owner;
+    }
+
+    /**
+     * Gets the id of the owner.
+     *
+     * @return The id of the owner.
+     */
+    public String getOwnerId() {
+        return ownerId;
     }
 
     /**
@@ -79,15 +79,6 @@ public class Book implements FirestoreSerializable, Serializable {
      */
     public String getIsbn() {
         return isbn;
-    }
-
-    /**
-     * Gets the username of the owner.
-     *
-     * @return The username of the owner.
-     */
-    public String getOwner() {
-        return owner;
     }
 
     /**
@@ -145,22 +136,29 @@ public class Book implements FirestoreSerializable, Serializable {
     }
 
     @Override
+    public String getId() {
+        return String.format("%s:%s", ownerId, isbn);
+    }
+
+    @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
+        map.put("ownerId", ownerId);
         map.put("title", title);
         map.put("author", author);
         map.put("isbn", isbn);
-        map.put("owner", owner);
-        // TODO: Photograph will likely have to be compressed and serialized due to size.
-        map.put("photograph", photograph);
+        map.put("photograph", photograph != null ? photograph.toFirestoreDocument() : null);
         map.put("description", description);
         map.put("status", status);
         return map;
     }
 
     public static Book fromFirestoreDocument(Map<String, Object> map) {
-        Book book = new Book((String) map.get("title"), (String) map.get("author"), (String) map.get("isbn"), (String) map.get("owner"));
-        book.photograph = (Photograph) map.get("photograph");
+        if (map == null) {
+            return null;
+        }
+        Book book = new Book((String) map.get("ownerId"), (String) map.get("title"), (String) map.get("author"), (String) map.get("isbn"));
+        book.photograph = Photograph.fromFirestoreDocument((Map<String, Object>) map.get("photograph"));
         book.description = (String) map.get("description");
         book.status = Status.valueOf((String) map.get("status"));
         return book;
@@ -174,7 +172,7 @@ public class Book implements FirestoreSerializable, Serializable {
         return Objects.equals(title, book.title) &&
             Objects.equals(author, book.author) &&
             Objects.equals(isbn, book.isbn) &&
-            Objects.equals(owner, book.owner) &&
+            Objects.equals(ownerId, book.ownerId) &&
             Objects.equals(photograph, book.photograph) &&
             Objects.equals(description, book.description) &&
             status == book.status;

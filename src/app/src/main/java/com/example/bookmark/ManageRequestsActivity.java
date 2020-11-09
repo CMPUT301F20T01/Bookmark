@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import com.example.bookmark.adapters.RequestList;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Geolocation;
-import com.example.bookmark.models.Owner;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
@@ -32,7 +31,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
     public static int GET_MEETING_LOCATION = 1;
 
     private Book book;
-    private Owner owner;
+    private User owner;
     private ListView requestList;
     private ArrayAdapter<Request> requestAdapter;
     private ArrayList<Request> requestDataList;
@@ -57,7 +56,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
             OnSuccessListener<User> onUserSuccess = new OnSuccessListener<User>() {
                 @Override
                 public void onSuccess(User user) {
-                    owner = new Owner(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmailAddress(), user.getPhoneNumber());
                     setRequestListener();
                 }
             };
@@ -67,7 +65,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
                     owner = null;
                 }
             };
-            FirebaseProvider.getInstance().retrieveUserByUsername(book.getOwner(), onUserSuccess, onUserFailure);
+            FirebaseProvider.getInstance().retrieveUserByUsername(book.getOwnerId(), onUserSuccess, onUserFailure);
             bookTitle = book.getTitle();
         }
 

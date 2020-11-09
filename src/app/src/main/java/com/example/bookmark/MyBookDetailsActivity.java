@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bookmark.models.MenuOptions;
-
 /**
  * This activity shows the details of a book. Depending on the
  * status of the book the user can then take some action. A user
