@@ -1,6 +1,6 @@
 package com.example.bookmark.models;
 
-import com.google.firebase.Timestamp;
+import com.example.bookmark.server.FirestoreIndexable;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,14 +13,14 @@ import java.util.Objects;
  *
  * @author Kyle Hennig.
  */
-public class Request implements FirestoreSerializable, Serializable {
+public class Request implements FirestoreIndexable, Serializable {
     public enum Status {
         REQUESTED, ACCEPTED, BORROWED
     }
 
-    private final String book;
-    private final String requester;
-    private final Date createdDate;
+    private final String bookId;
+    private final String requesterId;
+    private final long createdDate; // Stored as a long since Date::equals is flawed.
 
     private Geolocation location;
     private Status status = Status.REQUESTED;
@@ -32,41 +32,33 @@ public class Request implements FirestoreSerializable, Serializable {
      * @param requester The requester.
      * @param location  The pickup location.
      */
-    public Request(Book book, Borrower requester, Geolocation location) {
-        this(book.getIsbn(), requester.getUsername(), new Date(), location);
+    public Request(Book book, User requester, Geolocation location) {
+        this(book.getId(), requester.getId(), new Date().getTime(), location);
     }
 
-    /**
-     * Creates a Request.
-     *
-     * @param book        The requested book ISBN.
-     * @param requester   The requester's username.
-     * @param createdDate The date the request was created.
-     * @param location    The pickup location.
-     */
-    private Request(String book, String requester, Date createdDate, Geolocation location) {
-        this.book = book;
-        this.requester = requester;
+    private Request(String bookId, String requesterId, long createdDate, Geolocation location) {
+        this.bookId = bookId;
+        this.requesterId = requesterId;
         this.createdDate = createdDate;
         this.location = location;
     }
 
     /**
-     * Gets the requested book's ISBN.
+     * Gets the id of the requested book.
      *
-     * @return The requested book's ISBN.
+     * @return The id of the requested book.
      */
-    public String getBook() {
-        return book;
+    public String getBookId() {
+        return bookId;
     }
 
     /**
-     * Gets the requester's username.
+     * Gets the id of the requester.
      *
-     * @return The requester's username.
+     * @return The id of the requester.
      */
-    public String getRequester() {
-        return requester;
+    public String getRequesterId() {
+        return requesterId;
     }
 
     /**
@@ -75,7 +67,7 @@ public class Request implements FirestoreSerializable, Serializable {
      * @return The date the request was created.
      */
     public Date getCreatedDate() {
-        return createdDate;
+        return new Date(createdDate);
     }
 
     /**
@@ -115,23 +107,27 @@ public class Request implements FirestoreSerializable, Serializable {
     }
 
     @Override
+    public String getId() {
+        return String.format("%s:%s", bookId, requesterId);
+    }
+
+    @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
-        map.put("book", book);
-        map.put("requester", requester);
+        map.put("bookId", bookId);
+        map.put("requesterId", requesterId);
         map.put("createdDate", createdDate);
-        map.put("location", location == null ? null : location.toFirestoreDocument());
+        map.put("location", location != null ? location.toFirestoreDocument() : null);
         map.put("status", status);
         return map;
     }
 
     public static Request fromFirestoreDocument(Map<String, Object> map) {
-        Map<String, Object> locationMap = (Map<String, Object>) map.get("location");
-        Geolocation location = null;
-        if (locationMap != null) {
-            location = Geolocation.fromFirestoreDocument(locationMap);
+        if (map == null) {
+            return null;
         }
-        Request request = new Request((String) map.get("book"), (String) map.get("requester"), ((Timestamp) map.get("createdDate")).toDate(), location);
+        Geolocation location = Geolocation.fromFirestoreDocument((Map<String, Object>) map.get("location"));
+        Request request = new Request((String) map.get("bookId"), (String) map.get("requesterId"), (long) map.get("createdDate"), location);
         request.status = Status.valueOf((String) map.get("status"));
         return request;
     }
@@ -141,9 +137,9 @@ public class Request implements FirestoreSerializable, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Request request = (Request) o;
-        return Objects.equals(book, request.book) &&
-            Objects.equals(requester, request.requester) &&
-            Objects.equals(createdDate, request.createdDate) &&
+        return Objects.equals(bookId, request.bookId) &&
+            Objects.equals(requesterId, request.requesterId) &&
+            //Objects.equals(createdDate, request.createdDate) &&
             Objects.equals(location, request.location) &&
             status == request.status;
     }

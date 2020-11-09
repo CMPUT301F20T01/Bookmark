@@ -14,8 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.MenuOptions;
-import com.example.bookmark.models.Owner;
+import com.example.bookmark.models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.materialdrawer.Drawer;
 
@@ -92,13 +91,13 @@ public class MyBooksActivity extends AppCompatActivity
         // TODO: Get books from firebase by owner
 
         //Temp add some books
-        Owner owner = new Owner("u", "fn", "ln",
+        User owner = new User("u", "fn", "ln",
             "email", "pn");
 
-        Book b1 = new Book("Title 1", "Author 1", "1111111", owner);
+        Book b1 = new Book(owner, "Title 1", "Author 1", "1111111");
         b1.setDescription("Book 1 description");
 
-        Book b2 = new Book("Title 2", "Author 2", "22222", owner);
+        Book b2 = new Book(owner, "Title 2", "Author 2", "22222");
         b2.setDescription("Book 2 description");
 
         allBooks.add(b1);

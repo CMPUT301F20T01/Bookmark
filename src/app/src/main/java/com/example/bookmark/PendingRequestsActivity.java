@@ -72,10 +72,10 @@ public class PendingRequestsActivity extends AppCompatActivity implements Search
         //  user and firebase
 
         // Proof of concept
-        Book b1 = new Book("Title 1", "Author 1", "1111111", "o");
-        b1.setDescription("Book 1 description");
+        // Book b1 = new Book("Title 1", "Author 1", "1111111", "o");
+        // b1.setDescription("Book 1 description");
 
-        requestedBooks.add(b1);
+        // requestedBooks.add(b1);
     }
 
     @Override
