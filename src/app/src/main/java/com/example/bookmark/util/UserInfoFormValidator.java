@@ -4,6 +4,12 @@ import android.widget.EditText;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * This class contains static methods used to validate user
+ * info fields in SignupActivity and EditProfileActivity
+ *
+ * @author Konrad Staniszewski.
+ */
 public class UserInfoFormValidator {
     /**
      * Function to check if a EditText field is empty and float an error if it is.

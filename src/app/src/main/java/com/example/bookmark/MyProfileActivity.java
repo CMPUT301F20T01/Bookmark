@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.models.MenuOptions;
 import com.example.bookmark.server.FirebaseProvider;
 import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.DrawerProvider;
 import com.mikepenz.materialdrawer.Drawer;
 
 /**

@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.util.DrawerProvider;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
