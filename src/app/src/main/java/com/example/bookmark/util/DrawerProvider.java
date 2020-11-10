@@ -20,6 +20,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 /**
  * This class implement a navigation drawer that is passed to
+ * @author Konrad Staniszewski.
  */
 public class DrawerProvider {
     public static Drawer getDrawer(final Activity activity, Toolbar toolbar) {
