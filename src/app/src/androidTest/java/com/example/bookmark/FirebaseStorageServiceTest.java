@@ -26,11 +26,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Unit tests the FirebaseProvider.
+ * Unit tests the FirebaseStorageService.
  *
  * @author Kyle Hennig.
  */
-public class FirebaseProviderTest {
+public class FirebaseStorageServiceTest {
     /**
      * Prevents unit tests from modifying collections used in production.
      */
