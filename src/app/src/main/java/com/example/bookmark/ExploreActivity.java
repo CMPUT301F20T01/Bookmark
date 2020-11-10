@@ -13,7 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.FirebaseStorageService;
+import com.example.bookmark.server.StorageService;
+import com.example.bookmark.server.StorageServiceLocator;
 import com.example.bookmark.util.DialogUtil;
 import com.mikepenz.materialdrawer.Drawer;
 
@@ -112,7 +114,8 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
     }
 
     public void executeSearch(String searchedKeywords) {
-        FirebaseProvider.getInstance().retrieveBooks(books -> {
+        StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+        storageService.retrieveBooks(books -> {
             searchResults.clear();
             for (Book book : books) {
                 if (book.getDescription().contains(searchedKeywords)) {

@@ -18,7 +18,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.bookmark.R;
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.FirebaseStorageService;
+import com.example.bookmark.server.StorageService;
+import com.example.bookmark.server.StorageServiceLocator;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -76,9 +78,6 @@ public class SignupDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        // fetch FirebaseProvider
-        FirebaseProvider firebaseProvider = FirebaseProvider.getInstance();
-
         // Fetch relevant views
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_signup_dialog, null);
         userNameEditText = view.findViewById(R.id.sign_up_username_edit_text);
@@ -125,7 +124,8 @@ public class SignupDialogFragment extends DialogFragment {
 
                 // check username is not in db already
                 String username = userNameEditText.getText().toString();
-                firebaseProvider.retrieveUserByUsername(username,
+                StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+                storageService.retrieveUserByUsername(username,
                     new OnSuccessListener<User>() {
                         @Override
                         public void onSuccess(User user) {

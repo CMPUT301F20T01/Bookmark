@@ -21,30 +21,16 @@ import java.util.function.Function;
  *
  * @author Kyle Hennig.
  */
-public class FirebaseProvider implements StorageProvider {
+public class FirebaseStorageService implements StorageService {
     private static class Collection {
         private static final String USERS = "users";
         private static final String BOOKS = "books";
         private static final String REQUESTS = "requests";
     }
 
-    private static final FirebaseProvider instance = new FirebaseProvider();
     private static final String TAG = "FirebaseProvider";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    protected FirebaseProvider() {
-        // Singleton class.
-    }
-
-    /**
-     * Gets a singleton instance of the FirebaseProvider.
-     *
-     * @return The instance.
-     */
-    public static FirebaseProvider getInstance() {
-        return instance;
-    }
 
     @Override
     public void storeUser(User user, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {

@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Kyle Hennig.
  */
-public interface StorageProvider {
+public interface StorageService {
     /**
      * Stores a user.
      *

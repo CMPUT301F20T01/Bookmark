@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.example.bookmark.fragments.SignupDialogFragment;
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.FirebaseStorageService;
+import com.example.bookmark.server.StorageService;
+import com.example.bookmark.server.StorageServiceLocator;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -24,8 +26,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
  * @author Konrad Staniszewski
  */
 public class MainActivity extends AppCompatActivity implements SignupDialogFragment.OnFragmentInteractionListener {
-
-    FirebaseProvider firebaseProvider = FirebaseProvider.getInstance();
+    StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     private EditText userNameEditText;
     private Button signInButton;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
                     return;
                 }
                 // check if username is valid user, if not fire small error notification ect
-                firebaseProvider.retrieveUserByUsername(username,
+                storageService.retrieveUserByUsername(username,
                     new OnSuccessListener<User>() {
                         @Override
                         public void onSuccess(User user) {
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
     @Override
     public void onSignUpPressed(User user) {
         // add user to database
-        firebaseProvider.storeUser(user,
+        storageService.storeUser(user,
             new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {

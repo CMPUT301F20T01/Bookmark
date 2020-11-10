@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Request;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.FirebaseStorageService;
+import com.example.bookmark.server.StorageService;
+import com.example.bookmark.server.StorageServiceLocator;
 import com.example.bookmark.util.DialogUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -94,8 +96,9 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
             finish();
         };
         OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
-        FirebaseProvider.getInstance().storeRequest(request, aVoid ->
-            FirebaseProvider.getInstance().storeBook(book, onSuccessListener, onFailureListener), onFailureListener);
+        StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+        storageService.storeRequest(request, aVoid ->
+            storageService.storeBook(book, onSuccessListener, onFailureListener), onFailureListener);
     }
 
     /**

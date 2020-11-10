@@ -1,21 +1,13 @@
-package com.example.bookmark.mocks;
+package com.example.bookmark.server;
 
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.StorageProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.bookmark.mocks.MockModels.mockBook1;
-import static com.example.bookmark.mocks.MockModels.mockBook2;
-import static com.example.bookmark.mocks.MockModels.mockOwner;
-import static com.example.bookmark.mocks.MockModels.mockRequest1;
-import static com.example.bookmark.mocks.MockModels.mockRequest2;
-import static com.example.bookmark.mocks.MockModels.mockRequester;
 
 /**
  * An implementation of StorageProvider that stores all of the app's data in memory.
@@ -23,24 +15,35 @@ import static com.example.bookmark.mocks.MockModels.mockRequester;
  *
  * @author Kyle Hennig.
  */
-public class InMemoryProvider implements StorageProvider {
-    private static final StorageProvider instance = new InMemoryProvider();
+class InMemoryStorageService implements StorageService {
+    private static final StorageService instance = new InMemoryStorageService();
 
-    private final List<User> users = new ArrayList<>();
-    private final List<Book> books = new ArrayList<>();
-    private final List<Request> requests = new ArrayList<>();
+    private final List<User> users;
+    private final List<Book> books;
+    private final List<Request> requests;
 
-    public static StorageProvider getInstance() {
+    public static StorageService getInstance() {
         return instance;
     }
 
-    private InMemoryProvider() {
-        users.add(mockOwner());
-        users.add(mockRequester());
-        books.add(mockBook1());
-        books.add(mockBook2());
-        requests.add(mockRequest1());
-        requests.add(mockRequest2());
+    /**
+     * Creates an InMemoryStorageService.
+     */
+    public InMemoryStorageService() {
+        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    }
+
+    /**
+     * Creates an InMemoryStorageService.
+     *
+     * @param users    The users that should exist to start.
+     * @param books    The books that should exist to start.
+     * @param requests The requests that should exist to start.
+     */
+    public InMemoryStorageService(List<User> users, List<Book> books, List<Request> requests) {
+        this.users = users;
+        this.books = books;
+        this.requests = requests;
     }
 
     @Override

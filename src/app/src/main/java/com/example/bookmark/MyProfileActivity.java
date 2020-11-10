@@ -11,7 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.FirebaseStorageService;
+import com.example.bookmark.server.StorageService;
+import com.example.bookmark.server.StorageServiceLocator;
 import com.example.bookmark.util.DialogUtil;
 import com.mikepenz.materialdrawer.Drawer;
 
@@ -41,7 +43,8 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
         SharedPreferences sharedPref = this.getSharedPreferences("LOGGED_IN_USER", Context.MODE_PRIVATE);
         String username = sharedPref.getString("USER_NAME", "ERROR_NO_USER");
 
-        FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
+        StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+        storageService.retrieveUserByUsername(username, user -> {
             ((TextView) findViewById(R.id.username_textView)).setText(user.getUsername());
             ((TextView) findViewById(R.id.firstName_textView)).setText(user.getFirstName());
             ((TextView) findViewById(R.id.lastName_textView)).setText(user.getLastName());
