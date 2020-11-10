@@ -153,15 +153,13 @@ public class SignUpActivity extends BackButtonActivity {
                             intent.putExtra("SIGNED_UP_USERNAME", username);
                             startActivity(intent);
                         },
-                        e -> DialogUtil.showErrorDialog(this,
-                            new Exception("Connection Error. Please Try again."))
+                        e -> DialogUtil.showErrorDialog(this, e)
                     );
                 } else {
                     userNameLayout.setError("Username already registered. Please choose another");
                 }
             },
-            e -> DialogUtil.showErrorDialog(this,
-                new Exception("Connection Error. Please Try again."))
+            e -> DialogUtil.showErrorDialog(this, e)
         );
     }
 }
