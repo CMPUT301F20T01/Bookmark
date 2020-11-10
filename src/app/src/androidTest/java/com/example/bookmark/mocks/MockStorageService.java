@@ -9,6 +9,11 @@ import com.example.bookmark.server.StorageService;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Mocks a storage service with preexisting data.
+ *
+ * @author Kyle Hennig.
+ */
 public class MockStorageService {
     public static StorageService mockStorageService() {
         List<User> users = new ArrayList<>();
