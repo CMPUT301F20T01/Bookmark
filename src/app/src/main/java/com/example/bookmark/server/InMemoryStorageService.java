@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Kyle Hennig.
  */
-class InMemoryStorageService implements StorageService {
+public class InMemoryStorageService implements StorageService {
     private static final StorageService instance = new InMemoryStorageService();
 
     private final List<User> users;
