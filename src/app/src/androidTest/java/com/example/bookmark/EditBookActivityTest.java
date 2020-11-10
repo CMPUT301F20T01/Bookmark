@@ -56,7 +56,7 @@ public class EditBookActivityTest {
      */
     @Test
     public void scanISBN() {
-        View scanISBNBtn = rule.getActivity().findViewById(R.id.edit_book_scan_isbn_btn);
+        View scanISBNBtn = rule.getActivity().findViewById(R.id.book_scan_isbn_btn);
         solo.clickOnView(scanISBNBtn);
         solo.assertCurrentActivity("WRONG ACTIVITY", ScanIsbnActivity.class);
     }

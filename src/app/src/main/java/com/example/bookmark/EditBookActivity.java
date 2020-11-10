@@ -1,18 +1,12 @@
 package com.example.bookmark;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 
-import androidx.core.content.ContextCompat;
-
-import com.example.bookmark.fragments.ImageSelectDialogFragment;
+import com.example.bookmark.abstracts.AddEditBookActivity;
+import com.example.bookmark.models.Book;
 
 /**
  * This activity allows a user to edit the details of a book, remove a photo
@@ -23,120 +17,43 @@ import com.example.bookmark.fragments.ImageSelectDialogFragment;
  *
  * @author Mitch Adam.
  */
-public class EditBookActivity extends BackButtonActivity implements ImageSelectDialogFragment.ImageSelectListener {
-    private static final int ISBN_REQUEST_CODE = 100;
-    private static final String IMG_SELECT_TAG = "ImageSelectFragment";
-
-    private String isbn;
-    private String title;
-    private String author;
-    private String description;
-
-    private ImageButton scanISBNButton;
-    private ImageButton addPhotoButton;
-    private ImageButton deletePhotoButton;
-    private Button doneAddBookButton;
+public class EditBookActivity extends AddEditBookActivity {
+    private Button doneEditBookButton;
     private Button deleteBookButton;
-
-    private EditText titleEditText;
-    private EditText authorEditText;
-    private EditText isbnEditText;
-    private EditText descriptionEditText;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        // setContextView before calling super.onCreate so it can reference this activity's layout
         setContentView(R.layout.activity_edit_book);
+        super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Edit Book");
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        doneEditBookButton = findViewById((R.id.edit_book_done_btn));
+        doneEditBookButton.setOnClickListener(v -> doneEditBook());
 
-        Intent myIntent = getIntent(); // gets the previously created intent
-        isbn = myIntent.getStringExtra("ISBN");
-
-        scanISBNButton = findViewById(R.id.edit_book_scan_isbn_btn);
-        scanISBNButton.setOnClickListener(v -> goToScanISBN());
-
-        addPhotoButton = findViewById(R.id.edit_book_add_photo_btn);
-        addPhotoButton.setOnClickListener(v -> addPhoto());
-
-        deletePhotoButton = findViewById(R.id.edit_book_delete_photo_btn);
-        deletePhotoButton.setOnClickListener(v -> deletePhoto());
-
-        doneAddBookButton = findViewById(R.id.edit_book_done_btn);
-        doneAddBookButton.setOnClickListener(v -> doneAddBook());
-
-        deleteBookButton = findViewById(R.id.edit_book_delete_book_btn);
+        deleteBookButton = findViewById((R.id.edit_book_done_btn));
         deleteBookButton.setOnClickListener(v -> deleteBook());
 
-        titleEditText = findViewById(R.id.edit_book_title_field);
-        authorEditText = findViewById(R.id.edit_book_author_field);
-        isbnEditText = findViewById(R.id.edit_book_isbn_field);
-        descriptionEditText = findViewById(R.id.edit_book_description_field);
+        // TODO: Get book from intent
+        // TODO: Call populateFields with book from intent
 
-        getBookDetailsFromISBN();
-        fillBookDescriptionFields();
+        // TODO: Delete this once ^ is done:
+        Intent myIntent = getIntent(); // gets the previously created intent
+        isbnEditText.setText(myIntent.getStringExtra("ISBN"));
     }
 
-    private void getBookDetailsFromISBN() {
-        // TODO: Get details from firebase
-        author = "Book Author";
-        title = "Book Title";
-        description = "Book Description";
+    private void populateFields(Book book) {
+        // Set the values of all the EditTexts
     }
 
-    private void fillBookDescriptionFields() {
-        titleEditText.setText(title);
-        authorEditText.setText(author);
-        isbnEditText.setText(isbn);
-        descriptionEditText.setText(description);
-    }
-
-    private void goToScanISBN() {
-        Intent intent = new Intent(EditBookActivity.this, ScanIsbnActivity.class);
-        startActivityForResult(intent, ISBN_REQUEST_CODE);
-    }
-
-    private void addPhoto() {
-        ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
-    }
-
-    public void onImageSelect(Uri uri) {
-        // TODO: Save URI for when creating a book class
-        addPhotoButton.setImageURI(uri);
-        deletePhotoButton.setVisibility(View.VISIBLE);
-    }
-
-    private void deletePhoto() {
-        // TODO: Sync up with Kyle on Firebase stuff
-        // TODO: Properly clear the image instead of replacing it with original drawable
-        // TODO: Clear saved URI
-        addPhotoButton.setImageDrawable(ContextCompat.getDrawable(this, android.R.drawable.ic_menu_add));
-        deletePhotoButton.setVisibility(View.GONE);
-    }
-
-    private void doneAddBook() {
-        // TODO: Need the book class
+    protected void doneEditBook() {
         // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
+        // TODO: Edit the book object, pass changes to firebase
         Log.d("Edit Book", "Click done add book");
     }
 
     private void deleteBook() {
         // TODO: Sync up with Kyle on Firebase stuff
         Log.d("Edit Book", "Click delete book");
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) { return; }
-
-        // Get ISBN
-        if (requestCode == ISBN_REQUEST_CODE) {
-            String isbn = data.getStringExtra("ISBN");
-            isbnEditText.setText(isbn);
-        }
     }
 }
