@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.EmptyTextFocusListener;
@@ -133,7 +134,38 @@ public class EditProfileActivity extends BackButtonActivity {
     }
 
     private void editUserProfile() {
+        // validate all the text fields
+        boolean invalidField = false;
+        if (!validateEditTextEmpty(firstNameEditText, firstNameLayout)) {
+            invalidField = true;
+        }
+        if (!validateEditTextEmpty(lastNameEditText, lastNameLayout)) {
+            invalidField = true;
+        }
+        if (!checkIfEditTextValidEmail(emailAddressEditText, emailAddressLayout)) {
+            invalidField = true;
+        }
+        if (!checkIfEditTextValidPhoneNumber(phoneNumberEditText, phoneNumberLayout)) {
+            invalidField = true;
+        }
+        if (invalidField) {
+            return;
+        }
 
+        // Get values from fields and create user object
+        String firstName = firstNameEditText.getText().toString();
+        String lastName = lastNameEditText.getText().toString();
+        String emailAddress = emailAddressEditText.getText().toString();
+        String phoneNumber = phoneNumberEditText.getText().toString();
+
+        // add user and go back to main activity
+        User newUser = new User(loggedUsername, firstName, lastName, emailAddress, phoneNumber);
+        FirebaseProvider.getInstance().storeUser(newUser,
+            aVoid -> {
+                goToMyProfile();
+            },
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
     }
 
     private void goToMyProfile() {
