@@ -50,10 +50,10 @@ public class MainActivityTest {
      * Test opening signup activity
      */
     @Test
-    public void signup() {
-        View signupBtn = rule.getActivity().findViewById(R.id.login_signup_button);
-        solo.clickOnView(signupBtn);
-        solo.assertCurrentActivity("WRONG ACTIVITY", SignupActivity.class);
+    public void signUp() {
+        View signUpBtn = rule.getActivity().findViewById(R.id.login_signup_button);
+        solo.clickOnView(signUpBtn);
+        solo.assertCurrentActivity("WRONG ACTIVITY", SignUpActivity.class);
     }
 
     /**

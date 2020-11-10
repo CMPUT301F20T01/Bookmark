@@ -21,7 +21,7 @@ import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextVal
 import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidPhoneNumber;
 import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEmpty;
 
-public class SignupActivity extends BackButtonActivity {
+public class SignUpActivity extends BackButtonActivity {
     private EditText userNameEditText, firstNameEditText, lastNameEditText, emailAddressEditText, phoneNumberEditText;
     private TextInputLayout userNameLayout, firstNameLayout, lastNameLayout, emailAddressLayout, phoneNumberLayout;
     private Button signUpButton;
@@ -93,15 +93,15 @@ public class SignupActivity extends BackButtonActivity {
                         firebaseProvider.storeUser(newUser,
                             aVoid -> {
                             },
-                            e -> Toast.makeText(SignupActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
-                        Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                            e -> Toast.makeText(SignUpActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
+                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                         intent.putExtra("SIGNED_UP_USERNAME", username);
                         startActivity(intent);
                     } else {
                         userNameLayout.setError("Username already registered. Please choose another");
                     }
                 },
-                e -> Toast.makeText(SignupActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
+                e -> Toast.makeText(SignUpActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
         });
 
         // allows user to see if their email address is valid as they type

@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(view -> {
             userNameEditText.setText("");
             userNameLayout.setError(null); // hides error message
-            Intent intent12 = new Intent(MainActivity.this, SignupActivity.class);
-            startActivity(intent12);
+            Intent signUpIntent = new Intent(MainActivity.this, SignUpActivity.class);
+            startActivity(signUpIntent);
         });
     }
 }

@@ -15,18 +15,18 @@ import org.junit.Test;
 
 
 /**
- * Perform intent testing on the SignupActivity
+ * Perform intent testing on the SignUpActivity
  * <p>
  * Outstanding Issues/TODOs
  * Test Signing Up (how to make sure that user exists?)
  *
  * @author Konrad Staniszewski.
  */
-public class SignupActivityTest {
+public class SignUpActivityTest {
     private Solo solo;
     @Rule
-    public ActivityTestRule<SignupActivity> rule =
-        new ActivityTestRule<>(SignupActivity.class, true, true);
+    public ActivityTestRule<SignUpActivity> rule =
+        new ActivityTestRule<>(SignUpActivity.class, true, true);
 
     /**
      * Runs before all tests and create the solo instance.
@@ -53,6 +53,7 @@ public class SignupActivityTest {
      */
     @Test
     public void backToLogin() {
+        // implement using MockFirebaseProvider
     }
 
     /**
