@@ -17,11 +17,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * A singleton class the provides access to our Firestore database.
+ * An implementation of StorageProvider that stores all of the app's data in Firebase.
  *
  * @author Kyle Hennig.
  */
-public class FirebaseProvider {
+public class FirebaseProvider implements StorageProvider {
     private static class Collection {
         private static final String USERS = "users";
         private static final String BOOKS = "books";
@@ -46,80 +46,38 @@ public class FirebaseProvider {
         return instance;
     }
 
-    /**
-     * Stores a user to Firebase.
-     *
-     * @param user              The user.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void storeUser(User user, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         storeEntity(Collection.USERS, user, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves a user from Firebase.
-     *
-     * @param username          The username of the user.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveUserByUsername(String username, OnSuccessListener<User> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveEntity(Collection.USERS, username, User::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Stores a book to Firebase.
-     *
-     * @param book              The book.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void storeBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         storeEntity(Collection.BOOKS, book, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves a book from Firebase.
-     *
-     * @param owner             The owner of the book.
-     * @param isbn              The ISBN of the book.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveBook(User owner, String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
         String id = String.format("%s:%s", owner.getId(), isbn);
         retrieveEntity(Collection.BOOKS, id, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves all the books from Firebase.
-     *
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveBooks(OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveEntities(Collection.BOOKS, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves the books owned by a user.
-     *
-     * @param owner             The owner of the books.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveBooksByOwner(User owner, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveEntitiesMatching(Collection.BOOKS, query -> query.whereEqualTo("ownerId", owner.getId()), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves the books requested by a user.
-     *
-     * @param requester         The requester of the books.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveBooksByRequester(User requester, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveRequestsByRequester(requester, requests -> {
             List<String> bookIds = new ArrayList<>();
@@ -138,59 +96,28 @@ public class FirebaseProvider {
         }, onFailureListener);
     }
 
-    /**
-     * Stores a request to Firebase.
-     *
-     * @param request           The request.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         storeEntity(Collection.REQUESTS, request, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves a request from Firebase.
-     *
-     * @param book              The book the request was for.
-     * @param requester         The user who made the request.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
         String id = String.format("%s:%s", book.getId(), requester.getId());
         retrieveEntity(Collection.REQUESTS, id, Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves the requests for a book from Firebase.
-     *
-     * @param book              The book the request was for.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveRequestsByBook(Book book, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("bookId", book.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Retrieves the requests made by a requester from Firebase.
-     *
-     * @param requester         The user who made the request.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void retrieveRequestsByRequester(User requester, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requesterId", requester.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
-    /**
-     * Deletes a request from Firebase.
-     *
-     * @param request           The request.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
+    @Override
     public void deleteRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         deleteEntity(Collection.REQUESTS, request.getId(), onSuccessListener, onFailureListener);
     }
