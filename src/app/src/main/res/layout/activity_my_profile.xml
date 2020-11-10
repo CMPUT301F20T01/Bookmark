@@ -17,7 +17,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
-        android:id="@+id/username_textView"
+        android:id="@+id/my_profile_username_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -26,39 +26,39 @@
         app:layout_constraintTop_toBottomOf="@+id/my_profile_toolbar" />
 
     <TextView
-        android:id="@+id/firstName_textView"
+        android:id="@+id/my_profile_firstName_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/my_profile_username_textView" />
 
     <TextView
-        android:id="@+id/lastName_textView"
+        android:id="@+id/my_profile_lastName_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstName_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/my_profile_firstName_textView" />
 
     <TextView
-        android:id="@+id/emailAddress_textView"
+        android:id="@+id/my_profile_emailAddress_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastName_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/my_profile_lastName_textView" />
 
     <TextView
-        android:id="@+id/phoneNumber_textView"
+        android:id="@+id/my_profile_phoneNumber_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailAddress_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/my_profile_emailAddress_textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
