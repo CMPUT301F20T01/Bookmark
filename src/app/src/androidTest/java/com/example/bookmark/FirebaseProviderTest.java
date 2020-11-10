@@ -18,12 +18,8 @@ import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.function.Function;
 
-import static com.example.bookmark.mocks.MockModels.mockBook1;
-import static com.example.bookmark.mocks.MockModels.mockBook2;
-import static com.example.bookmark.mocks.MockModels.mockOwner;
-import static com.example.bookmark.mocks.MockModels.mockRequest1;
-import static com.example.bookmark.mocks.MockModels.mockRequest2;
-import static com.example.bookmark.mocks.MockModels.mockRequester;
+import com.example.bookmark.mocks.MockModels;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -78,27 +74,27 @@ public class FirebaseProviderTest {
     public static void createDatabase() {
         Semaphore semaphore = new Semaphore(0);
 
-        User owner = mockOwner();
+        User owner = MockModels.mockOwner();
         storageService.storeUser(owner, aVoid -> semaphore.release(), e -> fail("An error occurred while storing the owner."));
         acquire(semaphore);
 
-        User requester = mockRequester();
+        User requester = MockModels.mockRequester();
         storageService.storeUser(requester, aVoid -> semaphore.release(), e -> fail("An error occurred while storing the requester."));
         acquire(semaphore);
 
-        Book book1 = mockBook1();
+        Book book1 = MockModels.mockBook1();
         storageService.storeBook(book1, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 1."));
         acquire(semaphore);
 
-        Book book2 = mockBook2();
+        Book book2 = MockModels.mockBook2();
         storageService.storeBook(book2, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 2."));
         acquire(semaphore);
 
-        Request request1 = mockRequest1();
+        Request request1 = MockModels.mockRequest1();
         storageService.storeRequest(request1, aVoid -> semaphore.release(), e -> fail("An error occurred while storing request 1."));
         acquire(semaphore);
 
-        Request request2 = mockRequest2();
+        Request request2 = MockModels.mockRequest2();
         storageService.storeRequest(request2, aVoid -> semaphore.release(), e -> fail("An error occurred while storing request 2."));
         acquire(semaphore);
     }
@@ -109,7 +105,7 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveUser() {
         Semaphore semaphore = new Semaphore(0);
-        User user = mockOwner();
+        User user = MockModels.mockOwner();
         storageService.retrieveUserByUsername(user.getUsername(), user2 -> {
             assertEquals(user, user2);
             semaphore.release();
@@ -123,8 +119,8 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveBook() {
         Semaphore semaphore = new Semaphore(0);
-        User owner = mockOwner();
-        Book book = mockBook1();
+        User owner = MockModels.mockOwner();
+        Book book = MockModels.mockBook1();
         storageService.retrieveBook(owner, book.getIsbn(), book2 -> {
             assertEquals(book, book2);
             semaphore.release();
@@ -138,8 +134,8 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveMultipleBooks() {
         Semaphore semaphore = new Semaphore(0);
-        Book book1 = mockBook1();
-        Book book2 = mockBook2();
+        Book book1 = MockModels.mockBook1();
+        Book book2 = MockModels.mockBook2();
         storageService.retrieveBooks(books -> {
             assertTrue(books.contains(book1));
             assertTrue(books.contains(book2));
@@ -154,9 +150,9 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveMultipleBooksByOwner() {
         Semaphore semaphore = new Semaphore(0);
-        User owner = mockOwner();
-        Book book1 = mockBook1();
-        Book book2 = mockBook2();
+        User owner = MockModels.mockOwner();
+        Book book1 = MockModels.mockBook1();
+        Book book2 = MockModels.mockBook2();
         storageService.retrieveBooksByOwner(owner, books -> {
             assertTrue(books.contains(book1));
             assertTrue(books.contains(book2));
@@ -171,9 +167,9 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveMultipleBooksByRequester() {
         Semaphore semaphore = new Semaphore(0);
-        Book book1 = mockBook1();
-        Book book2 = mockBook2();
-        User requester = mockRequester();
+        Book book1 = MockModels.mockBook1();
+        Book book2 = MockModels.mockBook2();
+        User requester = MockModels.mockRequester();
         storageService.retrieveBooksByRequester(requester, books -> {
             assertTrue(books.contains(book1));
             assertTrue(books.contains(book2));
@@ -188,9 +184,9 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveRequest() {
         Semaphore semaphore = new Semaphore(0);
-        Book book = mockBook1();
-        User requester = mockRequester();
-        Request request = mockRequest1();
+        Book book = MockModels.mockBook1();
+        User requester = MockModels.mockRequester();
+        Request request = MockModels.mockRequest1();
         storageService.retrieveRequest(book, requester, request2 -> {
             assertEquals(request, request2);
             semaphore.release();
@@ -204,9 +200,9 @@ public class FirebaseProviderTest {
     @Test
     public void testDeleteRequest() {
         Semaphore semaphore = new Semaphore(0);
-        Book book = mockBook1();
-        User requester = mockRequester();
-        Request request = mockRequest1();
+        Book book = MockModels.mockBook1();
+        User requester = MockModels.mockRequester();
+        Request request = MockModels.mockRequest1();
         storageService.deleteRequest(request, aVoid ->
                 storageService.retrieveRequest(book, requester, request2 ->
                         storageService.storeRequest(request, aVoid2 -> {
@@ -224,9 +220,9 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveMultipleRequestsByBook() {
         Semaphore semaphore = new Semaphore(0);
-        Book book = mockBook1();
-        Request request1 = mockRequest1();
-        Request request2 = mockRequest2();
+        Book book = MockModels.mockBook1();
+        Request request1 = MockModels.mockRequest1();
+        Request request2 = MockModels.mockRequest2();
         storageService.retrieveRequestsByBook(book, requests -> {
             assertTrue(requests.contains(request1));
             assertTrue(requests.contains(request2));
@@ -241,9 +237,9 @@ public class FirebaseProviderTest {
     @Test
     public void testRetrieveMultipleRequestsByRequester() {
         Semaphore semaphore = new Semaphore(0);
-        User requester = mockRequester();
-        Request request1 = mockRequest1();
-        Request request2 = mockRequest2();
+        User requester = MockModels.mockRequester();
+        Request request1 = MockModels.mockRequest1();
+        Request request2 = MockModels.mockRequest2();
         storageService.retrieveRequestsByRequester(requester, requests -> {
             assertTrue(requests.contains(request1));
             assertTrue(requests.contains(request2));
