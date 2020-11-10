@@ -9,7 +9,7 @@ import com.example.bookmark.server.StorageService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MockStorageProvider {
+public class MockStorageService {
     public static StorageService mockStorageService() {
         List<User> users = new ArrayList<>();
         users.add(MockModels.mockOwner());
