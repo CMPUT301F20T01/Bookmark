@@ -14,6 +14,10 @@
     <string name="author">Author</string>
     <string name="isbn">ISBN</string>
     <string name="delete">Delete</string>
+    <string name="username">Username</string>
+
+    <string name="login">LOGIN</string>
+    <string name="signup">SIGN UP</string>
 
 
     <string name="request_string">Has requested to borrow this book.</string>

@@ -6,66 +6,81 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/login_title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:text="Bookmark"
-        android:textSize="50sp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="64dp"
+        android:text="@string/app_name"
+        android:textColor="@color/md_black_1000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="8sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"/>
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="275dp"
-        android:layout_height="254dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_title_text"
-        app:srcCompat="@mipmap/ic_launcher_foreground" />
-
-    <EditText
-        android:id="@+id/login_username_edit_text"
+        android:id="@+id/login_logo_imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="64dp"
-        android:background="@drawable/round_gray_border"
-        android:hint="Username"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/login_title_text"
+        app:srcCompat="@mipmap/ic_launcher_foreground"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
 
-    <Button
-        android:id="@+id/login_sign_in_button"
-        android:layout_width="120dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/login_username_textInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginTop="24dp"
-        android:text="Sign In"
-        android:textColor="@color/cardview_light_background"
-        android:background="@color/colorPrimary"
+        android:layout_marginEnd="64dp"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_username_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/login_logo_imageView">
 
-    <Button
-        android:id="@+id/login_sign_up_button"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/login_username_textInput"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/username"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login_login_button"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="24dp"
+        android:padding="12dp"
+        android:text="@string/login"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_username_textInputLayout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login_signup_button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="64dp"
-        android:text="Sign Up"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/cardview_light_background"
+        android:layout_marginEnd="72dp"
+        android:padding="12dp"
+        android:text="@string/signup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_username_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/login_username_textInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

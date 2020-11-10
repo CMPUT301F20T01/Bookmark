@@ -15,6 +15,7 @@ import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.FirebaseProvider;
 import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.DrawerProvider;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
