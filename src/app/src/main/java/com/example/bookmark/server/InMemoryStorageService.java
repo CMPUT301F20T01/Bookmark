@@ -16,15 +16,9 @@ import java.util.List;
  * @author Kyle Hennig.
  */
 public class InMemoryStorageService implements StorageService {
-    private static final StorageService instance = new InMemoryStorageService();
-
     private final List<User> users;
     private final List<Book> books;
     private final List<Request> requests;
-
-    public static StorageService getInstance() {
-        return instance;
-    }
 
     /**
      * Creates an InMemoryStorageService.
