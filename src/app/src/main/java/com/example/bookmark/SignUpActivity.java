@@ -92,11 +92,11 @@ public class SignUpActivity extends BackButtonActivity {
                         User newUser = new User(username, firstName, lastName, emailAddress, phoneNumber);
                         firebaseProvider.storeUser(newUser,
                             aVoid -> {
+                                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                                intent.putExtra("SIGNED_UP_USERNAME", username);
+                                startActivity(intent);
                             },
                             e -> Toast.makeText(SignUpActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
-                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                        intent.putExtra("SIGNED_UP_USERNAME", username);
-                        startActivity(intent);
                     } else {
                         userNameLayout.setError("Username already registered. Please choose another");
                     }
