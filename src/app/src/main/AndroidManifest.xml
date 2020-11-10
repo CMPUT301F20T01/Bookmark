@@ -22,7 +22,7 @@
             android:value="AIzaSyAncJ8eeijFPuMazRK_bIMN6E772RRZs_E" />
 
         <activity android:name=".ViewProfileActivity"></activity>
-        <activity android:name=".TakePhotoActivity" />
+        <activity android:name=".SignUpActivity"/>
         <activity android:name=".ScanIsbnActivity" />
         <activity android:name=".RequestedBookDetailsActivity" />
         <activity android:name=".PendingRequestsActivity" />
