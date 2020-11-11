@@ -51,10 +51,12 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
     private void populateUserInto(String username) {
         FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
             ((TextView) findViewById(R.id.my_profile_username_textView)).setText(user.getUsername());
-            ((TextView) findViewById(R.id.my_profile_firstName_textView)).setText(user.getFirstName());
-            ((TextView) findViewById(R.id.my_profile_lastName_textView)).setText(user.getLastName());
-            ((TextView) findViewById(R.id.my_profile_emailAddress_textView)).setText(user.getEmailAddress());
-            ((TextView) findViewById(R.id.my_profile_phoneNumber_textView)).setText(user.getPhoneNumber());
+            ((TextView) findViewById(R.id.my_profile_firstName_lastName_textView))
+                .setText("Name: " + user.getFirstName() + " " + user.getLastName());
+            ((TextView) findViewById(R.id.my_profile_emailAddress_textView))
+                .setText("Email: " + user.getEmailAddress());
+            ((TextView) findViewById(R.id.my_profile_phoneNumber_textView))
+                .setText("Phone: " + user.getPhoneNumber());
         }, e -> DialogUtil.showErrorDialog(this, e));
     }
 

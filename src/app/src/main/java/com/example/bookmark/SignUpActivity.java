@@ -21,6 +21,13 @@ import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextVal
 import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidPhoneNumber;
 import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEmpty;
 
+/**
+ * This activity allows a user to sign up for Bookmark.
+ * It provides a form to fill out and field validation to ensure
+ * that the provided details the users input work correctly.
+ *
+ * @author Konrad Staniszewski
+ */
 public class SignUpActivity extends BackButtonActivity {
     private EditText userNameEditText, firstNameEditText, lastNameEditText, emailAddressEditText, phoneNumberEditText;
     private TextInputLayout userNameLayout, firstNameLayout, lastNameLayout, emailAddressLayout, phoneNumberLayout;
@@ -32,7 +39,6 @@ public class SignUpActivity extends BackButtonActivity {
         setContentView(R.layout.activity_signup);
         getSupportActionBar().setTitle("Sign Up");
 
-        // get relevant views
         userNameEditText = findViewById(R.id.signup_username_edit_text);
         firstNameEditText = findViewById(R.id.signup_firstname_edit_text);
         lastNameEditText = findViewById(R.id.signup_lastname_edit_text);

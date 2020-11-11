@@ -34,7 +34,6 @@ public class EditProfileActivity extends BackButtonActivity {
 
     private EditText firstNameEditText, lastNameEditText, emailAddressEditText, phoneNumberEditText;
     private TextInputLayout firstNameLayout, lastNameLayout, emailAddressLayout, phoneNumberLayout;
-    private Button doneButton;
     private String loggedUsername;
 
     @Override
@@ -53,7 +52,7 @@ public class EditProfileActivity extends BackButtonActivity {
         emailAddressLayout = findViewById(R.id.edit_profile_email_textInputLayout);
         phoneNumberLayout = findViewById(R.id.edit_profile_phonenumber_textInputLayout);
 
-        doneButton = findViewById(R.id.edit_profile_done_button);
+        Button doneButton = findViewById(R.id.edit_profile_done_button);
         doneButton.setOnClickListener(v -> editUserProfile());
 
         emailAddressEditText.setOnFocusChangeListener((v, hasFocus) -> {
