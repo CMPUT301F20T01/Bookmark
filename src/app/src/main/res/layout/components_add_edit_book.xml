@@ -7,8 +7,6 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:helperTextEnabled="true"
-        app:helperText="@string/book_title"
         android:hint="@string/book_title">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -23,8 +21,6 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:helperTextEnabled="true"
-        app:helperText="@string/author"
         android:hint="@string/author">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -41,9 +37,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/isbn"
         app:endIconDrawable="@drawable/ic_baseline_photo_camera_24"
-        app:endIconMode="custom"
-        app:helperText="@string/isbn"
-        app:helperTextEnabled="true">
+        app:endIconMode="custom">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -56,8 +50,6 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:helperTextEnabled="true"
-        app:helperText="@string/description"
         android:hint="@string/description">
 
         <com.google.android.material.textfield.TextInputEditText
