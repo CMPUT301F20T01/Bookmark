@@ -26,7 +26,7 @@ import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEm
  */
 public class MainActivity extends AppCompatActivity {
 
-    StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+    private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     private EditText userNameEditText;
     private TextInputLayout userNameLayout;

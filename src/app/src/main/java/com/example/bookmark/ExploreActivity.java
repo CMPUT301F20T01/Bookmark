@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.server.FirebaseStorageService;
 import com.example.bookmark.server.StorageService;
 import com.example.bookmark.server.StorageServiceLocator;
 import com.example.bookmark.util.DialogUtil;
@@ -32,6 +31,9 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public class ExploreActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
+
+    private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
@@ -115,7 +117,6 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
     }
 
     public void executeSearch(String searchedKeywords) {
-        StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
         storageService.retrieveBooks(books -> {
             searchResults.clear();
             for (Book book : books) {

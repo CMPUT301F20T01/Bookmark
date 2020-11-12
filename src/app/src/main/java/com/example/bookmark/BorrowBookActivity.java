@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Request;
-import com.example.bookmark.server.FirebaseStorageService;
 import com.example.bookmark.server.StorageService;
 import com.example.bookmark.server.StorageServiceLocator;
 import com.example.bookmark.util.DialogUtil;
@@ -31,6 +30,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
  * @author Nayan Prakash.
  */
 public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String EXTRA_REQUEST = "com.example.bookmark.REQUEST";
 
@@ -82,21 +84,20 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
             if (book.getIsbn().equals(isbn)) {
                 book.setStatus(Book.Status.BORROWED);
                 request.setStatus(Request.Status.BORROWED);
-                storeToFirebase(book, request);
+                saveChanges(book, request);
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as request ISBN", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void storeToFirebase(Book book, Request request) {
+    private void saveChanges(Book book, Request request) {
         OnSuccessListener<Void> onSuccessListener = aVoid -> {
             Intent intent = getIntent();
             setResult(Activity.RESULT_OK, intent);
             finish();
         };
         OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
-        StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
         storageService.storeRequest(request, aVoid ->
             storageService.storeBook(book, onSuccessListener, onFailureListener), onFailureListener);
     }

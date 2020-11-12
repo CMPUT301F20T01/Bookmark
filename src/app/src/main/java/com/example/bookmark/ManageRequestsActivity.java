@@ -29,6 +29,7 @@ import java.util.List;
  * @author Nayan Prakash.
  */
 public class ManageRequestsActivity extends BackButtonActivity {
+
     private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     public static int GET_MEETING_LOCATION = 1;

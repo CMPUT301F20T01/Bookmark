@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.bookmark.server.FirebaseStorageService;
 import com.example.bookmark.server.StorageService;
 import com.example.bookmark.server.StorageServiceLocator;
 import com.example.bookmark.util.DialogUtil;
@@ -27,6 +26,7 @@ import com.mikepenz.materialdrawer.Drawer;
  */
 public class MyProfileActivity extends AppCompatActivity implements MenuOptions {
 
+    private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     private Drawer navigationDrawer = null;
 
@@ -52,7 +52,6 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
     }
 
     private void populateUserInto(String username) {
-        StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
         storageService.retrieveUserByUsername(username, user -> {
             ((TextView) findViewById(R.id.my_profile_username_textView)).setText(user.getUsername());
             ((TextView) findViewById(R.id.my_profile_firstName_lastName_textView))

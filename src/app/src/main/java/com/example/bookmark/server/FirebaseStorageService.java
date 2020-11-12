@@ -28,7 +28,7 @@ public class FirebaseStorageService implements StorageService {
         private static final String REQUESTS = "requests";
     }
 
-    private static final String TAG = "FirebaseProvider";
+    private static final String TAG = "FirebaseStorageService";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
