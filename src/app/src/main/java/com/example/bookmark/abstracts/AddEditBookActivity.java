@@ -14,13 +14,13 @@ import com.example.bookmark.BackButtonActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.ScanIsbnActivity;
 import com.example.bookmark.fragments.ImageSelectDialogFragment;
+import com.google.android.material.textfield.TextInputLayout;
 
 public abstract class AddEditBookActivity extends BackButtonActivity
         implements ImageSelectDialogFragment.ImageSelectListener {
     private static final int ISBN_REQUEST_CODE = 100;
     private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
-    protected ImageButton scanISBNButton;
     protected ImageButton addPhotoButton;
     protected ImageButton deletePhotoButton;
     protected EditText titleEditText;
@@ -32,19 +32,19 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        scanISBNButton = findViewById(R.id.book_scan_isbn_btn);
-        scanISBNButton.setOnClickListener(v -> goToScanISBN());
+        TextInputLayout isbnTextInputLayout = findViewById(R.id.add_edit_book_isbn);
+        isbnTextInputLayout.setEndIconOnClickListener(v -> goToScanISBN());
 
-        addPhotoButton = findViewById(R.id.book_add_photo_btn);
-        addPhotoButton.setOnClickListener(v -> addPhoto());
+        // addPhotoButton = findViewById(R.id.book_add_photo_btn);
+        // addPhotoButton.setOnClickListener(v -> addPhoto());
 
-        deletePhotoButton = findViewById(R.id.book_delete_photo_btn);
-        deletePhotoButton.setOnClickListener(v -> deletePhoto());
+        // deletePhotoButton = findViewById(R.id.book_delete_photo_btn);
+        // deletePhotoButton.setOnClickListener(v -> deletePhoto());
 
-        titleEditText = findViewById(R.id.book_title_field);
-        authorEditText = findViewById(R.id.book_author_field);
-        isbnEditText = findViewById(R.id.book_isbn_field);
-        descriptionEditText = findViewById(R.id.book_description_field);
+        titleEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_title)).getEditText();
+        authorEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_author)).getEditText();
+        isbnEditText = isbnTextInputLayout.getEditText();
+        descriptionEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_description)).getEditText();
     }
 
     private void goToScanISBN() {

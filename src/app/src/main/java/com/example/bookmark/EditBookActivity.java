@@ -28,10 +28,10 @@ public class EditBookActivity extends AddEditBookActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Edit Book");
 
-        doneEditBookButton = findViewById((R.id.edit_book_done_btn));
+        doneEditBookButton = findViewById((R.id.edit_book_done_button));
         doneEditBookButton.setOnClickListener(v -> doneEditBook());
 
-        deleteBookButton = findViewById((R.id.edit_book_done_btn));
+        deleteBookButton = findViewById((R.id.edit_book_delete_button));
         deleteBookButton.setOnClickListener(v -> deleteBook());
 
         // TODO: Get book from intent

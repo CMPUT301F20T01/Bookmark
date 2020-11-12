@@ -26,7 +26,7 @@ public class AddBookActivity extends AddEditBookActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Add Book");
 
-        doneAddBookButton = findViewById((R.id.add_book_done_btn));
+        doneAddBookButton = findViewById((R.id.add_book_done_button));
         doneAddBookButton.setOnClickListener(v -> doneAddBook());
     }
 
