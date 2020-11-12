@@ -4,6 +4,9 @@ import android.content.Context;
 
 import androidx.appcompat.app.AlertDialog;
 
+/**
+ * @author Kyle Hennig
+ */
 public class DialogUtil {
     public static void showErrorDialog(Context context, Exception e) {
         new AlertDialog.Builder(context)

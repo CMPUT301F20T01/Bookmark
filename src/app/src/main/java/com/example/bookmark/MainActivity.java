@@ -1,23 +1,22 @@
 package com.example.bookmark;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.bookmark.fragments.SignupDialogFragment;
-import com.example.bookmark.models.User;
-import com.example.bookmark.server.FirebaseStorageService;
 import com.example.bookmark.server.StorageService;
 import com.example.bookmark.server.StorageServiceLocator;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.EmptyTextFocusListener;
+import com.google.android.material.textfield.TextInputLayout;
+
+import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEmpty;
 
 /**
  * Starting point of the application.
@@ -25,11 +24,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
  *
  * @author Konrad Staniszewski
  */
-public class MainActivity extends AppCompatActivity implements SignupDialogFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
+
     StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     private EditText userNameEditText;
-    private Button signInButton;
+    private TextInputLayout userNameLayout;
+    private Button loginButton;
     private Button signUpButton;
 
     /**
@@ -42,86 +43,91 @@ public class MainActivity extends AppCompatActivity implements SignupDialogFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // make sure shared preferences have user logged out
+        logOut();
+
         // Fetch relevant views
-        userNameEditText = findViewById(R.id.login_username_edit_text);
-        signInButton = findViewById(R.id.login_sign_in_button);
-        signUpButton = findViewById(R.id.login_sign_up_button);
+        userNameEditText = findViewById(R.id.login_username_textInput);
+        userNameLayout = findViewById(R.id.login_username_textInputLayout);
+        loginButton = findViewById(R.id.login_login_button);
+        signUpButton = findViewById(R.id.login_signup_button);
+
+        loginButton.setOnClickListener(v -> logIn());
+        signUpButton.setOnClickListener(v -> signUp());
+        userNameEditText.setOnFocusChangeListener(new EmptyTextFocusListener(userNameEditText, userNameLayout));
+
+        // pre-fill username if just signed up
+        Intent intent = getIntent();
+        String signedUpUsername = intent.getStringExtra("SIGNED_UP_USERNAME");
+        if (signedUpUsername != null) {
+            userNameEditText.setText(signedUpUsername);
+        }
 
         /**
-         * Sign in button event listener
+         * username EditText textChangeListener
          */
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        userNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                String username = userNameEditText.getText().toString();
-                if (username.length() == 0) {
-                    userNameEditText.setError("Please enter a username.");
-                    return;
-                }
-                // check if username is valid user, if not fire small error notification ect
-                storageService.retrieveUserByUsername(username,
-                    new OnSuccessListener<User>() {
-                        @Override
-                        public void onSuccess(User user) {
-                            if (user == null) {
-                                userNameEditText.setError("Username not registered!\nPlease enter existing username.");
-                            } else {
-                                // store user object in shared preferences
-                                SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("USER_NAME", user.getUsername());
-                                editor.commit();
-                                // launch my books activity
-                                Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-                    },
-                    new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            userNameEditText.setError("Connection Error. Please Try again.");
-                        }
-                    });
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-        });
 
-        /**
-         * Sign up button event listener
-         */
-        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                userNameEditText.setText("");
-                userNameEditText.setError(null); // hides error message
-                new SignupDialogFragment().show(getSupportFragmentManager(), "SIGN_UP");
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                userNameLayout.setError(null);
             }
         });
     }
 
     /**
-     * Handles the logic for when signup is pressed in the SignupDialog
-     *
-     * @param user: user object that was just added to the system
+     * Sign in button event listener function
      */
-    @Override
-    public void onSignUpPressed(User user) {
-        // add user to database
-        storageService.storeUser(user,
-            new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
+    private void logIn() {
+        if (!validateEditTextEmpty(userNameEditText, userNameLayout)) {
+            return;
+        }
+
+        // check if username is valid user, if not fire small error notification ect
+        String username = userNameEditText.getText().toString();
+        storageService.retrieveUserByUsername(username,
+            user -> {
+                if (user == null) {
+                    userNameLayout.setError("User not registered!");
+                } else {
+                    // store user object in shared preferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("USER_NAME", user.getUsername());
+                    editor.commit();
+                    // launch my books activity
+                        Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+                        startActivity(intent);
                 }
             },
-            new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplication().getBaseContext(), "Connection Error. Please Try again.", Toast.LENGTH_LONG).show();
-                }
-            });
+            e -> DialogUtil.showErrorDialog(MainActivity.this,
+                new Exception("Connection Error. Please Try again."))
+        );
+    }
 
-        // fill out field for easier sign in
-        userNameEditText = findViewById(R.id.login_username_edit_text);
-        userNameEditText.setText(user.getUsername());
+    /**
+     * Sign up button event listener function
+     */
+    private void signUp() {
+        userNameEditText.setText("");
+        userNameLayout.setError(null); // hides error message
+        Intent signUpIntent = new Intent(MainActivity.this, SignUpActivity.class);
+        startActivity(signUpIntent);
+    }
+
+    /**
+     * Make sure any logged in user is signed out before continuing
+     */
+    private void logOut() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear().commit();
     }
 }
