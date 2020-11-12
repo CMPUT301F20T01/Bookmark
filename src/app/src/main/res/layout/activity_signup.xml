@@ -3,11 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EditProfileActivity">
+    android:layout_height="match_parent">
+
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edit_profile_firstname_textInputLayout"
+        android:id="@+id/signup_username_textInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:errorEnabled="true"
+        app:helperText="Username"
+        app:helperTextEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signup_username_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username"
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/signup_firstname_textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,10 +42,10 @@
         app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/signup_username_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_profile_firstname_edit_text"
+            android:id="@+id/signup_firstname_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="First Name"
@@ -30,7 +53,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edit_profile_lastname_textInputLayout"
+        android:id="@+id/signup_lastname_textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,10 +65,10 @@
         app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_profile_firstname_textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/signup_firstname_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_profile_lastname_edit_text"
+            android:id="@+id/signup_lastname_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Last Name"
@@ -53,7 +76,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edit_profile_email_textInputLayout"
+        android:id="@+id/signup_email_textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,10 +88,10 @@
         app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_profile_lastname_textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/signup_lastname_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_profile_email_edit_text"
+            android:id="@+id/signup_email_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
@@ -76,7 +99,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edit_profile_phonenumber_textInputLayout"
+        android:id="@+id/signup_phonenumber_textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,10 +111,10 @@
         app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_profile_email_textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/signup_email_textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_profile_phonenumber_edit_text"
+            android:id="@+id/signup_phonenumber_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"
@@ -99,7 +122,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/edit_profile_done_button"
+        android:id="@+id/signup_signup_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"

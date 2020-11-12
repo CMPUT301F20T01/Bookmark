@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/menu_edit_edit_btn"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ic_baseline_edit_24"
         android:title="@string/edit"
         app:showAsAction="always" />
 
