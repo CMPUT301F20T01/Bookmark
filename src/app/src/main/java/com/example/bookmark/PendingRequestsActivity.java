@@ -9,14 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.util.DrawerProvider;
-import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +24,8 @@ import java.util.List;
  *
  * @author Ryan Kortbeek.
  */
-public class PendingRequestsActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
+public class PendingRequestsActivity extends NavigationDrawerActivity
+    implements SearchDialogFragment.OnFragmentInteractionListener {
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
@@ -38,19 +34,12 @@ public class PendingRequestsActivity extends AppCompatActivity implements Search
     private BookList requestedBooksAdapter;
     private ListView requestedBooksListView;
 
-    private Drawer navigationDrawer = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.navigationActivity);
         setContentView(R.layout.activity_pending_requests);
 
-        // toolbar setup
-        Toolbar toolbar = (Toolbar) findViewById(R.id.requested_books_toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Pending Requests");
-        navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
 
         requestedBooksListView = findViewById(R.id.requested_books_listview);
 
@@ -98,16 +87,6 @@ public class PendingRequestsActivity extends AppCompatActivity implements Search
                 break;
         }
         return (super.onOptionsItemSelected(item));
-    }
-
-    @Override
-    public void onBackPressed() {
-        //handle the back press :D close the drawer first and if the drawer is closed close the activity
-        if (navigationDrawer != null && navigationDrawer.isDrawerOpen()) {
-            navigationDrawer.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
