@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.EmptyTextFocusListener;
 import com.google.android.material.textfield.TextInputLayout;
 
 import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEmpty;
@@ -41,11 +43,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // make sure shared preferences have user logged out
+        logOut();
+
         // Fetch relevant views
         userNameEditText = findViewById(R.id.login_username_textInput);
         userNameLayout = findViewById(R.id.login_username_textInputLayout);
         loginButton = findViewById(R.id.login_login_button);
         signUpButton = findViewById(R.id.login_signup_button);
+
+        loginButton.setOnClickListener(v -> logIn());
+        signUpButton.setOnClickListener(v -> signUp());
+        userNameEditText.setOnFocusChangeListener(new EmptyTextFocusListener(userNameEditText, userNameLayout));
 
         // pre-fill username if just signed up
         Intent intent = getIntent();
@@ -53,17 +62,6 @@ public class MainActivity extends AppCompatActivity {
         if (signedUpUsername != null) {
             userNameEditText.setText(signedUpUsername);
         }
-
-        /**
-         * username EditText onFocus listener
-         */
-        userNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                userNameLayout.setError(null);
-            } else {
-                validateEditTextEmpty(userNameEditText, userNameLayout);
-            }
-        });
 
         /**
          * username EditText textChangeListener
@@ -82,43 +80,54 @@ public class MainActivity extends AppCompatActivity {
                 userNameLayout.setError(null);
             }
         });
+    }
 
-        /**
-         * Sign in button event listener
-         */
-        loginButton.setOnClickListener(view -> {
-            if (!validateEditTextEmpty(userNameEditText, userNameLayout)) {
-                return;
-            }
+    /**
+     * Sign in button event listener function
+     */
+    private void logIn() {
+        if (!validateEditTextEmpty(userNameEditText, userNameLayout)) {
+            return;
+        }
 
-            // check if username is valid user, if not fire small error notification ect
-            String username = userNameEditText.getText().toString();
-            firebaseProvider.retrieveUserByUsername(username,
-                user -> {
-                    if (user == null) {
-                        userNameLayout.setError("User not registered!");
-                    } else {
-                        // store user object in shared preferences
-                        SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("USER_NAME", user.getUsername());
-                        editor.commit();
-                        // launch my books activity
-                        Intent intent1 = new Intent(getApplicationContext(), MyBooksActivity.class);
-                        startActivity(intent1);
-                    }
-                },
-                e -> Toast.makeText(MainActivity.this, "Connection Error. Please Try again.", Toast.LENGTH_LONG).show());
-        });
+        // check if username is valid user, if not fire small error notification ect
+        String username = userNameEditText.getText().toString();
+        firebaseProvider.retrieveUserByUsername(username,
+            user -> {
+                if (user == null) {
+                    userNameLayout.setError("User not registered!");
+                } else {
+                    // store user object in shared preferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("USER_NAME", user.getUsername());
+                    editor.commit();
+                    // launch my books activity
+                        Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+                        startActivity(intent);
+                }
+            },
+            e -> DialogUtil.showErrorDialog(MainActivity.this,
+                new Exception("Connection Error. Please Try again."))
+        );
+    }
 
-        /**
-         * Sign up button event listener
-         */
-        signUpButton.setOnClickListener(view -> {
-            userNameEditText.setText("");
-            userNameLayout.setError(null); // hides error message
-            Intent signUpIntent = new Intent(MainActivity.this, SignUpActivity.class);
-            startActivity(signUpIntent);
-        });
+    /**
+     * Sign up button event listener function
+     */
+    private void signUp() {
+        userNameEditText.setText("");
+        userNameLayout.setError(null); // hides error message
+        Intent signUpIntent = new Intent(MainActivity.this, SignUpActivity.class);
+        startActivity(signUpIntent);
+    }
+
+    /**
+     * Make sure any logged in user is signed out before continuing
+     */
+    private void logOut() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear().commit();
     }
 }
