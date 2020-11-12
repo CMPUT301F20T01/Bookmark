@@ -10,12 +10,11 @@ import android.widget.EditText;
 
 
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageService;
+import com.example.bookmark.server.StorageServiceLocator;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.EmptyTextFocusListener;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.ArrayList;
 
 import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidEmail;
 import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidPhoneNumber;
@@ -29,6 +28,8 @@ import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEm
  * @author Konrad Staniszewski
  */
 public class SignUpActivity extends BackButtonActivity {
+    StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
+
     private EditText userNameEditText, firstNameEditText, lastNameEditText, emailAddressEditText, phoneNumberEditText;
     private TextInputLayout userNameLayout, firstNameLayout, lastNameLayout, emailAddressLayout, phoneNumberLayout;
 
@@ -142,7 +143,7 @@ public class SignUpActivity extends BackButtonActivity {
 
         // check username is not in db already
         String username = userNameEditText.getText().toString();
-        FirebaseProvider.getInstance().retrieveUserByUsername(username,
+        storageService.retrieveUserByUsername(username,
             user -> {
                 if (user == null) {
                     // Get values from fields and create user object
@@ -153,7 +154,7 @@ public class SignUpActivity extends BackButtonActivity {
 
                     // add user and go back to main activity
                     User newUser = new User(username, firstName, lastName, emailAddress, phoneNumber);
-                    FirebaseProvider.getInstance().storeUser(newUser,
+                    storageService.storeUser(newUser,
                         aVoid -> {
                             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                             intent.putExtra("SIGNED_UP_USERNAME", username);

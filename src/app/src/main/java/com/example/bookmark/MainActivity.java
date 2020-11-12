@@ -9,14 +9,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseStorageService;
 import com.example.bookmark.server.StorageService;
 import com.example.bookmark.server.StorageServiceLocator;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.EmptyTextFocusListener;
 import com.google.android.material.textfield.TextInputLayout;
@@ -98,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         // check if username is valid user, if not fire small error notification ect
         String username = userNameEditText.getText().toString();
-        firebaseProvider.retrieveUserByUsername(username,
+        storageService.retrieveUserByUsername(username,
             user -> {
                 if (user == null) {
                     userNameLayout.setError("User not registered!");
