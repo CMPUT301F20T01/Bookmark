@@ -41,13 +41,22 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
 
         SharedPreferences sharedPref = this.getSharedPreferences("LOGGED_IN_USER", Context.MODE_PRIVATE);
         String username = sharedPref.getString("USER_NAME", "ERROR_NO_USER");
+        if (username.equals("ERROR_NO_USER")) {
+            DialogUtil.showErrorDialog(this, new Exception(username));
+        } else {
+            populateUserInto(username);
+        }
+    }
 
+    private void populateUserInto(String username) {
         FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
-            ((TextView) findViewById(R.id.username_textView)).setText(user.getUsername());
-            ((TextView) findViewById(R.id.firstName_textView)).setText(user.getFirstName());
-            ((TextView) findViewById(R.id.lastName_textView)).setText(user.getLastName());
-            ((TextView) findViewById(R.id.emailAddress_textView)).setText(user.getEmailAddress());
-            ((TextView) findViewById(R.id.phoneNumber_textView)).setText(user.getPhoneNumber());
+            ((TextView) findViewById(R.id.my_profile_username_textView)).setText(user.getUsername());
+            ((TextView) findViewById(R.id.my_profile_firstName_lastName_textView))
+                .setText("Name: " + user.getFirstName() + " " + user.getLastName());
+            ((TextView) findViewById(R.id.my_profile_emailAddress_textView))
+                .setText("Email: " + user.getEmailAddress());
+            ((TextView) findViewById(R.id.my_profile_phoneNumber_textView))
+                .setText("Phone: " + user.getPhoneNumber());
         }, e -> DialogUtil.showErrorDialog(this, e));
     }
 
@@ -73,7 +82,7 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_filter_search_search_btn) {
+        if (item.getItemId() == R.id.menu_edit_edit_btn) {
             goToEditProfile();
         }
         return (super.onOptionsItemSelected(item));
