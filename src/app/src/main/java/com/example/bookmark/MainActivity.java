@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
     private void logOut() {
         SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("USER_NAME");
-        editor.commit();
+        editor.clear().commit();
     }
 }
