@@ -75,6 +75,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         } else {
             return username;
         }
-        return "ERROR_NO_USER";
+        return username;
     }
 }
