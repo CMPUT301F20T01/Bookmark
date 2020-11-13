@@ -85,7 +85,6 @@ public class InMemoryStorageService implements StorageService {
         for (Book book : books) {
             if (book.getOwnerId().equals(owner.getId())) {
                 booksByOwner.add(book);
-                return;
             }
         }
         onSuccessListener.onSuccess(booksByOwner);
