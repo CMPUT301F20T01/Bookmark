@@ -1,7 +1,5 @@
 package com.example.bookmark;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,9 +7,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.bookmark.server.FirebaseProvider;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.EmptyTextFocusListener;
 import com.google.android.material.textfield.TextInputLayout;
@@ -25,8 +24,6 @@ import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEm
  * @author Konrad Staniszewski
  */
 public class MainActivity extends AppCompatActivity {
-
-    FirebaseProvider firebaseProvider = FirebaseProvider.getInstance();
 
     private EditText userNameEditText;
     private TextInputLayout userNameLayout;
@@ -92,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         // check if username is valid user, if not fire small error notification ect
         String username = userNameEditText.getText().toString();
-        firebaseProvider.retrieveUserByUsername(username,
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username,
             user -> {
                 if (user == null) {
                     userNameLayout.setError("User not registered!");
@@ -103,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("USER_NAME", user.getUsername());
                     editor.commit();
                     // launch my books activity
-                        Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
-                        startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+                    startActivity(intent);
                 }
             },
             e -> DialogUtil.showErrorDialog(MainActivity.this,

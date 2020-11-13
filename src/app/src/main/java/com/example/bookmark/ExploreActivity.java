@@ -10,7 +10,7 @@ import android.widget.ListView;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class ExploreActivity extends NavigationDrawerActivity
     implements SearchDialogFragment.OnFragmentInteractionListener {
+
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
@@ -92,7 +93,7 @@ public class ExploreActivity extends NavigationDrawerActivity
     }
 
     public void executeSearch(String searchedKeywords) {
-        FirebaseProvider.getInstance().retrieveBooks(books -> {
+        StorageServiceProvider.getStorageService().retrieveBooks(books -> {
             searchResults.clear();
             for (Book book : books) {
                 if (book.getDescription().contains(searchedKeywords)) {

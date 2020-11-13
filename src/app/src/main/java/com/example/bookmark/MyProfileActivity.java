@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 
 /**
@@ -38,7 +38,7 @@ public class MyProfileActivity extends NavigationDrawerActivity
     }
 
     private void populateUserInto(String username) {
-        FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             ((TextView) findViewById(R.id.my_profile_username_textView)).setText(user.getUsername());
             ((TextView) findViewById(R.id.my_profile_firstName_lastName_textView))
                 .setText("Name: " + user.getFirstName() + " " + user.getLastName());

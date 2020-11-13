@@ -18,7 +18,7 @@ import com.example.bookmark.AcceptRequestsActivity;
 import com.example.bookmark.ManageRequestsActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Request;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -95,7 +95,7 @@ public class RequestList extends ArrayAdapter<Request> {
             @Override
             public void onClick(View v) {
                 Request r = requests.get(position);
-                FirebaseProvider.getInstance().deleteRequest(r, new OnSuccessListener<Void>() {
+                StorageServiceProvider.getStorageService().deleteRequest(r, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         requests.remove(position);
