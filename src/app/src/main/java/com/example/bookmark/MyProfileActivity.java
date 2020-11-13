@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.DrawerProvider;
 import com.mikepenz.materialdrawer.Drawer;
@@ -49,7 +49,7 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
     }
 
     private void populateUserInto(String username) {
-        FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             ((TextView) findViewById(R.id.my_profile_username_textView)).setText(user.getUsername());
             ((TextView) findViewById(R.id.my_profile_firstName_lastName_textView))
                 .setText("Name: " + user.getFirstName() + " " + user.getLastName());

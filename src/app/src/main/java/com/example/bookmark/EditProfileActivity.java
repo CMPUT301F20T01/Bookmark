@@ -11,12 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.EmptyTextFocusListener;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.ArrayList;
 
 import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidEmail;
 import static com.example.bookmark.util.UserInfoFormValidator.checkIfEditTextValidPhoneNumber;
@@ -124,7 +122,7 @@ public class EditProfileActivity extends BackButtonActivity {
     }
 
     private void prepopulateTextFields(String username) {
-        FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             firstNameEditText.setText(user.getFirstName());
             lastNameEditText.setText(user.getLastName());
             emailAddressEditText.setText(user.getEmailAddress());
@@ -159,7 +157,7 @@ public class EditProfileActivity extends BackButtonActivity {
 
         // add user and go back to main activity
         User newUser = new User(loggedUsername, firstName, lastName, emailAddress, phoneNumber);
-        FirebaseProvider.getInstance().storeUser(newUser,
+        StorageServiceProvider.getStorageService().storeUser(newUser,
             aVoid -> {
                 goToMyProfile();
             },

@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.DrawerProvider;
 import com.mikepenz.materialdrawer.Drawer;
@@ -30,6 +30,7 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public class ExploreActivity extends AppCompatActivity implements SearchDialogFragment.OnFragmentInteractionListener {
+
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
@@ -113,7 +114,7 @@ public class ExploreActivity extends AppCompatActivity implements SearchDialogFr
     }
 
     public void executeSearch(String searchedKeywords) {
-        FirebaseProvider.getInstance().retrieveBooks(books -> {
+        StorageServiceProvider.getStorageService().retrieveBooks(books -> {
             searchResults.clear();
             for (Book book : books) {
                 if (book.getDescription().contains(searchedKeywords)) {
