@@ -11,8 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Request;
-import com.example.bookmark.server.StorageService;
-import com.example.bookmark.server.StorageServiceLocator;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,8 +29,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
  * @author Nayan Prakash.
  */
 public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyCallback {
-
-    private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String EXTRA_REQUEST = "com.example.bookmark.REQUEST";
@@ -98,8 +95,8 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
             finish();
         };
         OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
-        storageService.storeRequest(request, aVoid ->
-            storageService.storeBook(book, onSuccessListener, onFailureListener), onFailureListener);
+        StorageServiceProvider.getStorageService().storeRequest(request, aVoid ->
+            StorageServiceProvider.getStorageService().storeBook(book, onSuccessListener, onFailureListener), onFailureListener);
     }
 
     /**

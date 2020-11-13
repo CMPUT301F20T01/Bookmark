@@ -11,8 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.StorageService;
-import com.example.bookmark.server.StorageServiceLocator;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.EmptyTextFocusListener;
 import com.google.android.material.textfield.TextInputLayout;
@@ -30,8 +29,6 @@ import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEm
  * @author Konrad Staniszewski
  */
 public class EditProfileActivity extends BackButtonActivity {
-
-    private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     private EditText firstNameEditText, lastNameEditText, emailAddressEditText, phoneNumberEditText;
     private TextInputLayout firstNameLayout, lastNameLayout, emailAddressLayout, phoneNumberLayout;
@@ -125,7 +122,7 @@ public class EditProfileActivity extends BackButtonActivity {
     }
 
     private void prepopulateTextFields(String username) {
-        storageService.retrieveUserByUsername(username, user -> {
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             firstNameEditText.setText(user.getFirstName());
             lastNameEditText.setText(user.getLastName());
             emailAddressEditText.setText(user.getEmailAddress());
@@ -160,7 +157,7 @@ public class EditProfileActivity extends BackButtonActivity {
 
         // add user and go back to main activity
         User newUser = new User(loggedUsername, firstName, lastName, emailAddress, phoneNumber);
-        storageService.storeUser(newUser,
+        StorageServiceProvider.getStorageService().storeUser(newUser,
             aVoid -> {
                 goToMyProfile();
             },

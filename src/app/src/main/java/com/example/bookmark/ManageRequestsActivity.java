@@ -14,9 +14,7 @@ import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.FirebaseStorageService;
-import com.example.bookmark.server.StorageService;
-import com.example.bookmark.server.StorageServiceLocator;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -29,8 +27,6 @@ import java.util.List;
  * @author Nayan Prakash.
  */
 public class ManageRequestsActivity extends BackButtonActivity {
-
-    private static final StorageService storageService = StorageServiceLocator.getInstance().getStorageService();
 
     public static int GET_MEETING_LOCATION = 1;
 
@@ -69,7 +65,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
                     owner = null;
                 }
             };
-            storageService.retrieveUserByUsername(book.getOwnerId(), onUserSuccess, onUserFailure);
+            StorageServiceProvider.getStorageService().retrieveUserByUsername(book.getOwnerId(), onUserSuccess, onUserFailure);
             bookTitle = book.getTitle();
         }
 
@@ -101,7 +97,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
                     Request request = (Request) bundle.getSerializable("Request");
                     request.setLocation(geolocation);
                     request.setStatus(Request.Status.ACCEPTED);
-                    storageService.storeRequest(request, new OnSuccessListener<Void>() {
+                    StorageServiceProvider.getStorageService().storeRequest(request, new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
 
@@ -139,6 +135,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
 
             }
         };
-        storageService.retrieveRequestsByBook(book, onSuccessListener, onFailureListener);
+        StorageServiceProvider.getStorageService().retrieveRequestsByBook(book, onSuccessListener, onFailureListener);
     }
 }
