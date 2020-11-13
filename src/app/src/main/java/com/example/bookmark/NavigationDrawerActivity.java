@@ -1,12 +1,18 @@
 package com.example.bookmark;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.DrawerProvider;
 import com.mikepenz.materialdrawer.Drawer;
 
@@ -40,6 +46,15 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.global_toolbar);
         setSupportActionBar(toolbar);
         navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
+        // set selected item
+        Intent intent = getIntent();
+        long identifier = intent.getLongExtra("SELECTED_IDENTIFIER", -1);
+        navigationDrawer.setSelection(identifier);
+        // set drawer username text
+        View header = navigationDrawer.getHeader();
+        TextView usernameTextView = header.findViewById(R.id.navigation_header_username);
+        String username = getLoggedUsername();
+        usernameTextView.setText(username);
     }
 
     @Override
@@ -50,5 +65,16 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private String getLoggedUsername() {
+        SharedPreferences sharedPref = this.getSharedPreferences("LOGGED_IN_USER", Context.MODE_PRIVATE);
+        String username = sharedPref.getString("USER_NAME", "ERROR_NO_USER");
+        if (username.equals("ERROR_NO_USER")) {
+            DialogUtil.showErrorDialog(this, new Exception(username));
+        } else {
+            return username;
+        }
+        return "ERROR_NO_USER";
     }
 }
