@@ -114,7 +114,7 @@ public class InMemoryStorageService implements StorageService {
     @Override
     public void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
         for (Request request : requests) {
-            if (request.getBookId().equals(book.getId()) && request.getRequesterId().equals(request.getId())) {
+            if (request.getBookId().equals(book.getId()) && request.getRequesterId().equals(requester.getId())) {
                 onSuccessListener.onSuccess(request);
                 return;
             }
