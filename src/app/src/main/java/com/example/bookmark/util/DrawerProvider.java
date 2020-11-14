@@ -25,18 +25,9 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
  */
 public class DrawerProvider {
 
-    private static final PrimaryDrawerItem myBooksItem =
-        new PrimaryDrawerItem().withName("My Books").withIcon(R.drawable.ic_baseline_menu_book_24).withIdentifier(1);
-    private static final PrimaryDrawerItem borrowedItem =
-        new PrimaryDrawerItem().withName("Borrowed").withIcon(R.drawable.ic_baseline_bookmarks_24).withIdentifier(2);
-    private static final PrimaryDrawerItem pendingItem =
-        new PrimaryDrawerItem().withName("Pending Requests").withIcon(R.drawable.ic_baseline_compare_arrows_24).withIdentifier(3);
-    private static final PrimaryDrawerItem exploreItem =
-        new PrimaryDrawerItem().withName("Explore").withIcon(R.drawable.ic_baseline_explore_24).withIdentifier(4);
-    private static final PrimaryDrawerItem myProfileItem =
-        new PrimaryDrawerItem().withName("My Profile").withIcon(R.drawable.ic_baseline_person_24).withIdentifier(5);
-    private static final PrimaryDrawerItem logOutItem =
-        new PrimaryDrawerItem().withName("Log Out").withIcon(R.drawable.ic_baseline_exit_to_app_24).withIdentifier(6);
+    private static PrimaryDrawerItem getDrawerItem(String name, int iconRes, int identifier) {
+        return new PrimaryDrawerItem().withName(name).withIcon(iconRes).withIdentifier(identifier);
+    }
 
     public static Drawer getDrawer(final Activity activity, Toolbar toolbar) {
         DrawerBuilder drawerBuilder = new DrawerBuilder();
@@ -46,12 +37,12 @@ public class DrawerProvider {
         drawerBuilder.withHeaderPadding(true);
         drawerBuilder.withHeader(R.layout.navigation_drawer_header);
         drawerBuilder.addDrawerItems(
-            myBooksItem,
-            borrowedItem,
-            pendingItem,
-            exploreItem,
-            myProfileItem,
-            logOutItem
+            getDrawerItem("My Books", R.drawable.ic_baseline_menu_book_24, 1),
+            getDrawerItem("Borrowed", R.drawable.ic_baseline_bookmarks_24, 2),
+            getDrawerItem("Pending Requests", R.drawable.ic_baseline_compare_arrows_24, 3),
+            getDrawerItem("Explore", R.drawable.ic_baseline_explore_24, 4),
+            getDrawerItem("My Profile", R.drawable.ic_baseline_person_24, 5),
+            getDrawerItem("Log Out", R.drawable.ic_baseline_exit_to_app_24, 6)
         );
         drawerBuilder.withOnDrawerItemClickListener((view, position, drawerItem) -> {
             if (drawerItem != null) {
