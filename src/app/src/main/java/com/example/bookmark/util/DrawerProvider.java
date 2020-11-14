@@ -69,7 +69,6 @@ public class DrawerProvider {
             return false;
         });
         Drawer result = drawerBuilder.build();
-//        result.setSelection(0); // this just removes the selection all together
         return result;
     }
 }
