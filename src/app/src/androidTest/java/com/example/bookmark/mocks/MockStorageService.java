@@ -15,16 +15,16 @@ import java.util.List;
  * @author Kyle Hennig.
  */
 public class MockStorageService {
-    public static StorageService mockStorageService() {
+    public static StorageService getMockStorageService() {
         List<User> users = new ArrayList<>();
-        users.add(MockModels.mockOwner());
-        users.add(MockModels.mockRequester());
+        users.add(MockModels.getMockOwner());
+        users.add(MockModels.getMockRequester());
         List<Book> books = new ArrayList<>();
-        books.add(MockModels.mockBook1());
-        books.add(MockModels.mockBook2());
+        books.add(MockModels.getMockBook1());
+        books.add(MockModels.getMockBook2());
         List<Request> requests = new ArrayList<>();
-        requests.add(MockModels.mockRequest1());
-        requests.add(MockModels.mockRequest2());
+        requests.add(MockModels.getMockRequest1());
+        requests.add(MockModels.getMockRequest2());
         return new InMemoryStorageService(users, books, requests);
     }
 }
