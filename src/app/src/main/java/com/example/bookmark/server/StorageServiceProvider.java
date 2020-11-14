@@ -29,12 +29,8 @@ public class StorageServiceProvider {
      * Sets the storage service.
      *
      * @param storageService The storage service to use.
-     * @throws RuntimeException If the storage service has already been set.
      */
     public static void setStorageService(StorageService storageService) {
-        if (StorageServiceProvider.storageService != null) {
-            throw new RuntimeException("The storage service has already been set! You cannot set it again.");
-        }
         StorageServiceProvider.storageService = storageService;
     }
 }

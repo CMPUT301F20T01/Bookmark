@@ -7,16 +7,6 @@
     android:focusable="true"
     tools:context=".ExploreActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/explore_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
     <ListView
         android:id="@+id/search_results_listview"
         android:layout_width="0dp"
@@ -26,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/explore_toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
     </ListView>
 

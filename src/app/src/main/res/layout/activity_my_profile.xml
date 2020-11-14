@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MyProfileActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_profile_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
     <TextView
         android:id="@+id/my_profile_username_textView"
         android:layout_width="wrap_content"
@@ -25,7 +15,7 @@
         android:textSize="40sp"
         android:textColor="@color/md_black_1000"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_profile_toolbar" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/my_profile_firstName_lastName_textView"
