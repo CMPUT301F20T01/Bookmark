@@ -44,11 +44,11 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
         if (username.equals("ERROR_NO_USER")) {
             DialogUtil.showErrorDialog(this, new Exception(username));
         } else {
-            populateUserInto(username);
+            populateUserInfo(username);
         }
     }
 
-    private void populateUserInto(String username) {
+    private void populateUserInfo(String username) {
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             ((TextView) findViewById(R.id.my_profile_username_textView)).setText(user.getUsername());
             ((TextView) findViewById(R.id.my_profile_firstName_lastName_textView))
