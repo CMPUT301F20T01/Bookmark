@@ -32,8 +32,8 @@ public class StorageServiceProvider {
      * @throws RuntimeException If the storage service has already been set.
      */
     public static void setStorageService(StorageService storageService) {
-        if (StorageServiceProvider.storageService != null) {
-            throw new RuntimeException("The storage service has already been set! You cannot set it again.");
+        if (!StorageServiceProvider.storageService.getClass().equals(storageService.getClass())) {
+            throw new RuntimeException("You cannot change the type of the storage service!");
         }
         StorageServiceProvider.storageService = storageService;
     }
