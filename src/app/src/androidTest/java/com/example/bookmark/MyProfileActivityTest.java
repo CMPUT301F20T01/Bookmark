@@ -39,7 +39,7 @@ public class MyProfileActivityTest {
 
     @BeforeClass
     public static void setUpOnce() {
-        StorageServiceProvider.setStorageService(MockStorageService.mockStorageService());
+        StorageServiceProvider.setStorageService(MockStorageService.getMockStorageService());
     }
 
     /**
