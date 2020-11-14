@@ -29,12 +29,8 @@ public class StorageServiceProvider {
      * Sets the storage service.
      *
      * @param storageService The storage service to use.
-     * @throws RuntimeException If the storage service has already been set.
      */
     public static void setStorageService(StorageService storageService) {
-        if (!StorageServiceProvider.storageService.getClass().equals(storageService.getClass())) {
-            throw new RuntimeException("You cannot change the type of the storage service!");
-        }
         StorageServiceProvider.storageService = storageService;
     }
 }
