@@ -10,10 +10,13 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.bookmark.mocks.MockStorageService;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -32,6 +35,11 @@ public class EditProfileActivityTest {
     @Rule
     public ActivityTestRule<EditProfileActivity> rule =
         new ActivityTestRule<>(EditProfileActivity.class, true, false);
+
+    @BeforeClass
+    public static void setUpOnce() {
+        StorageServiceProvider.setStorageService(MockStorageService.getMockStorageService());
+    }
 
     /**
      * Runs before all tests and create the solo instance.
@@ -55,7 +63,7 @@ public class EditProfileActivityTest {
      */
     @Test
     public void start() throws Exception {
-//        solo.assertCurrentActivity("WRONG ACTIVITY", EditProfileActivity.class);
+        solo.assertCurrentActivity("WRONG ACTIVITY", EditProfileActivity.class);
     }
 
     /**
@@ -63,10 +71,9 @@ public class EditProfileActivityTest {
      */
     @Test
     public void doneEditing() {
-//        solo.sleep(500); // necessary for asynchronous database call
-//        View doneEditingBtn = rule.getActivity().findViewById(R.id.edit_profile_done_button);
-//        solo.clickOnView(doneEditingBtn);
-//        solo.assertCurrentActivity("WRONG ACTIVITY", MyProfileActivity.class);
+        View doneEditingBtn = rule.getActivity().findViewById(R.id.edit_profile_done_button);
+        solo.clickOnView(doneEditingBtn);
+        solo.assertCurrentActivity("WRONG ACTIVITY", MyProfileActivity.class);
     }
 
     /**
@@ -74,12 +81,11 @@ public class EditProfileActivityTest {
      */
     @Test
     public void testEmailValidation() {
-//        solo.sleep(500);
-//        View doneEditingBtn = rule.getActivity().findViewById(R.id.edit_profile_done_button);
-//        EditText emailEditText = rule.getActivity().findViewById(R.id.edit_profile_email_edit_text);
-//        solo.clearEditText(emailEditText);
-//        solo.clickOnView(doneEditingBtn);
-//        solo.assertCurrentActivity("WRONG ACTIVITY", EditProfileActivity.class);
+        View doneEditingBtn = rule.getActivity().findViewById(R.id.edit_profile_done_button);
+        EditText emailEditText = rule.getActivity().findViewById(R.id.edit_profile_email_edit_text);
+        solo.clearEditText(emailEditText);
+        solo.clickOnView(doneEditingBtn);
+        solo.assertCurrentActivity("WRONG ACTIVITY", EditProfileActivity.class);
     }
 
     /**
