@@ -18,6 +18,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 
 /**
+ * This class implement a navigation drawer that is passed to
  * NavigationDrawerActivity to be used in all navigation drawer activities
  *
  * @author Konrad Staniszewski.
