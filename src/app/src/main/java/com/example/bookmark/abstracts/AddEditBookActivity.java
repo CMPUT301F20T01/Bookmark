@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
 
@@ -21,8 +21,8 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     private static final int ISBN_REQUEST_CODE = 100;
     private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
-    protected ImageButton addPhotoButton;
-    protected ImageButton deletePhotoButton;
+    protected ImageView addPhotoButton;
+    protected ImageView deletePhotoButton;
     protected EditText titleEditText;
     protected EditText authorEditText;
     protected EditText isbnEditText;
@@ -35,11 +35,11 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         TextInputLayout isbnTextInputLayout = findViewById(R.id.add_edit_book_isbn);
         isbnTextInputLayout.setEndIconOnClickListener(v -> goToScanISBN());
 
-        // addPhotoButton = findViewById(R.id.book_add_photo_btn);
-        // addPhotoButton.setOnClickListener(v -> addPhoto());
+        addPhotoButton = findViewById(R.id.book_image);
+        addPhotoButton.setOnClickListener(v -> addPhoto());
 
-        // deletePhotoButton = findViewById(R.id.book_delete_photo_btn);
-        // deletePhotoButton.setOnClickListener(v -> deletePhoto());
+        deletePhotoButton = findViewById(R.id.add_edit_book_delete_image_button);
+        deletePhotoButton.setOnClickListener(v -> deletePhoto());
 
         titleEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_title)).getEditText();
         authorEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_author)).getEditText();
@@ -66,7 +66,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         // TODO: Sync up with Kyle on Firebase stuff
         // TODO: Properly clear the image instead of replacing it with original drawable
         // TODO: Clear saved URI
-        addPhotoButton.setImageDrawable(ContextCompat.getDrawable(this, android.R.drawable.ic_menu_add));
+        addPhotoButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
         deletePhotoButton.setVisibility(View.GONE);
     }
 

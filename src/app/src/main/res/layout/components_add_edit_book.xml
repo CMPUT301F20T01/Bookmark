@@ -66,14 +66,28 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageButton
-        android:id="@+id/book_add_photo_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="24dp"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:background="@drawable/ic_baseline_add_photo_alternate_24"
-        android:scaleType="centerInside" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/add_edit_book_delete_image_button"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="5dp"
+        android:elevation="4dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/add_edit_include_book_image"
+        app:layout_constraintTop_toTopOf="@+id/add_edit_include_book_image"
+        app:srcCompat="@drawable/ic_baseline_cancel_24"
+        app:tint="@color/colorDeny"
+        tools:visibility="visible" />
 
-</merge>
+    <include
+        android:id="@+id/add_edit_include_book_image"
+        layout="@layout/components_book_image_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_description"
+        app:layout_constraintWidth_percent="0.6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
