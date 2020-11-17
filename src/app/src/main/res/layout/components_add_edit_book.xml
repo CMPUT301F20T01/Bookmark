@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_edit_book_title"
         style="@style/OutlinedSpacedTextInputLayout"
-        android:hint="@string/book_title">
+        android:hint="@string/book_title"
+        app:layout_constraintBottom_toTopOf="@+id/add_edit_book_author"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -16,7 +23,11 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_edit_book_author"
         style="@style/OutlinedSpacedTextInputLayout"
-        android:hint="@string/author">
+        android:hint="@string/author"
+        app:layout_constraintBottom_toTopOf="@+id/add_edit_book_isbn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -29,7 +40,11 @@
         style="@style/OutlinedSpacedTextInputLayout"
         android:hint="@string/isbn"
         app:endIconDrawable="@drawable/ic_baseline_photo_camera_24"
-        app:endIconMode="custom">
+        app:endIconMode="custom"
+        app:layout_constraintBottom_toTopOf="@+id/add_edit_book_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_author">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -40,7 +55,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_edit_book_description"
         style="@style/OutlinedSpacedTextInputLayout"
-        android:hint="@string/description">
+        android:hint="@string/description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_isbn">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
