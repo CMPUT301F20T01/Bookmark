@@ -21,13 +21,17 @@ public class AddBookActivity extends AddEditBookActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // setContextView before calling super.onCreate so it can reference this activity's layout
-        setContentView(R.layout.activity_add_book);
         super.onCreate(savedInstanceState);
+        // setContextView called by AddEditBookActivity via getLayoutResourceId()
         getSupportActionBar().setTitle("Add Book");
 
         doneAddBookButton = findViewById((R.id.add_book_done_button));
         doneAddBookButton.setOnClickListener(v -> doneAddBook());
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_add_book;
     }
 
     protected void doneAddBook() {

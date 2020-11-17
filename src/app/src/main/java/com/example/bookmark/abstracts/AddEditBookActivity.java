@@ -31,6 +31,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutResourceId());
 
         TextInputLayout isbnTextInputLayout = findViewById(R.id.add_edit_book_isbn);
         isbnTextInputLayout.setEndIconOnClickListener(v -> goToScanISBN());
@@ -46,6 +47,8 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         isbnEditText = isbnTextInputLayout.getEditText();
         descriptionEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_description)).getEditText();
     }
+
+    protected abstract int getLayoutResourceId();
 
     private void goToScanISBN() {
         Intent intent = new Intent(AddEditBookActivity.this, ScanIsbnActivity.class);

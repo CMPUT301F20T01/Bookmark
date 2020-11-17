@@ -23,9 +23,8 @@ public class EditBookActivity extends AddEditBookActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // setContextView before calling super.onCreate so it can reference this activity's layout
-        setContentView(R.layout.activity_edit_book);
         super.onCreate(savedInstanceState);
+        // setContextView called by AddEditBookActivity via getLayoutResourceId()
         getSupportActionBar().setTitle("Edit Book");
 
         doneEditBookButton = findViewById((R.id.edit_book_done_button));
@@ -44,6 +43,11 @@ public class EditBookActivity extends AddEditBookActivity {
 
     private void populateFields(Book book) {
         // Set the values of all the EditTexts
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_edit_book;
     }
 
     protected void doneEditBook() {
