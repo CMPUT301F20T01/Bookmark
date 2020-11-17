@@ -4,37 +4,29 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_edit_book_title"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/OutlinedSpacedTextInputLayout"
         android:hint="@string/book_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_edit_book_author"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/OutlinedSpacedTextInputLayout"
         android:hint="@string/author">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_edit_book_isbn"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/OutlinedSpacedTextInputLayout"
         android:hint="@string/isbn"
         app:endIconDrawable="@drawable/ic_baseline_photo_camera_24"
         app:endIconMode="custom">
@@ -47,15 +39,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_edit_book_description"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/OutlinedSpacedTextInputLayout"
         android:hint="@string/description">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
