@@ -16,6 +16,7 @@
 
     <Button
         android:id="@+id/edit_book_done_button"
+        style="@style/BottomButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/done"
@@ -26,7 +27,7 @@
 
     <Button
         android:id="@+id/edit_book_delete_button"
-        style="?attr/materialButtonOutlinedStyle"
+        style="@style/BottomButton.Outlined"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/delete"

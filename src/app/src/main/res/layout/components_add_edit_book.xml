@@ -5,66 +5,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_edit_book_title"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:hint="@string/book_title"
-        app:layout_constraintBottom_toTopOf="@+id/add_edit_book_author"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_edit_book_fields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_edit_book_title"
+            style="@style/OutlinedSpacedTextInputLayout.Top"
+            android:hint="@string/book_title"
+            app:layout_constraintBottom_toTopOf="@+id/add_edit_book_author"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_edit_book_author"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:hint="@string/author"
-        app:layout_constraintBottom_toTopOf="@+id/add_edit_book_isbn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_title">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_edit_book_author"
+            style="@style/OutlinedSpacedTextInputLayout"
+            android:hint="@string/author"
+            app:layout_constraintBottom_toTopOf="@+id/add_edit_book_isbn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_edit_book_title">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_edit_book_isbn"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:hint="@string/isbn"
-        app:endIconDrawable="@drawable/ic_baseline_photo_camera_24"
-        app:endIconMode="custom"
-        app:layout_constraintBottom_toTopOf="@+id/add_edit_book_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_author">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_edit_book_isbn"
+            style="@style/OutlinedSpacedTextInputLayout"
+            android:hint="@string/isbn"
+            app:endIconDrawable="@drawable/ic_baseline_photo_camera_24"
+            app:endIconMode="custom"
+            app:layout_constraintBottom_toTopOf="@+id/add_edit_book_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_edit_book_author">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_edit_book_description"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:hint="@string/description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_isbn">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_edit_book_description"
+            style="@style/OutlinedSpacedTextInputLayout.Bottom"
+            android:hint="@string/description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_edit_book_isbn">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/add_edit_book_delete_image_button"
@@ -87,7 +98,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_edit_book_description"
+        app:layout_constraintTop_toBottomOf="@id/add_edit_book_fields"
         app:layout_constraintWidth_percent="0.6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
