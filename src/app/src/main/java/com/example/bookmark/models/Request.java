@@ -137,9 +137,9 @@ public class Request implements FirestoreIndexable, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Request request = (Request) o;
-        return Objects.equals(bookId, request.bookId) &&
+        return createdDate == request.createdDate &&
+            Objects.equals(bookId, request.bookId) &&
             Objects.equals(requesterId, request.requesterId) &&
-            //Objects.equals(createdDate, request.createdDate) &&
             Objects.equals(location, request.location) &&
             status == request.status;
     }

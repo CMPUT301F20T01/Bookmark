@@ -8,13 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import com.example.bookmark.server.FirebaseProvider;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
-import com.example.bookmark.util.DrawerProvider;
-import com.mikepenz.materialdrawer.Drawer;
 
 /**
  * This activity shows a user all of their profile details.
@@ -23,33 +18,27 @@ import com.mikepenz.materialdrawer.Drawer;
  *
  * @author Konrad Staniszewski
  */
-public class MyProfileActivity extends AppCompatActivity implements MenuOptions {
-
-    private Drawer navigationDrawer = null;
+public class MyProfileActivity extends NavigationDrawerActivity
+    implements MenuOptions {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.navigationActivity);
         setContentView(R.layout.activity_my_profile);
 
-        // setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_profile_toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("My Profile");
-        navigationDrawer = DrawerProvider.getDrawer(this, toolbar);
 
         SharedPreferences sharedPref = this.getSharedPreferences("LOGGED_IN_USER", Context.MODE_PRIVATE);
         String username = sharedPref.getString("USER_NAME", "ERROR_NO_USER");
         if (username.equals("ERROR_NO_USER")) {
             DialogUtil.showErrorDialog(this, new Exception(username));
         } else {
-            populateUserInto(username);
+            populateUserInfo(username);
         }
     }
 
-    private void populateUserInto(String username) {
-        FirebaseProvider.getInstance().retrieveUserByUsername(username, user -> {
+    private void populateUserInfo(String username) {
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             ((TextView) findViewById(R.id.my_profile_username_textView)).setText(user.getUsername());
             ((TextView) findViewById(R.id.my_profile_firstName_lastName_textView))
                 .setText("Name: " + user.getFirstName() + " " + user.getLastName());
@@ -64,16 +53,6 @@ public class MyProfileActivity extends AppCompatActivity implements MenuOptions 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        //handle the back press :D close the drawer first and if the drawer is closed close the activity
-        if (navigationDrawer != null && navigationDrawer.isDrawerOpen()) {
-            navigationDrawer.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void goToEditProfile() {
