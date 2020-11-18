@@ -21,8 +21,8 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     private static final int ISBN_REQUEST_CODE = 100;
     private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
-    protected ImageView addPhotoButton;
-    protected ImageView deletePhotoButton;
+    protected ImageView bookImage;
+    protected ImageView deleteBookImageButton;
     protected EditText titleEditText;
     protected EditText authorEditText;
     protected EditText isbnEditText;
@@ -36,11 +36,11 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         TextInputLayout isbnTextInputLayout = findViewById(R.id.add_edit_book_isbn);
         isbnTextInputLayout.setEndIconOnClickListener(v -> goToScanISBN());
 
-        addPhotoButton = findViewById(R.id.book_image);
-        addPhotoButton.setOnClickListener(v -> addPhoto());
+        bookImage = findViewById(R.id.book_image);
+        bookImage.setOnClickListener(v -> addImage());
 
-        deletePhotoButton = findViewById(R.id.add_edit_book_delete_image_button);
-        deletePhotoButton.setOnClickListener(v -> deletePhoto());
+        deleteBookImageButton = findViewById(R.id.add_edit_book_delete_image_button);
+        deleteBookImageButton.setOnClickListener(v -> deleteImage());
 
         titleEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_title)).getEditText();
         authorEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_author)).getEditText();
@@ -55,22 +55,21 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         startActivityForResult(intent, ISBN_REQUEST_CODE);
     }
 
-    private void addPhoto() {
+    private void addImage() {
         ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
     }
 
     public void onImageSelect(Uri uri) {
         // TODO: Save URI for when creating a book class
-        addPhotoButton.setImageURI(uri);
-        deletePhotoButton.setVisibility(View.VISIBLE);
+        bookImage.setImageURI(uri);
+        deleteBookImageButton.setVisibility(View.VISIBLE);
     }
 
-    private void deletePhoto() {
+    private void deleteImage() {
         // TODO: Sync up with Kyle on Firebase stuff
-        // TODO: Properly clear the image instead of replacing it with original drawable
         // TODO: Clear saved URI
-        addPhotoButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
-        deletePhotoButton.setVisibility(View.GONE);
+        bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
+        deleteBookImageButton.setVisibility(View.GONE);
     }
 
     @Override
