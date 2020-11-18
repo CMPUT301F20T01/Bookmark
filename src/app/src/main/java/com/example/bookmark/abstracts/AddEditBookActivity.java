@@ -48,23 +48,41 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         descriptionEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_description)).getEditText();
     }
 
+    /**
+     * Helper function called in onCreate() to retrieve the layout. This should be overridden by
+     * subclasses to return the desired layout so it can be set in this abstract class layer. The
+     * subclass should not call setContentView() itself.
+     * @return The layout resource ID
+     */
     protected abstract int getLayoutResourceId();
 
+    /**
+     * Launch the activity to scan ISBN codes.
+     */
     private void goToScanISBN() {
         Intent intent = new Intent(AddEditBookActivity.this, ScanIsbnActivity.class);
         startActivityForResult(intent, ISBN_REQUEST_CODE);
     }
 
+    /**
+     * Launch the fragment to select a book image.
+     */
     private void addImage() {
         ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
     }
 
+    /**
+     * Callback for when an image is selected.
+     */
     public void onImageSelect(Uri uri) {
         // TODO: Save URI for when creating a book class
         bookImage.setImageURI(uri);
         deleteBookImageButton.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Delete the added book image.
+     */
     private void deleteImage() {
         // TODO: Sync up with Kyle on Firebase stuff
         // TODO: Clear saved URI
@@ -72,6 +90,9 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         deleteBookImageButton.setVisibility(View.GONE);
     }
 
+    /**
+     * Callback for when the scan ISBN activity returns.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

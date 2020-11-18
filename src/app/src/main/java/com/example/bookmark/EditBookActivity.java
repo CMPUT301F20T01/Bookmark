@@ -41,21 +41,34 @@ public class EditBookActivity extends AddEditBookActivity {
         isbnEditText.setText(myIntent.getStringExtra("ISBN"));
     }
 
-    private void populateFields(Book book) {
-        // Set the values of all the EditTexts
-    }
-
+    /**
+     * Pass the layout to the superclass.
+     * @return The layout resource ID
+     */
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_edit_book;
     }
 
+    /**
+     * Populate the inputs to the current values of the book being edited.
+     */
+    private void populateFields(Book book) {
+        // Set the values of all the EditTexts
+    }
+
+    /**
+     * Book is finished being edited, update the book details.
+     */
     protected void doneEditBook() {
         // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
         // TODO: Edit the book object, pass changes to firebase
         Log.d("Edit Book", "Click done add book");
     }
 
+    /**
+     * Delete the book currently being edited.
+     */
     private void deleteBook() {
         // TODO: Sync up with Kyle on Firebase stuff
         Log.d("Edit Book", "Click delete book");

@@ -29,11 +29,18 @@ public class AddBookActivity extends AddEditBookActivity {
         doneAddBookButton.setOnClickListener(v -> doneAddBook());
     }
 
+    /**
+     * Pass the layout to the superclass.
+     * @return The layout resource ID
+     */
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_add_book;
     }
 
+    /**
+     * Create and add the book to the database.
+     */
     protected void doneAddBook() {
         // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
         // TODO: Create the book object, send it to Firebase?
