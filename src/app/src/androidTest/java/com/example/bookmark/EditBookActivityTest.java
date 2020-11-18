@@ -56,8 +56,8 @@ public class EditBookActivityTest {
      */
     @Test
     public void scanISBN() {
-        View scanISBNBtn = rule.getActivity().findViewById(R.id.edit_book_scan_isbn_btn);
-        solo.clickOnView(scanISBNBtn);
+        // Image 0 is the camera icon in the ISBN text field
+        solo.clickOnImageButton(0);
         solo.assertCurrentActivity("WRONG ACTIVITY", ScanIsbnActivity.class);
     }
 
