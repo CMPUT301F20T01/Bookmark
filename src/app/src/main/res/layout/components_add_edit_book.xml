@@ -80,28 +80,55 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/add_edit_book_delete_image_button"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="5dp"
-        android:elevation="4dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/add_edit_include_book_image"
-        app:layout_constraintTop_toTopOf="@+id/add_edit_include_book_image"
-        app:srcCompat="@drawable/ic_baseline_cancel_24"
-        app:tint="@color/colorDeny"
-        tools:visibility="visible" />
-
-    <include
-        android:id="@+id/add_edit_include_book_image"
-        layout="@layout/components_book_image_card"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_edit_book_fields"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintEnd_toStartOf="@+id/add_edit_book_image_right_guide"
+        app:layout_constraintStart_toEndOf="@+id/add_edit_book_image_left_guide"
+        app:layout_constraintTop_toBottomOf="@id/add_edit_book_fields">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/add_edit_book_delete_image_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="5dp"
+            android:elevation="4dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/add_edit_include_book_image"
+            app:layout_constraintTop_toTopOf="@id/add_edit_include_book_image"
+            app:srcCompat="@drawable/ic_baseline_cancel_24"
+            app:tint="@color/colorDeny"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/add_edit_include_book_image"
+            layout="@layout/components_book_image_card"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/add_edit_book_image_left_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/add_edit_book_image_right_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
