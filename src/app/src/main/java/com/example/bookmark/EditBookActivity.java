@@ -60,7 +60,7 @@ public class EditBookActivity extends AddEditBookActivity {
     /**
      * Book is finished being edited, update the book details.
      */
-    protected void doneEditBook() {
+    private void doneEditBook() {
         // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
         // TODO: Edit the book object, pass changes to firebase
         Log.d("Edit Book", "Click done add book");
