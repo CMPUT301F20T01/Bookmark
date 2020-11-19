@@ -41,7 +41,7 @@ public class AddBookActivity extends AddEditBookActivity {
     /**
      * Create and add the book to the database.
      */
-    protected void doneAddBook() {
+    private void doneAddBook() {
         // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
         // TODO: Create the book object, send it to Firebase?
         Log.d("Add Book", "Click done add book");
