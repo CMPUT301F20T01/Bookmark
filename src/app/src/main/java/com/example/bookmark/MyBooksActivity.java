@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.bookmark.adapters.BookList;
+import com.example.bookmark.fragments.ImageSelectDialogFragment;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
@@ -107,6 +108,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_filter_search, menu);
+        // ImageSelectDialogFragment.newInstance().show(getSupportFragmentManager(), IMG_SELECT_TAG);
         return true;
     }
 
