@@ -16,6 +16,12 @@
     <string name="delete">Delete</string>
     <string name="username">Username</string>
 
+
+    <string name="available">Available</string>
+    <string name="requested">Requested</string>
+    <string name="accepted">Accepted</string>
+    <string name="borrowed">Borrowed</string>
+
     <string name="login">LOGIN</string>
     <string name="signup">SIGN UP</string>
 
