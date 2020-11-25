@@ -7,15 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.example.bookmark.adapters.RequestList;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.example.bookmark.util.DialogUtil;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
@@ -53,19 +51,8 @@ public class ManageRequestsActivity extends BackButtonActivity {
 
         if (bundle != null) {
             book = (Book) bundle.getSerializable("Book");
-            OnSuccessListener<User> onUserSuccess = new OnSuccessListener<User>() {
-                @Override
-                public void onSuccess(User user) {
-                    setRequestListener();
-                }
-            };
-            OnFailureListener onUserFailure = new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    owner = null;
-                }
-            };
-            StorageServiceProvider.getStorageService().retrieveUserByUsername(book.getOwnerId(), onUserSuccess, onUserFailure);
+            owner = (User) bundle.getSerializable("User");
+            setRequestListener();
             bookTitle = book.getTitle();
         }
 
@@ -97,17 +84,16 @@ public class ManageRequestsActivity extends BackButtonActivity {
                     Request request = (Request) bundle.getSerializable("Request");
                     request.setLocation(geolocation);
                     request.setStatus(Request.Status.ACCEPTED);
-                    StorageServiceProvider.getStorageService().storeRequest(request, new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+                    StorageServiceProvider.getStorageService().storeRequest(
+                        request,
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
 
-                        }
-                    }, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
+                            }
+                        },
+                        e -> DialogUtil.showErrorDialog(this, e)
+                    );
                 }
             }
         }
@@ -129,12 +115,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
                 }
             }
         };
-        OnFailureListener onFailureListener = new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        };
-        StorageServiceProvider.getStorageService().retrieveRequestsByBook(book, onSuccessListener, onFailureListener);
+        StorageServiceProvider.getStorageService().retrieveRequestsByBook(book, onSuccessListener, e -> DialogUtil.showErrorDialog(this, e));
     }
 }
