@@ -8,10 +8,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -76,20 +83,23 @@ public class MyBooksActivity extends NavigationDrawerActivity
     }
 
     private void getBooks() {
-        // TODO: Get books from firebase by owner
-
-        //Temp add some books
-        User owner = new User("u", "fn", "ln",
-            "email", "pn");
-
-        Book b1 = new Book(owner, "Title 1", "Author 1", "1111111");
-        b1.setDescription("Book 1 description");
-
-        Book b2 = new Book(owner, "Title 2", "Author 2", "22222");
-        b2.setDescription("Book 2 description");
-
-        allBooks.add(b1);
-        allBooks.add(b2);
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(
+            username,
+            user -> {
+                OnSuccessListener<List<Book>> onBooksSuccessListener = new OnSuccessListener<List<Book>>() {
+                    @Override
+                    public void onSuccess(List<Book> books) {
+                        for (Book book : books) {
+                            allBooks.add(book);
+                        }
+                        booksAdapter.notifyDataSetChanged();
+                    }
+                };
+                StorageServiceProvider.getStorageService().retrieveBooksByOwner(user, onBooksSuccessListener, e -> DialogUtil.showErrorDialog(this, e));
+            },
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
     }
 
     private void setFilteredBooks() {
