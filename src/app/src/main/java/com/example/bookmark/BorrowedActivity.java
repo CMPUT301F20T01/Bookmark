@@ -12,6 +12,9 @@ import android.widget.ListView;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,14 +62,16 @@ public class BorrowedActivity extends NavigationDrawerActivity
     }
 
     private void getBorrowedBooks() {
-        // TODO get books currently borrowed by current user - need access to
-        //  current user and firebase
-
-        // Proof of concept
-        // Book b1 = new Book("Title 1", "Author 1", "1111111", "o");
-        // b1.setDescription("Book 1 description");
-
-        // borrowedBooks.add(b1);
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
+            StorageServiceProvider.getStorageService().retrieveBooksByRequester(user, books -> {
+                borrowedBooks.addAll(books);
+            }, e -> {
+                DialogUtil.showErrorDialog(this, e);
+            });
+        }, e -> {
+            DialogUtil.showErrorDialog(this, e);
+        });
     }
 
     @Override
