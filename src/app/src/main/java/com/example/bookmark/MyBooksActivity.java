@@ -90,7 +90,6 @@ public class MyBooksActivity extends NavigationDrawerActivity
                 OnSuccessListener<List<Book>> onBooksSuccessListener = new OnSuccessListener<List<Book>>() {
                     @Override
                     public void onSuccess(List<Book> books) {
-                        System.out.println("hello");
                         for (Book book : books) {
                             allBooks.add(book);
                         }
