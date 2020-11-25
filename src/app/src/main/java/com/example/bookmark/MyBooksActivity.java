@@ -96,13 +96,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
                         booksAdapter.notifyDataSetChanged();
                     }
                 };
-                OnFailureListener onBooksFailureListener = new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                };
-                StorageServiceProvider.getStorageService().retrieveBooksByOwner(user, onBooksSuccessListener, onBooksFailureListener);
+                StorageServiceProvider.getStorageService().retrieveBooksByOwner(user, onBooksSuccessListener, e -> DialogUtil.showErrorDialog(this, e));
             },
             e -> DialogUtil.showErrorDialog(this, e)
         );
