@@ -10,6 +10,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
+
 /**
  * This activity shows the details of a book. Depending on the
  * status of the book the user can then take some action. A user
@@ -22,11 +28,14 @@ import android.widget.TextView;
  */
 public class MyBookDetailsActivity extends BackButtonActivity implements MenuOptions {
 
-    String isbn;
-    String title;
-    String author;
-    String description;
-    String status;
+    private User user;
+    private Book book;
+
+    private String isbn;
+    private String title;
+    private String author;
+    private String description;
+    private String status;
     //Image image;
 
     private TextView titleTextView;
@@ -68,8 +77,11 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Intent myIntent = getIntent(); // gets the previously created intent
-        isbn = myIntent.getStringExtra("ISBN");
+        Intent intent = getIntent(); // gets the previously created intent
+        Bundle bundle = intent.getExtras();
+
+        user = (User) bundle.getSerializable("User");
+        book = (Book) bundle.getSerializable("Book");
 
         titleTextView = findViewById(R.id.book_details_title_text);
         authorTextView = findViewById(R.id.book_details_author_text);
@@ -80,18 +92,17 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
         actionButton = findViewById(R.id.book_details_action_btn);
 
-        getBookDetailsFromISBN();
+        getBookDetails();
         fillBookDetails();
         configureActionButton();
     }
 
-    private void getBookDetailsFromISBN() {
-        // TODO: Get details from firebase
-        author = "Book Author";
-        title = "Book Title";
-        description = "Book Description";
-        //Image = some image
-        status = "Requested";
+    private void getBookDetails() {
+        isbn = book.getIsbn();
+        author = book.getAuthor();
+        title = book.getTitle();
+        description = book.getDescription();
+        status = book.getStatus().toString();
     }
 
     private void fillBookDetails() {
@@ -105,18 +116,18 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
     private void configureActionButton() {
         switch (status) {
-            case "Available":
+            case "AVAILABLE":
                 actionButton.setVisibility(View.INVISIBLE);
                 break;
-            case "Requested":
+            case "REQUESTED":
                 actionButton.setText("Manage Requests");
                 actionButton.setOnClickListener(manageRequestsListener);
                 break;
-            case "Accepted":
+            case "ACCEPTED":
                 actionButton.setText("Give");
                 actionButton.setOnClickListener(giveBookListener);
                 break;
-            case "Borrowed":
+            case "BORROWED":
                 actionButton.setText("Receive");
                 actionButton.setOnClickListener(receiveBookListener);
                 break;
@@ -124,8 +135,12 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     }
 
     private void manageRequests() {
-        //TODO
-        Log.d("Book Details", "Manage Requests Clicked");
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Book", book);
+        bundle.putSerializable("User", user);
+        Intent intent = new Intent(MyBookDetailsActivity.this, ManageRequestsActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private void giveBook() {
