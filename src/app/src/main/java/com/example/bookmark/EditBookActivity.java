@@ -59,16 +59,16 @@ public class EditBookActivity extends AddEditBookActivity {
      */
     private void populateFields() {
         // Set the values of all the EditTexts
+        titleEditText.setText(book.getTitle());
+        authorEditText.setText(book.getAuthor());
+        isbnEditText.setText(book.getIsbn());
+        descriptionEditText.setText(book.getDescription());
+
         // Don't support editing a title, author, isbn
         //TODO: May want to remove instead
-        titleEditText.setText(book.getTitle());
         titleEditText.setFocusable(false);
-        authorEditText.setText(book.getAuthor());
-        authorEditText.setFocusable(false);
-        isbnEditText.setText(book.getIsbn());
         isbnEditText.setFocusable(false);
         authorEditText.setFocusable(false);
-        descriptionEditText.setText(book.getDescription());
     }
 
     /**

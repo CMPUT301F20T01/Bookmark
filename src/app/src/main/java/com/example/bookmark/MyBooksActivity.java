@@ -95,6 +95,13 @@ public class MyBooksActivity extends NavigationDrawerActivity
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getBooks();
+        setFilteredBooks();
+    }
+
     private void getBooks() {
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(
