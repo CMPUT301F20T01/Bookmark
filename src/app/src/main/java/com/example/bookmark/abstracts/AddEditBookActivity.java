@@ -67,6 +67,14 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     protected abstract int getLayoutResourceId();
 
     /**
+     * Gets called if an isbn number is scanned in.
+     *
+     * @param isbn
+     * @return
+     */
+    protected abstract void getBookDetails(String isbn);
+
+    /**
      * Launch the activity to scan ISBN codes.
      */
     private void goToScanISBN() {
@@ -102,6 +110,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         deleteBookImageButton.setVisibility(View.GONE);
     }
 
+
     /**
      * Callback for when the scan ISBN activity returns.
      */
@@ -116,6 +125,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         if (requestCode == ISBN_REQUEST_CODE) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
+            getBookDetails(isbn);
         }
     }
 }

@@ -4,13 +4,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Photograph;
-import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * This activity allows a user to add a new book. It provides fields
@@ -86,5 +93,63 @@ public class AddBookActivity extends AddEditBookActivity {
             }, e -> DialogUtil.showErrorDialog(this, e));
             finish();
         }, e -> DialogUtil.showErrorDialog(this, e));
+    }
+
+    /**
+     * Gets book details from Google API
+     *
+     * @param isbn - the ISBN of the book to retrieve detials of
+     */
+    @Override
+    protected void getBookDetails(String isbn) {
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = String.format(
+            "https://www.googleapis.com/books/v1/volumes?q=%s&key=AIzaSyBWHRvbDfUIhuEE6Pju59jxarsJXPXSK48",
+            isbn
+        );
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+
+                        JSONObject volumeInfo =
+                            jsonObject
+                                .getJSONArray("items")
+                                .getJSONObject(0)
+                                .getJSONObject("volumeInfo");
+
+                        if (volumeInfo.has("title")) {
+                            titleEditText.setText(volumeInfo.getString("title"));
+                        }
+
+                        if (volumeInfo.has("authors")) {
+                            authorEditText.setText(
+                                volumeInfo.getJSONArray("authors").getString(0));
+                        }
+
+                        if (volumeInfo.has("description")) {
+                            descriptionEditText.setText(volumeInfo.getString("description"));
+                        }
+
+                    } catch (JSONException | IndexOutOfBoundsException err) {
+                        Log.d("GOOGLE API", "Error converting response to JSON" + err.toString());
+                    }
+                }
+            }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("GOOGLE API", "NO GOOD" + error);
+
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 }

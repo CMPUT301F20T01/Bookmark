@@ -100,4 +100,11 @@ public class EditBookActivity extends AddEditBookActivity {
     private void deleteBook() {
         Log.d("Edit Book", "Click delete book");
     }
+
+
+    /**
+     * Don't fetch details for edit book
+     */
+    protected void getBookDetails(String isbn) {
+    }
 }
