@@ -78,6 +78,15 @@ public interface StorageService {
     void retrieveBooksByRequester(User requester, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener);
 
     /**
+     * Deletes a book.
+     *
+     * @param book              The book.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    void deleteBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener);
+
+    /**
      * Stores a request.
      *
      * @param request           The request.
