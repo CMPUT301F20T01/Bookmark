@@ -22,9 +22,6 @@ import com.example.bookmark.util.UserUtil;
  * This activity shows the details of a book. Depending on the
  * status of the book the user can then take some action. A user
  * can also navigate to the edit book activity from here.
- * <p>
- * Outstanding Issues/TODOs
- * Need to hook up to DB
  *
  * @author Mitch Adam.
  */
@@ -33,8 +30,6 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
     private User user;
     private Book book;
-
-    private String isbn;
 
     private TextView titleTextView;
     private TextView authorTextView;
@@ -45,6 +40,7 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
     private Button actionButton;
 
+    //Set correct functionality based on book status
     private final View.OnClickListener manageRequestsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -128,6 +124,9 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         }
     }
 
+    /**
+     * Handle managing request
+     */
     private void manageRequests() {
         Bundle bundle = new Bundle();
         bundle.putSerializable("Book", book);
@@ -137,11 +136,17 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         startActivity(intent);
     }
 
+    /**
+     * Handle giving a book
+     */
     private void giveBook() {
         //TODO
         Log.d("Book Details", "Give Book Clicked");
     }
 
+    /**
+     * Handle receiving a book
+     */
     private void receiveBook() {
         //TODO
         Log.d("Book Details", "Receive Book Clicked");

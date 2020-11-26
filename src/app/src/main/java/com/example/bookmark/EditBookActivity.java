@@ -75,7 +75,6 @@ public class EditBookActivity extends AddEditBookActivity {
      * Book is finished being edited, update the book details.
      */
     private void doneEditBook() {
-        // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
 
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {

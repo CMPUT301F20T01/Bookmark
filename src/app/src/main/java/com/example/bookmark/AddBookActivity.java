@@ -83,7 +83,7 @@ public class AddBookActivity extends AddEditBookActivity {
         if (!isValid) {
             return;
         }
-        // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
+
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             Book book = new Book(user, title, author, isbn);

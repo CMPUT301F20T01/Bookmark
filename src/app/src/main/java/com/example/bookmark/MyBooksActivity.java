@@ -82,11 +82,12 @@ public class MyBooksActivity extends NavigationDrawerActivity
             }
         });
 
+        // Pull down to refresh
         final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getBooks(); // your code
+                getBooks();
                 setFilteredBooks();
                 pullToRefresh.setRefreshing(false);
             }
@@ -100,6 +101,9 @@ public class MyBooksActivity extends NavigationDrawerActivity
         setFilteredBooks();
     }
 
+    /**
+     * Get list of users books
+     */
     private void getBooks() {
         OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
         String username = UserUtil.getLoggedInUser(this);
@@ -119,12 +123,18 @@ public class MyBooksActivity extends NavigationDrawerActivity
         );
     }
 
+
+    /**
+     * Set the list of books to display to user based on what is filtered
+     */
     private void setFilteredBooks() {
         // TODO: Implement filtering
-        // I think eric is working on part of this?
         filteredBooks = allBooks;
     }
 
+    /**
+     * Start add book intent
+     */
     private void goToAddBook() {
         Intent intent = new Intent(MyBooksActivity.this, AddBookActivity.class);
         startActivity(intent);
@@ -137,6 +147,9 @@ public class MyBooksActivity extends NavigationDrawerActivity
         return true;
     }
 
+    /**
+     * Handle menu selection
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:
