@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
+import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageService;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
@@ -39,6 +41,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
     private Button actionButton;
 
     private Book book;
+    private User user;
 
     /**
      * This function creates the ExploreBookDetails view and retrieves the book object from the
@@ -57,6 +60,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         book = (Book) intent.getSerializableExtra(ExploreActivity.EXTRA_BOOK);
+        user = (User) intent.getSerializableExtra("User");
 
         titleTextView = findViewById(R.id.explore_details_title_text);
         authorTextView = findViewById(R.id.explore_details_author_text);
@@ -102,17 +106,15 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
      * @param v This is the view of the "Request" button
      */
     public void handleRequestButtonClick(View v) {
-        String username = UserUtil.getLoggedInUser(this);
-        StorageServiceProvider.getStorageService().retrieveUserByUsername(
-            username,
-            user -> {
-                Request request = new Request(book, user, null);
-                StorageServiceProvider.getStorageService().storeRequest(
-                    request,
-                    aVoid -> {
-                        // TODO: set book as requested and update book status and request status
-                        book.setStatus(Book.Status.REQUESTED);
-                    },
+        Request request = new Request(book, user, null);
+        request.setStatus(Request.Status.REQUESTED);
+        StorageServiceProvider.getStorageService().storeRequest(
+            request,
+            aVoid -> {
+                book.setStatus(Book.Status.REQUESTED);
+                StorageServiceProvider.getStorageService().storeBook(
+                    book,
+                    a -> Log.d("Accepted Book Details", "Book stored"),
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
             },

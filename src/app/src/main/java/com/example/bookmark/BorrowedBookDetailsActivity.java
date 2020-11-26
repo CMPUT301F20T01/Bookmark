@@ -3,6 +3,7 @@ package com.example.bookmark;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
 
 /**
  * TODO: Description of class.
@@ -37,6 +41,7 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
     private Button actionButton;
 
     private Book book;
+    private User user;
 
     /**
      * This function creates the BorrowedBookDetails view and retrieves the book object from the
@@ -53,9 +58,9 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Intent myIntent = getIntent();
-        Bundle myBundle = myIntent.getExtras();
-        book = (Book) myBundle.getSerializable("Book");
+        Intent intent = getIntent();
+        book = (Book) intent.getSerializableExtra("Book");
+        user = (User) intent.getSerializableExtra("User");
 
         titleTextView = findViewById(R.id.borrowed_details_title_text);
         authorTextView = findViewById(R.id.borrowed_details_author_text);
@@ -86,6 +91,24 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
             String isbn = data.getStringExtra("ISBN");
             if(book.getIsbn().equals(isbn)) {
                 // TODO: set book as available and update book status and request status
+                StorageServiceProvider.getStorageService().retrieveRequest(
+                    book,
+                    user,
+                    request -> {
+                        book.setStatus(Book.Status.AVAILABLE);
+                        StorageServiceProvider.getStorageService().deleteRequest(
+                            request,
+                            aVoid -> Log.d("Accepted Book Details", "Request stored"),
+                            e -> DialogUtil.showErrorDialog(this, e)
+                        );
+                        StorageServiceProvider.getStorageService().storeBook(
+                            book,
+                            aVoid -> Log.d("Accepted Book Details", "Book stored"),
+                            e -> DialogUtil.showErrorDialog(this, e)
+                        );
+                    },
+                    e -> DialogUtil.showErrorDialog(this, e)
+                );
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }
