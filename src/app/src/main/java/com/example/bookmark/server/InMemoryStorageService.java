@@ -106,6 +106,12 @@ public class InMemoryStorageService implements StorageService {
     }
 
     @Override
+    public void deleteBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        books.remove(book);
+        onSuccessListener.onSuccess(null);
+    }
+
+    @Override
     public void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         requests.add(request);
         onSuccessListener.onSuccess(null);
