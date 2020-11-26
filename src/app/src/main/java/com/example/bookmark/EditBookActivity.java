@@ -63,12 +63,6 @@ public class EditBookActivity extends AddEditBookActivity {
         authorEditText.setText(book.getAuthor());
         isbnEditText.setText(book.getIsbn());
         descriptionEditText.setText(book.getDescription());
-
-        // Don't support editing a title, author, isbn
-        //TODO: May want to remove instead
-        titleEditText.setFocusable(false);
-        isbnEditText.setFocusable(false);
-        authorEditText.setFocusable(false);
     }
 
     /**
@@ -78,7 +72,14 @@ public class EditBookActivity extends AddEditBookActivity {
 
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
+            String title = titleEditText.getText().toString();
+            String author = authorEditText.getText().toString();
+            String isbn = isbnEditText.getText().toString();
             String description = descriptionEditText.getText().toString();
+
+            book.setTitle(title);
+            book.setAuthor(author);
+            book.setIsbn(isbn);
             book.setDescription(description);
             //book.setPhotograph(uriToPhotograph(bookImage));
             StorageServiceProvider.getStorageService().storeBook(book, aVoid -> {
