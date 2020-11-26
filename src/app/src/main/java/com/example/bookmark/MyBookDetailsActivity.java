@@ -102,7 +102,9 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         if (book.getPhotograph() != null) {
             imageView.setImageURI(book.getPhotograph().getUri());
         }
-        statusTextView.setText("Status: " + book.getStatus());
+        statusTextView.setText("Status: "
+            + book.getStatus().toString().charAt(0)
+            + book.getStatus().toString().substring(1).toLowerCase());
 
     }
 

@@ -12,7 +12,7 @@
         android:layout_height="38dp"
         android:layout_marginTop="16dp"
         android:background="#673AB7"
-        android:text="Action"
+        android:text="@string/action"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +23,11 @@
         android:layout_width="191dp"
         android:layout_height="172dp"
         android:layout_marginTop="24dp"
+        android:contentDescription="@string/book_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/book_details_description_text"
+        app:srcCompat="@drawable/ic_book"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -34,15 +36,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:text="ISBN: 00000000000000"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/book_details_author_text" />
 
     <TextView
         android:id="@+id/book_details_description_text"
         android:layout_width="0dp"
-        android:layout_height="165dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
@@ -53,12 +58,16 @@
 
     <TextView
         android:id="@+id/book_details_title_text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:text="Book Title"
         android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,10 +87,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="24dp"
         android:text="Author"
-        android:textColor="#787878"
+        android:textColor="#BCBCBC"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/book_details_title_text" />
 

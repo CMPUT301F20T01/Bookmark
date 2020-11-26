@@ -65,7 +65,9 @@ public class BookList extends ArrayAdapter<Book> {
 
         //image.setImageBitmap(book.getPhotograph());
 
-        String bookStatus = "Status: " + book.getStatus().toString();
+        String bookStatus = ("Status: "
+            + book.getStatus().toString().charAt(0)
+            + book.getStatus().toString().substring(1).toLowerCase());
         // TODO get owner name once functionality is supported by Owner class
         String bookOwner = "Owner: "; // + book.getOwner().toString();
 
