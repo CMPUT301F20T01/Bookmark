@@ -38,7 +38,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
     private User user;
 
     private final List<Book> allBooks = new ArrayList<Book>();
-    private List<Book> filteredBooks = new ArrayList<Book>();
+    private List<Book> filteredBooks = allBooks;
 
     private BookList booksAdapter;
     private ListView booksListView;
@@ -63,10 +63,11 @@ public class MyBooksActivity extends NavigationDrawerActivity
         addBookBtn = findViewById(R.id.my_books_add_btn);
         addBookBtn.setOnClickListener(addBookListener);
         booksAdapter = new BookList(this, filteredBooks, false, true);
-
-        getBooks();
-        setFilteredBooks();
         booksListView.setAdapter(booksAdapter);
+
+        // Fetch users books
+        getBooks();
+
         booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -80,6 +81,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
 
                 startActivity(intent);
             }
+
         });
 
         // Pull down to refresh
@@ -88,17 +90,16 @@ public class MyBooksActivity extends NavigationDrawerActivity
             @Override
             public void onRefresh() {
                 getBooks();
-                setFilteredBooks();
                 pullToRefresh.setRefreshing(false);
             }
         });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getBooks();
-        setFilteredBooks();
     }
 
     /**
@@ -115,7 +116,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
                     books -> {
                         allBooks.clear();
                         allBooks.addAll(books);
-                        booksAdapter.notifyDataSetChanged();
+                        setFilteredBooks();
                     },
                     onFailureListener
                 ),
@@ -130,6 +131,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
     private void setFilteredBooks() {
         // TODO: Implement filtering
         filteredBooks = allBooks;
+        booksAdapter.notifyDataSetChanged();
     }
 
     /**
