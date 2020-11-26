@@ -81,7 +81,7 @@ public class AddBookActivity extends AddEditBookActivity {
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             Book book = new Book(user, title, author, isbn);
             book.setDescription(description);
-            book.setPhotograph(new Photograph(imageUri));
+//            book.setPhotograph(new Photograph());
             StorageServiceProvider.getStorageService().storeBook(book, aVoid -> {
             }, e -> DialogUtil.showErrorDialog(this, e));
             finish();

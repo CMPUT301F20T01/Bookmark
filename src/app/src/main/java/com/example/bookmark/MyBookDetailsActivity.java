@@ -99,9 +99,9 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         authorTextView.setText(book.getAuthor());
         isbnTextView.setText("ISBN: " + book.getIsbn());
         descriptionTextView.setText("Description: " + book.getDescription());
-        if (book.getPhotograph() != null) {
-            imageView.setImageURI(book.getPhotograph().getUri());
-        }
+//        if (book.getPhotograph() != null) {
+//            imageView.setImageURI(book.getPhotograph().getUri());
+//        }
         statusTextView.setText("Status: "
             + book.getStatus().toString().charAt(0)
             + book.getStatus().toString().substring(1).toLowerCase());
@@ -179,8 +179,8 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
         // Get ISBN
         if (requestCode == EDIT_REQUEST_CODE) {
-            Book book_ = (Book) data.getSerializableExtra("book");
-            book = book_;
+            Bundle bundle = data.getExtras();
+            book = (Book) bundle.getSerializable("Book");
             fillBookDetails();
         }
     }
