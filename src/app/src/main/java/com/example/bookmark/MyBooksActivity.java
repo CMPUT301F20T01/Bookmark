@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
@@ -28,9 +29,6 @@ import java.util.List;
  * This activity shows a user a list of their books.
  * They can select a book to see and edit the details of a book.
  * They can also add a book from here
- * <p>
- * Outstanding Issues/TODOs
- * Need to hook up to DB
  *
  * @author Mitch Adam.
  */
@@ -38,7 +36,6 @@ public class MyBooksActivity extends NavigationDrawerActivity
     implements SearchDialogFragment.OnFragmentInteractionListener, MenuOptions {
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
-    // Going to need some sort of owner or uid
 
     private User user;
 
@@ -82,7 +79,18 @@ public class MyBooksActivity extends NavigationDrawerActivity
                 bundle.putSerializable("User", user);
                 Intent intent = new Intent(MyBooksActivity.this, MyBookDetailsActivity.class);
                 intent.putExtras(bundle);
+
                 startActivity(intent);
+            }
+        });
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getBooks(); // your code
+                setFilteredBooks();
+                pullToRefresh.setRefreshing(false);
             }
         });
     }
@@ -96,6 +104,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
                 OnSuccessListener<List<Book>> onBooksSuccessListener = new OnSuccessListener<List<Book>>() {
                     @Override
                     public void onSuccess(List<Book> books) {
+                        allBooks.clear();
                         for (Book book : books) {
                             allBooks.add(book);
                         }

@@ -1,5 +1,6 @@
 package com.example.bookmark;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
@@ -27,16 +29,12 @@ import com.example.bookmark.util.UserUtil;
  * @author Mitch Adam.
  */
 public class MyBookDetailsActivity extends BackButtonActivity implements MenuOptions {
+    private static final int EDIT_REQUEST_CODE = 101;
 
     private User user;
     private Book book;
 
     private String isbn;
-    private String title;
-    private String author;
-    private String description;
-    private String status;
-    //Image image;
 
     private TextView titleTextView;
     private TextView authorTextView;
@@ -92,42 +90,36 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
         actionButton = findViewById(R.id.book_details_action_btn);
 
-        getBookDetails();
         fillBookDetails();
         configureActionButton();
     }
 
-    private void getBookDetails() {
-        isbn = book.getIsbn();
-        author = book.getAuthor();
-        title = book.getTitle();
-        description = book.getDescription();
-        status = book.getStatus().toString();
-    }
-
     private void fillBookDetails() {
-        titleTextView.setText(title);
-        authorTextView.setText(author);
-        isbnTextView.setText("ISBN: " + isbn);
-        descriptionTextView.setText("Description: " + description);
-        //imageView.setImageBitmap();
-        statusTextView.setText("Status: " + status);
+        titleTextView.setText(book.getTitle());
+        authorTextView.setText(book.getAuthor());
+        isbnTextView.setText("ISBN: " + book.getIsbn());
+        descriptionTextView.setText("Description: " + book.getDescription());
+        if (book.getPhotograph() != null) {
+            imageView.setImageURI(book.getPhotograph().getUri());
+        }
+        statusTextView.setText("Status: " + book.getStatus());
+
     }
 
     private void configureActionButton() {
-        switch (status) {
-            case "AVAILABLE":
+        switch (book.getStatus()) {
+            case AVAILABLE:
                 actionButton.setVisibility(View.INVISIBLE);
                 break;
-            case "REQUESTED":
+            case REQUESTED:
                 actionButton.setText("Manage Requests");
                 actionButton.setOnClickListener(manageRequestsListener);
                 break;
-            case "ACCEPTED":
+            case ACCEPTED:
                 actionButton.setText("Give");
                 actionButton.setOnClickListener(giveBookListener);
                 break;
-            case "BORROWED":
+            case BORROWED:
                 actionButton.setText("Receive");
                 actionButton.setOnClickListener(receiveBookListener);
                 break;
@@ -163,12 +155,32 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit_edit_btn:
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Book", book);
                 Intent intent = new Intent(MyBookDetailsActivity.this, EditBookActivity.class);
-                intent.putExtra("ISBN", isbn);
-                startActivity(intent);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, EDIT_REQUEST_CODE);
                 break;
         }
         return (super.onOptionsItemSelected(item));
+    }
+
+    /**
+     * Callback for when the Edit book activity returns
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        // Get ISBN
+        if (requestCode == EDIT_REQUEST_CODE) {
+            Book book_ = (Book) data.getSerializableExtra("book");
+            book = book_;
+            fillBookDetails();
+        }
     }
 
 }
