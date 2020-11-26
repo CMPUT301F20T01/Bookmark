@@ -58,10 +58,10 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
 
         setBookDetails();
         fillBookDetails();
-        configureActionButton();
     }
 
     private void setBookDetails() {
+        isbn = book.getIsbn();
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
@@ -77,12 +77,7 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         statusTextView.setText("Status: " + status);
     }
 
-    private void configureActionButton() {
-        actionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void handleBorrowButtonClick(View v) {
 
-            }
-        });
     }
 }

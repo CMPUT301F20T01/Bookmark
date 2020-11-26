@@ -34,4 +34,9 @@
     <string name="choose_book_image">Choose Book Image</string>
     <string name="choose_from_gallery">Choose From Gallery</string>
     <string name="take_photo">Take Photo</string>
+
+    <string name="return_book">RETURN</string>
+    <string name="book_requested">REQUESTED</string>
+    <string name="borrow_book">BORROW</string>
+    <string name="request_book">REQUEST</string>
 </resources>

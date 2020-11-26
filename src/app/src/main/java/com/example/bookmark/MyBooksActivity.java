@@ -40,6 +40,8 @@ public class MyBooksActivity extends NavigationDrawerActivity
         ".SEARCH";
     // Going to need some sort of owner or uid
 
+    private User user;
+
     private final List<Book> allBooks = new ArrayList<Book>();
     private List<Book> filteredBooks;
 
@@ -75,8 +77,11 @@ public class MyBooksActivity extends NavigationDrawerActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Book", filteredBooks.get(position));
+                bundle.putSerializable("User", user);
                 Intent intent = new Intent(MyBooksActivity.this, MyBookDetailsActivity.class);
-                intent.putExtra("ISBN", filteredBooks.get(position).getIsbn());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -87,6 +92,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
         StorageServiceProvider.getStorageService().retrieveUserByUsername(
             username,
             user -> {
+                this.user = user;
                 OnSuccessListener<List<Book>> onBooksSuccessListener = new OnSuccessListener<List<Book>>() {
                     @Override
                     public void onSuccess(List<Book> books) {

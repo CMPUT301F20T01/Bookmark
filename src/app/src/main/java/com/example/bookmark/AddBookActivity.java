@@ -2,10 +2,14 @@ package com.example.bookmark;
 
 import android.os.Bundle;
 import android.util.Log;
-
 import android.widget.Button;
 
 import com.example.bookmark.abstracts.AddEditBookActivity;
+import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
 
 /**
  * This activity allows a user to add a new book. It provides fields
@@ -31,6 +35,7 @@ public class AddBookActivity extends AddEditBookActivity {
 
     /**
      * Pass the layout to the superclass.
+     *
      * @return The layout resource ID
      */
     @Override
@@ -45,5 +50,18 @@ public class AddBookActivity extends AddEditBookActivity {
         // TODO: Call uriToPhotograph() only here, once the done button has been pressed (Uri to Bitmap is relatively expensive)
         // TODO: Create the book object, send it to Firebase?
         Log.d("Add Book", "Click done add book");
+
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
+            String title = titleEditText.getText().toString();
+            String author = authorEditText.getText().toString();
+            String isbn = isbnEditText.getText().toString();
+            String description = descriptionEditText.getText().toString();
+            Book book = new Book(user, title, author, isbn);
+            book.setDescription(description);
+            StorageServiceProvider.getStorageService().storeBook(book, aVoid -> {
+            }, e -> DialogUtil.showErrorDialog(this, e));
+            finish();
+        }, e -> DialogUtil.showErrorDialog(this, e));
     }
 }

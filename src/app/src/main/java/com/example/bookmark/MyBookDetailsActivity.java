@@ -10,9 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bookmark.server.StorageServiceProvider;
-import com.example.bookmark.util.DialogUtil;
-import com.example.bookmark.util.UserUtil;
+import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
 
 /**
  * This activity shows the details of a book. Depending on the
@@ -26,11 +25,14 @@ import com.example.bookmark.util.UserUtil;
  */
 public class MyBookDetailsActivity extends BackButtonActivity implements MenuOptions {
 
-    String isbn;
-    String title;
-    String author;
-    String description;
-    String status;
+    private User user;
+    private Book book;
+
+    private String isbn;
+    private String title;
+    private String author;
+    private String description;
+    private String status;
     //Image image;
 
     private TextView titleTextView;
@@ -72,8 +74,11 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Intent myIntent = getIntent(); // gets the previously created intent
-        isbn = myIntent.getStringExtra("ISBN");
+        Intent intent = getIntent(); // gets the previously created intent
+        Bundle bundle = intent.getExtras();
+
+        user = (User) bundle.getSerializable("User");
+        book = (Book) bundle.getSerializable("Book");
 
         titleTextView = findViewById(R.id.book_details_title_text);
         authorTextView = findViewById(R.id.book_details_author_text);
@@ -84,30 +89,17 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
         actionButton = findViewById(R.id.book_details_action_btn);
 
-        getBookDetailsFromISBN();
+        getBookDetails();
+        fillBookDetails();
+        configureActionButton();
     }
 
-    private void getBookDetailsFromISBN() {
-        String username = UserUtil.getLoggedInUser(this);
-        StorageServiceProvider.getStorageService().retrieveUserByUsername(
-            username,
-            user -> {
-                StorageServiceProvider.getStorageService().retrieveBook(
-                    user,
-                    isbn,
-                    book -> {
-                        author = book.getAuthor();
-                        title = book.getTitle();
-                        description = book.getDescription();
-                        status = book.getStatus().toString();
-                        fillBookDetails();
-                        configureActionButton();
-                    },
-                    e -> DialogUtil.showErrorDialog(this, e)
-                );
-            },
-            e -> DialogUtil.showErrorDialog(this, e)
-        );
+    private void getBookDetails() {
+        isbn = book.getIsbn();
+        author = book.getAuthor();
+        title = book.getTitle();
+        description = book.getDescription();
+        status = book.getStatus().toString();
     }
 
     private void fillBookDetails() {
@@ -140,8 +132,12 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     }
 
     private void manageRequests() {
-        //TODO
-        Log.d("Book Details", "Manage Requests Clicked");
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Book", book);
+        bundle.putSerializable("User", user);
+        Intent intent = new Intent(MyBookDetailsActivity.this, ManageRequestsActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private void giveBook() {
