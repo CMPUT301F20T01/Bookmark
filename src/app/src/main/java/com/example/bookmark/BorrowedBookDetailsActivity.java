@@ -71,7 +71,7 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
         if (requestCode == BorrowedBookDetailsActivity.GET_ISBN && resultCode == Activity.RESULT_OK) {
             String isbn = data.getStringExtra("ISBN");
             if(book.getIsbn().equals(isbn)) {
-                book.setStatus(Book.Status.AVAILABLE);
+                // TODO: set book as available and update book status and request status
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }

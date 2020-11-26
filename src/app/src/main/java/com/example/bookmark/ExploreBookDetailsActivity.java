@@ -91,6 +91,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
                 StorageServiceProvider.getStorageService().storeRequest(
                     request,
                     aVoid -> {
+                        // TODO: set book as requested and update book status and request status
                         book.setStatus(Book.Status.REQUESTED);
                     },
                     e -> DialogUtil.showErrorDialog(this, e)

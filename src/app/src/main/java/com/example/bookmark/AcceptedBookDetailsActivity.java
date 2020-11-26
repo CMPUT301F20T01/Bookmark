@@ -1,11 +1,13 @@
 package com.example.bookmark;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookmark.models.Book;
 
@@ -15,6 +17,8 @@ import com.example.bookmark.models.Book;
  * @author Nayan Prakash.
  */
 public class AcceptedBookDetailsActivity extends BackButtonActivity {
+
+    public static final int GET_ISBN = 1;
 
     String isbn;
     String title;
@@ -60,6 +64,20 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         fillBookDetails();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AcceptedBookDetailsActivity.GET_ISBN && resultCode == Activity.RESULT_OK) {
+            String isbn = data.getStringExtra("ISBN");
+            if(book.getIsbn().equals(isbn)) {
+                // TODO: set book as borrowed and update book status and request status
+            } else {
+                Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void setBookDetails() {
         isbn = book.getIsbn();
         author = book.getAuthor();
@@ -78,6 +96,7 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
     }
 
     public void handleBorrowButtonClick(View v) {
-
+        Intent intent = new Intent(this, ScanIsbnActivity.class);
+        startActivityForResult(intent, AcceptedBookDetailsActivity.GET_ISBN);
     }
 }
