@@ -38,6 +38,12 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
 
     private Book book;
 
+    /**
+     * This function creates the AcceptedBookDetails view and retrieves the book object from the
+     * intent, and sets all the views of the activity
+     *
+     * @param savedInstanceState an instance state that has the state of the BorrowBookActivity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +70,14 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         fillBookDetails();
     }
 
+    /**
+     * This function handles the results from other activities. Specifically, this function handles
+     * the results after returning from ScanIsbnActivity
+     *
+     * @param requestCode the requestCode of the activity results
+     * @param resultCode  the resultCode of the activity result
+     * @param data        the intent of the activity result
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -78,6 +92,9 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         }
     }
 
+    /**
+     * This function handles retrieving data from the Book object
+     */
     private void setBookDetails() {
         isbn = book.getIsbn();
         author = book.getAuthor();
@@ -86,6 +103,9 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         status = book.getStatus().toString();
     }
 
+    /**
+     * This function handles filling the text fields and image with the book data
+     */
     private void fillBookDetails() {
         titleTextView.setText(title);
         authorTextView.setText(author);
@@ -95,6 +115,12 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         statusTextView.setText("Status: " + status);
     }
 
+    /**
+     * This is the function that handles the press of the "Borrow" button and starts an activity
+     * to get the ISBN from ScanIsbnActivity
+     *
+     * @param v This is the view of the "Borrow" button
+     */
     public void handleBorrowButtonClick(View v) {
         Intent intent = new Intent(this, ScanIsbnActivity.class);
         startActivityForResult(intent, AcceptedBookDetailsActivity.GET_ISBN);

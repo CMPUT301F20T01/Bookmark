@@ -40,6 +40,12 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
 
     private Book book;
 
+    /**
+     * This function creates the ExploreBookDetails view and retrieves the book object from the
+     * intent, and sets all the views of the activity
+     *
+     * @param savedInstanceState an instance state that has the state of the BorrowBookActivity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +71,9 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
         fillBookDetails();
     }
 
+    /**
+     * This function handles retrieving data from the Book object
+     */
     private void setBookDetails() {
         isbn = book.getIsbn();
         author = book.getAuthor();
@@ -73,6 +82,9 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
         status = book.getStatus().toString();
     }
 
+    /**
+     * This function handles filling the text fields and image with the book data
+     */
     private void fillBookDetails() {
         titleTextView.setText(title);
         authorTextView.setText(author);
@@ -82,6 +94,13 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
         statusTextView.setText("Status: " + status);
     }
 
+    /**
+     * This is the function that handles the press of the "Request" button and creates a request
+     * on the book and stores the request in Firestore while also updating the book's status to
+     * requested
+     *
+     * @param v This is the view of the "Request" button
+     */
     public void handleRequestButtonClick(View v) {
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(

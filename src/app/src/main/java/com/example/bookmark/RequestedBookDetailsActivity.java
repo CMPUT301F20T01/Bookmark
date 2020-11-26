@@ -32,6 +32,12 @@ public class RequestedBookDetailsActivity extends BackButtonActivity {
 
     private Book book;
 
+    /**
+     * This function creates the RequestedBookDetails view and retrieves the book object from the
+     * intent, and sets all the views of the activity
+     *
+     * @param savedInstanceState an instance state that has the state of the BorrowBookActivity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +62,9 @@ public class RequestedBookDetailsActivity extends BackButtonActivity {
         fillBookDetails();
     }
 
+    /**
+     * This function handles retrieving data from the Book object
+     */
     private void setBookDetails() {
         isbn = book.getIsbn();
         author = book.getAuthor();
@@ -64,6 +73,9 @@ public class RequestedBookDetailsActivity extends BackButtonActivity {
         status = book.getStatus().toString();
     }
 
+    /**
+     * This function handles filling the text fields and image with the book data
+     */
     private void fillBookDetails() {
         titleTextView.setText(title);
         authorTextView.setText(author);
