@@ -38,7 +38,7 @@ public class MyBooksActivity extends NavigationDrawerActivity
     private User user;
 
     private final List<Book> allBooks = new ArrayList<Book>();
-    private List<Book> filteredBooks;
+    private List<Book> filteredBooks = new ArrayList<Book>();
 
     private BookList booksAdapter;
     private ListView booksListView;
@@ -62,10 +62,10 @@ public class MyBooksActivity extends NavigationDrawerActivity
 
         addBookBtn = findViewById(R.id.my_books_add_btn);
         addBookBtn.setOnClickListener(addBookListener);
+        booksAdapter = new BookList(this, filteredBooks, false, true);
 
         getBooks();
         setFilteredBooks();
-        booksAdapter = new BookList(this, filteredBooks, false, true);
         booksListView.setAdapter(booksAdapter);
         booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
