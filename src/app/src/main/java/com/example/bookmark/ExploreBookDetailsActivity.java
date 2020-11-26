@@ -28,6 +28,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
     String title;
     String author;
     String description;
+    String ownedBy;
     String status;
     // TODO: Image image;
 
@@ -36,6 +37,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
     private TextView isbnTextView;
     private TextView descriptionTextView;
     private ImageView imageView;
+    private TextView ownedByTextView;
     private TextView statusTextView;
 
     private Button actionButton;
@@ -67,6 +69,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
         isbnTextView = findViewById(R.id.explore_details_isbn_text);
         descriptionTextView = findViewById(R.id.explore_details_description_text);
         imageView = findViewById(R.id.explore_details_book_image);
+        ownedByTextView = findViewById(R.id.explore_details_owned_by);
         statusTextView = findViewById(R.id.explore_details_book_status_text);
 
         actionButton = findViewById(R.id.explore_details_action_btn);
@@ -83,6 +86,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
+        ownedBy = book.getOwnerId();
         status = book.getStatus().toString();
     }
 
@@ -95,6 +99,7 @@ public class ExploreBookDetailsActivity extends AppCompatActivity {
         isbnTextView.setText("ISBN: " + isbn);
         descriptionTextView.setText("Description: " + description);
         //imageView.setImageBitmap();
+        ownedByTextView.setText("Owned by: " + ownedBy);
         statusTextView.setText("Status: " + status);
     }
 

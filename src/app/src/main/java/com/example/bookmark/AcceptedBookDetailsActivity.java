@@ -29,6 +29,7 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
     String title;
     String author;
     String description;
+    String ownedBy;
     String status;
     // TODO: Image image;
 
@@ -37,6 +38,7 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
     private TextView isbnTextView;
     private TextView descriptionTextView;
     private ImageView imageView;
+    private TextView ownedByTextView;
     private TextView statusTextView;
 
     private Button actionButton;
@@ -68,6 +70,7 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         isbnTextView = findViewById(R.id.accepted_details_isbn_text);
         descriptionTextView = findViewById(R.id.accepted_details_description_text);
         imageView = findViewById(R.id.accepted_details_book_image);
+        ownedByTextView = findViewById(R.id.accepted_details_owned_by);
         statusTextView = findViewById(R.id.accepted_details_book_status_text);
 
         actionButton = findViewById(R.id.accepted_details_action_btn);
@@ -124,6 +127,7 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
+        ownedBy = book.getOwnerId();
         status = book.getStatus().toString();
     }
 
@@ -136,6 +140,7 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         isbnTextView.setText("ISBN: " + isbn);
         descriptionTextView.setText("Description: " + description);
         //imageView.setImageBitmap();
+        ownedByTextView.setText("Owned by: " + ownedBy);
         statusTextView.setText("Status: " + status);
     }
 
