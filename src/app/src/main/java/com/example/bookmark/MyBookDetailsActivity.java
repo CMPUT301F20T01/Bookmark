@@ -181,7 +181,16 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         if (requestCode == EDIT_REQUEST_CODE) {
             Bundle bundle = data.getExtras();
             book = (Book) bundle.getSerializable("Book");
-            fillBookDetails();
+
+            // Book is deleted
+            if (book == null) {
+                Intent intent = new Intent(MyBookDetailsActivity.this,
+                    MyBooksActivity.class);
+                startActivity(intent);
+            } else {
+                fillBookDetails();
+            }
+
         }
     }
 

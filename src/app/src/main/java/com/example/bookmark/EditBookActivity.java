@@ -84,6 +84,7 @@ public class EditBookActivity extends AddEditBookActivity {
             //book.setPhotograph(uriToPhotograph(bookImage));
             StorageServiceProvider.getStorageService().storeBook(book, aVoid -> {
             }, e -> DialogUtil.showErrorDialog(this, e));
+
             // Return the edited book
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
@@ -98,12 +99,25 @@ public class EditBookActivity extends AddEditBookActivity {
      * Delete the book currently being edited.
      */
     private void deleteBook() {
-        Log.d("Edit Book", "Click delete book");
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
+
+            StorageServiceProvider.getStorageService().deleteBook(book, aVoid -> {
+            }, e -> DialogUtil.showErrorDialog(this, e));
+
+            // Return the edited book
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Book", null);
+            intent.putExtras(bundle);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }, e -> DialogUtil.showErrorDialog(this, e));
     }
 
 
     /**
-     * Don't fetch details for edit book
+     * Don't fetch details for edit book on isbn scan
      */
     protected void getBookDetails(String isbn) {
     }
