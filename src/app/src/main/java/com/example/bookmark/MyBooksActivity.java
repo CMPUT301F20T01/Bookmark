@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
@@ -18,7 +16,6 @@ import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -39,6 +36,8 @@ public class MyBooksActivity extends NavigationDrawerActivity
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
     // Going to need some sort of owner or uid
+
+    private User user;
 
     private final List<Book> allBooks = new ArrayList<Book>();
     private List<Book> filteredBooks;
@@ -75,30 +74,32 @@ public class MyBooksActivity extends NavigationDrawerActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Book", filteredBooks.get(position));
+                bundle.putSerializable("User", user);
                 Intent intent = new Intent(MyBooksActivity.this, MyBookDetailsActivity.class);
-                intent.putExtra("ISBN", filteredBooks.get(position).getIsbn());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
     }
 
     private void getBooks() {
+        OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(
             username,
-            user -> {
-                OnSuccessListener<List<Book>> onBooksSuccessListener = new OnSuccessListener<List<Book>>() {
-                    @Override
-                    public void onSuccess(List<Book> books) {
-                        for (Book book : books) {
-                            allBooks.add(book);
-                        }
+            user ->
+                StorageServiceProvider.getStorageService().retrieveBooksByOwner(
+                    user,
+                    books -> {
+                        allBooks.clear();
+                        allBooks.addAll(books);
                         booksAdapter.notifyDataSetChanged();
-                    }
-                };
-                StorageServiceProvider.getStorageService().retrieveBooksByOwner(user, onBooksSuccessListener, e -> DialogUtil.showErrorDialog(this, e));
-            },
-            e -> DialogUtil.showErrorDialog(this, e)
+                    },
+                    onFailureListener
+                ),
+            onFailureListener
         );
     }
 
