@@ -18,9 +18,9 @@ public class Book implements FirestoreIndexable, Serializable {
     }
 
     private final String ownerId;
-    private final String title;
-    private final String author;
-    private final String isbn;
+    private String title;
+    private String author;
+    private String isbn;
 
     private Photograph photograph = null;
     private String description = "";
@@ -133,6 +133,33 @@ public class Book implements FirestoreIndexable, Serializable {
      */
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    /**
+     * Sets the title
+     *
+     * @param title The title.
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Set the author
+     *
+     * @param author The author.
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
+     * Sets the isbn
+     *
+     * @param isbn The isbn.
+     */
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     @Override

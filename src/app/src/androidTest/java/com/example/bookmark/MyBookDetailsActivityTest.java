@@ -1,12 +1,20 @@
 package com.example.bookmark;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
+import com.example.bookmark.mocks.MockModels;
+import com.example.bookmark.mocks.MockStorageService;
+import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -23,9 +31,26 @@ import androidx.test.rule.ActivityTestRule;
  */
 public class MyBookDetailsActivityTest {
     private Solo solo;
+
+    @BeforeClass
+    public static void setUpOnce() {
+        StorageServiceProvider.setStorageService(MockStorageService.getMockStorageService());
+    }
+
     @Rule
     public ActivityTestRule<MyBookDetailsActivity> rule =
-        new ActivityTestRule<>(MyBookDetailsActivity.class, true, true);
+        new ActivityTestRule<MyBookDetailsActivity>(MyBookDetailsActivity.class, true, true) {
+            @Override
+            protected Intent getActivityIntent() {
+                User owner = MockModels.getMockOwner();
+                Book book = new Book(owner, "TEST", "TEST", "TEST");
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Book", book);
+                intent.putExtras(bundle);
+                return intent;
+            }
+        };
 
     /**
      * Runs before all tests and creates solo instance.

@@ -1,5 +1,6 @@
 package com.example.bookmark;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
 
@@ -17,23 +19,14 @@ import com.example.bookmark.models.User;
  * This activity shows the details of a book. Depending on the
  * status of the book the user can then take some action. A user
  * can also navigate to the edit book activity from here.
- * <p>
- * Outstanding Issues/TODOs
- * Need to hook up to DB
  *
  * @author Mitch Adam.
  */
 public class MyBookDetailsActivity extends BackButtonActivity implements MenuOptions {
+    private static final int EDIT_REQUEST_CODE = 101;
 
     private User user;
     private Book book;
-
-    private String isbn;
-    private String title;
-    private String author;
-    private String description;
-    private String status;
-    //Image image;
 
     private TextView titleTextView;
     private TextView authorTextView;
@@ -44,6 +37,7 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
     private Button actionButton;
 
+    //Set correct functionality based on book status
     private final View.OnClickListener manageRequestsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -89,48 +83,47 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 
         actionButton = findViewById(R.id.book_details_action_btn);
 
-        getBookDetails();
         fillBookDetails();
         configureActionButton();
     }
 
-    private void getBookDetails() {
-        isbn = book.getIsbn();
-        author = book.getAuthor();
-        title = book.getTitle();
-        description = book.getDescription();
-        status = book.getStatus().toString();
-    }
-
     private void fillBookDetails() {
-        titleTextView.setText(title);
-        authorTextView.setText(author);
-        isbnTextView.setText("ISBN: " + isbn);
-        descriptionTextView.setText("Description: " + description);
-        //imageView.setImageBitmap();
-        statusTextView.setText("Status: " + status);
+        titleTextView.setText(book.getTitle());
+        authorTextView.setText(book.getAuthor());
+        isbnTextView.setText("ISBN: " + book.getIsbn());
+        descriptionTextView.setText("Description: " + book.getDescription());
+//        if (book.getPhotograph() != null) {
+//            imageView.setImageURI(book.getPhotograph().getUri());
+//        }
+        statusTextView.setText("Status: "
+            + book.getStatus().toString().charAt(0)
+            + book.getStatus().toString().substring(1).toLowerCase());
+
     }
 
     private void configureActionButton() {
-        switch (status) {
-            case "AVAILABLE":
+        switch (book.getStatus()) {
+            case AVAILABLE:
                 actionButton.setVisibility(View.INVISIBLE);
                 break;
-            case "REQUESTED":
+            case REQUESTED:
                 actionButton.setText("Manage Requests");
                 actionButton.setOnClickListener(manageRequestsListener);
                 break;
-            case "ACCEPTED":
+            case ACCEPTED:
                 actionButton.setText("Give");
                 actionButton.setOnClickListener(giveBookListener);
                 break;
-            case "BORROWED":
+            case BORROWED:
                 actionButton.setText("Receive");
                 actionButton.setOnClickListener(receiveBookListener);
                 break;
         }
     }
 
+    /**
+     * Handle managing request
+     */
     private void manageRequests() {
         Bundle bundle = new Bundle();
         bundle.putSerializable("Book", book);
@@ -140,11 +133,17 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         startActivity(intent);
     }
 
+    /**
+     * Handle giving a book
+     */
     private void giveBook() {
         //TODO
         Log.d("Book Details", "Give Book Clicked");
     }
 
+    /**
+     * Handle receiving a book
+     */
     private void receiveBook() {
         //TODO
         Log.d("Book Details", "Receive Book Clicked");
@@ -160,12 +159,41 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit_edit_btn:
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Book", book);
                 Intent intent = new Intent(MyBookDetailsActivity.this, EditBookActivity.class);
-                intent.putExtra("ISBN", isbn);
-                startActivity(intent);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, EDIT_REQUEST_CODE);
                 break;
         }
         return (super.onOptionsItemSelected(item));
+    }
+
+    /**
+     * Callback for when the Edit book activity returns
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        // Get ISBN
+        if (requestCode == EDIT_REQUEST_CODE) {
+            Bundle bundle = data.getExtras();
+            book = (Book) bundle.getSerializable("Book");
+
+            // Book is deleted
+            if (book == null) {
+                Intent intent = new Intent(MyBookDetailsActivity.this,
+                    MyBooksActivity.class);
+                startActivity(intent);
+            } else {
+                fillBookDetails();
+            }
+
+        }
     }
 
 }
