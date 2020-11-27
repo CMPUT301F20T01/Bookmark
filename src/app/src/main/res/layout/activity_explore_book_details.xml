@@ -7,14 +7,13 @@
     tools:context=".ExploreBookDetailsActivity">
 
     <Button
+        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/explore_details_action_btn"
         android:layout_width="219dp"
         android:layout_height="38dp"
         android:layout_marginTop="16dp"
-        android:background="#673AB7"
         android:onClick="handleRequestButtonClick"
         android:text="@string/request_book"
-        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/explore_details_book_status_text" />

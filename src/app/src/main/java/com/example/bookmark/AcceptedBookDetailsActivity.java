@@ -44,8 +44,6 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
     private TextView ownedByTextView;
     private TextView statusTextView;
 
-    private Button actionButton;
-
     private Book book;
     private User user;
 
@@ -61,9 +59,6 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         setContentView(R.layout.activity_accepted_book_details);
         getSupportActionBar().setTitle("Book Details");
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         Intent intent = getIntent();
         book = (Book) intent.getSerializableExtra("Book");
         user = (User) intent.getSerializableExtra("User");
@@ -75,8 +70,6 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         imageView = findViewById(R.id.accepted_details_book_image);
         ownedByTextView = findViewById(R.id.accepted_details_owned_by);
         statusTextView = findViewById(R.id.accepted_details_book_status_text);
-
-        actionButton = findViewById(R.id.accepted_details_action_btn);
 
         setBookDetails();
         fillBookDetails();

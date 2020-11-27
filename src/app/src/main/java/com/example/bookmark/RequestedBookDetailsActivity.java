@@ -46,9 +46,6 @@ public class RequestedBookDetailsActivity extends BackButtonActivity {
         setContentView(R.layout.activity_requested_book_details);
         getSupportActionBar().setTitle("Book Details");
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         Intent myIntent = getIntent();
         Bundle myBundle = myIntent.getExtras();
         book = (Book) myBundle.getSerializable("Book");

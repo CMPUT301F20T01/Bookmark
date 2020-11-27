@@ -42,7 +42,6 @@ public class ExploreBookDetailsActivity extends BackButtonActivity {
     private ImageView imageView;
     private TextView ownedByTextView;
     private TextView statusTextView;
-
     private Button actionButton;
 
     private Book book;
@@ -60,9 +59,6 @@ public class ExploreBookDetailsActivity extends BackButtonActivity {
         setContentView(R.layout.activity_explore_book_details);
         getSupportActionBar().setTitle("Book Details");
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         Intent intent = getIntent();
         book = (Book) intent.getSerializableExtra(ExploreActivity.EXTRA_BOOK);
         user = (User) intent.getSerializableExtra("User");
@@ -74,7 +70,6 @@ public class ExploreBookDetailsActivity extends BackButtonActivity {
         imageView = findViewById(R.id.explore_details_book_image);
         ownedByTextView = findViewById(R.id.explore_details_owned_by);
         statusTextView = findViewById(R.id.explore_details_book_status_text);
-
         actionButton = findViewById(R.id.explore_details_action_btn);
 
         setBookDetails();
@@ -122,7 +117,11 @@ public class ExploreBookDetailsActivity extends BackButtonActivity {
                 book.setStatus(Book.Status.REQUESTED);
                 StorageServiceProvider.getStorageService().storeBook(
                     book,
-                    a -> Log.d("Accepted Book Details", "Book stored"),
+                    a -> {
+                        Log.d("Accepted Book Details", "Book stored");
+                        // TODO: should change button style to grayed out button
+                        actionButton.setText("REQUESTED");
+                    },
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
             },
