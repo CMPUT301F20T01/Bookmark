@@ -17,6 +17,9 @@ public class Book implements FirestoreIndexable, Serializable {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }
 
+    // Null if not stored to Firebase.
+    private final String id;
+
     private final String ownerId;
     private String title;
     private String author;
@@ -35,10 +38,11 @@ public class Book implements FirestoreIndexable, Serializable {
      * @param isbn   The ISBN.
      */
     public Book(User owner, String title, String author, String isbn) {
-        this(owner.getId(), title, author, isbn);
+        this(null, owner.getId(), title, author, isbn);
     }
 
-    private Book(String ownerId, String title, String author, String isbn) {
+    private Book(String id, String ownerId, String title, String author, String isbn) {
+        this.id = id;
         this.ownerId = ownerId;
         this.title = title;
         this.author = author;
@@ -164,7 +168,7 @@ public class Book implements FirestoreIndexable, Serializable {
 
     @Override
     public String getId() {
-        return String.format("%s:%s", ownerId, isbn);
+        return id;
     }
 
     @Override
@@ -180,11 +184,17 @@ public class Book implements FirestoreIndexable, Serializable {
         return map;
     }
 
-    public static Book fromFirestoreDocument(Map<String, Object> map) {
+    public static Book fromFirestoreDocument(String id, Map<String, Object> map) {
         if (map == null) {
             return null;
         }
-        Book book = new Book((String) map.get("ownerId"), (String) map.get("title"), (String) map.get("author"), (String) map.get("isbn"));
+        Book book = new Book(
+            id,
+            (String) map.get("ownerId"),
+            (String) map.get("title"),
+            (String) map.get("author"),
+            (String) map.get("isbn")
+        );
         book.photograph = Photograph.fromFirestoreDocument((Map<String, Object>) map.get("photograph"));
         book.description = (String) map.get("description");
         book.status = Status.valueOf((String) map.get("status"));

@@ -18,6 +18,9 @@ public class Request implements FirestoreIndexable, Serializable {
         REQUESTED, ACCEPTED, BORROWED
     }
 
+    // Null if not stored to Firebase.
+    private final String id;
+
     private final String bookId;
     private final String requesterId;
     private final long createdDate; // Stored as a long since Date::equals is flawed.
@@ -33,10 +36,11 @@ public class Request implements FirestoreIndexable, Serializable {
      * @param location  The pickup location.
      */
     public Request(Book book, User requester, Geolocation location) {
-        this(book.getId(), requester.getId(), new Date().getTime(), location);
+        this(null, book.getId(), requester.getId(), new Date().getTime(), location);
     }
 
-    private Request(String bookId, String requesterId, long createdDate, Geolocation location) {
+    private Request(String id, String bookId, String requesterId, long createdDate, Geolocation location) {
+        this.id = id;
         this.bookId = bookId;
         this.requesterId = requesterId;
         this.createdDate = createdDate;
@@ -108,7 +112,7 @@ public class Request implements FirestoreIndexable, Serializable {
 
     @Override
     public String getId() {
-        return String.format("%s:%s", bookId, requesterId);
+        return id;
     }
 
     @Override
@@ -122,12 +126,18 @@ public class Request implements FirestoreIndexable, Serializable {
         return map;
     }
 
-    public static Request fromFirestoreDocument(Map<String, Object> map) {
+    public static Request fromFirestoreDocument(String id, Map<String, Object> map) {
         if (map == null) {
             return null;
         }
         Geolocation location = Geolocation.fromFirestoreDocument((Map<String, Object>) map.get("location"));
-        Request request = new Request((String) map.get("bookId"), (String) map.get("requesterId"), (long) map.get("createdDate"), location);
+        Request request = new Request(
+            id,
+            (String) map.get("bookId"),
+            (String) map.get("requesterId"),
+            (long) map.get("createdDate"),
+            location
+        );
         request.status = Status.valueOf((String) map.get("status"));
         return request;
     }
