@@ -7,7 +7,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * An implementation of StorageProvider that stores all of the app's data in memory.
@@ -16,9 +19,9 @@ import java.util.List;
  * @author Kyle Hennig.
  */
 public class InMemoryStorageService implements StorageService {
-    private final List<User> users;
-    private final List<Book> books;
-    private final List<Request> requests;
+    private final Map<String, User> users = new HashMap<>();
+    private final Map<String, Book> books = new HashMap<>();
+    private final Map<String, Request> requests = new HashMap<>();
 
     /**
      * Creates an InMemoryStorageService.
@@ -35,20 +38,26 @@ public class InMemoryStorageService implements StorageService {
      * @param requests The requests that should exist to start.
      */
     public InMemoryStorageService(List<User> users, List<Book> books, List<Request> requests) {
-        this.users = users;
-        this.books = books;
-        this.requests = requests;
+        for (User user : users) {
+            storeEntity(this.users, user);
+        }
+        for (Book book : books) {
+            storeEntity(this.books, book);
+        }
+        for (Request request : requests) {
+            storeEntity(this.requests, request);
+        }
     }
 
     @Override
     public void storeUser(User user, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        users.add(user);
+        storeEntity(users, user);
         onSuccessListener.onSuccess(null);
     }
 
     @Override
     public void retrieveUserByUsername(String username, OnSuccessListener<User> onSuccessListener, OnFailureListener onFailureListener) {
-        for (User user : users) {
+        for (User user : users.values()) {
             if (user.getUsername().equals(username)) {
                 onSuccessListener.onSuccess(user);
                 return;
@@ -59,19 +68,24 @@ public class InMemoryStorageService implements StorageService {
 
     @Override
     public void storeBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        books.add(book);
+        storeEntity(books, book);
         onSuccessListener.onSuccess(null);
     }
 
     @Override
+    public void retrieveBook(String id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+        onSuccessListener.onSuccess(books.get(id));
+    }
+
+    @Override
     public void retrieveBooks(OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
-        onSuccessListener.onSuccess(books);
+        onSuccessListener.onSuccess(new ArrayList<>(books.values()));
     }
 
     @Override
     public void retrieveBooksByOwner(User owner, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         List<Book> booksByOwner = new ArrayList<>();
-        for (Book book : books) {
+        for (Book book : books.values()) {
             if (book.getOwnerId().equals(owner.getId())) {
                 booksByOwner.add(book);
             }
@@ -82,11 +96,11 @@ public class InMemoryStorageService implements StorageService {
     @Override
     public void retrieveBooksByRequester(User requester, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         List<String> bookIds = new ArrayList<>();
-        for (Request request : requests) {
+        for (Request request : requests.values()) {
             bookIds.add(request.getBookId());
         }
         List<Book> booksByRequester = new ArrayList<>();
-        for (Book book : books) {
+        for (Book book : books.values()) {
             if (bookIds.contains(book.getId())) {
                 booksByRequester.add(book);
             }
@@ -96,20 +110,25 @@ public class InMemoryStorageService implements StorageService {
 
     @Override
     public void deleteBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        books.remove(book);
+        books.remove(book.getId());
         onSuccessListener.onSuccess(null);
     }
 
     @Override
     public void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        requests.add(request);
+        storeEntity(requests, request);
         onSuccessListener.onSuccess(null);
+    }
+
+    @Override
+    public void retrieveRequest(String id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
+        onSuccessListener.onSuccess(requests.get(id));
     }
 
     @Override
     public void retrieveRequestsByBook(Book book, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
         List<Request> requestsByBook = new ArrayList<>();
-        for (Request request : requests) {
+        for (Request request : requests.values()) {
             if (request.getBookId().equals(book.getId())) {
                 requestsByBook.add(request);
             }
@@ -120,7 +139,7 @@ public class InMemoryStorageService implements StorageService {
     @Override
     public void retrieveRequestsByRequester(User requester, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
         List<Request> requestsByRequester = new ArrayList<>();
-        for (Request request : requests) {
+        for (Request request : requests.values()) {
             if (request.getRequesterId().equals(requester.getId())) {
                 requestsByRequester.add(request);
             }
@@ -130,7 +149,15 @@ public class InMemoryStorageService implements StorageService {
 
     @Override
     public void deleteRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        requests.remove(request);
+        requests.remove(request.getId());
         onSuccessListener.onSuccess(null);
+    }
+
+    private <T extends FirestoreIndexable> void storeEntity(Map<String, T> map, T entity) {
+        if (entity.getId() != null) {
+            map.put(entity.getId(), entity);
+        } else {
+            map.put(UUID.randomUUID().toString(), entity);
+        }
     }
 }

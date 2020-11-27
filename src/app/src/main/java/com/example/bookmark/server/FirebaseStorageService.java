@@ -52,6 +52,11 @@ public class FirebaseStorageService implements StorageService {
     }
 
     @Override
+    public void retrieveBook(String id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveEntity(Collection.BOOKS, id, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    }
+
+    @Override
     public void retrieveBooks(OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveEntities(Collection.BOOKS, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
@@ -88,6 +93,11 @@ public class FirebaseStorageService implements StorageService {
     @Override
     public void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         storeEntity(Collection.REQUESTS, request, onSuccessListener, onFailureListener);
+    }
+
+    @Override
+    public void retrieveRequest(String id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveEntity(Collection.REQUESTS, id, Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
