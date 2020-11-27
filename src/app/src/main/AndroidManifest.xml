@@ -2,13 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bookmark">
 
-    <uses-feature android:name="android.hardware.camera.any" />
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,12 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAncJ8eeijFPuMazRK_bIMN6E772RRZs_E" />
-
         <activity android:name=".ViewProfileActivity"></activity>
-        <activity android:name=".SignUpActivity"/>
+
+        <activity android:name=".SignUpActivity" />
         <activity android:name=".ScanIsbnActivity" />
         <activity android:name=".RequestedBookDetailsActivity" />
         <activity android:name=".PendingRequestsActivity" />
@@ -47,6 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAncJ8eeijFPuMazRK_bIMN6E772RRZs_E" />
 
         <!-- File provider for ImageSelectDialogFragment -->
         <provider
@@ -61,9 +54,16 @@
 
         <service
             android:name="AcceptRequestsActivity"
-            android:foregroundServiceType="location">
-        </service>
+            android:foregroundServiceType="location"></service>
 
     </application>
+
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>

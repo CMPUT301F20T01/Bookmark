@@ -40,9 +40,6 @@ import java.util.concurrent.Executors;
  * This activity opens up a camera view using CameraX and allows a
  * user to scan a barcode using Google's ML kit. Upon success
  * the isbn will be returned.
- * <p>
- * <p>
- * Outstanding Issues/TODOs
  *
  * @author Mitch Adam.
  */

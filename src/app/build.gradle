@@ -67,4 +67,7 @@ dependencies {
     // Add the dependency for Firestore.
     implementation 'com.google.firebase:firebase-firestore'
     // See https://firebase.google.com/docs/android/setup#available-libraries for other libraries we can use.
+
+    //HTTP
+    implementation 'com.android.volley:volley:1.1.1'
 }
