@@ -31,7 +31,7 @@ public class User implements FirestoreIndexable, Serializable {
      * @param phoneNumber  The user's phone number.
      */
     public User(String username, String firstName, String lastName, String emailAddress, String phoneNumber) {
-        this(new EntityId(), username, firstName, lastName, emailAddress, phoneNumber);
+        this(new EntityId(username), username, firstName, lastName, emailAddress, phoneNumber);
     }
 
     private User(EntityId id, String username, String firstName, String lastName, String emailAddress, String phoneNumber) {
