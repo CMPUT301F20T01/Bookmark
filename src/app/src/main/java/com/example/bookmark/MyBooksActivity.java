@@ -89,16 +89,20 @@ public class MyBooksActivity extends NavigationDrawerActivity
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(
             username,
-            user ->
+            user -> {
+                this.user = user;
                 StorageServiceProvider.getStorageService().retrieveBooksByOwner(
                     user,
                     books -> {
                         allBooks.clear();
                         allBooks.addAll(books);
-                        booksAdapter.notifyDataSetChanged();
+                        if (booksAdapter != null) {
+                            booksAdapter.notifyDataSetChanged();
+                        }
                     },
                     onFailureListener
-                ),
+                );
+            },
             onFailureListener
         );
     }

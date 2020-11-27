@@ -1,8 +1,12 @@
 package com.example.bookmark;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
+import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -25,7 +29,7 @@ public class MyBookDetailsActivityTest {
     private Solo solo;
     @Rule
     public ActivityTestRule<MyBookDetailsActivity> rule =
-        new ActivityTestRule<>(MyBookDetailsActivity.class, true, true);
+        new ActivityTestRule<>(MyBookDetailsActivity.class, true, false);
 
     /**
      * Runs before all tests and creates solo instance.
@@ -34,6 +38,18 @@ public class MyBookDetailsActivityTest {
      */
     @Before
     public void setUp() throws Exception {
+        User testUser = new User("test",
+            "test",
+            "test",
+            "test",
+            "test"
+        );
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("User", testUser);
+        bundle.putSerializable("Book", new Book(testUser, "test", "test", "test"));
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        rule.launchActivity(intent);
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
     }
 
@@ -44,7 +60,6 @@ public class MyBookDetailsActivityTest {
      */
     @Test
     public void start() throws Exception {
-        Activity activity = rule.getActivity();
     }
 
     /**

@@ -71,9 +71,7 @@ public class MyBooksActivityTest {
      * @throws Exception
      */
     @Test
-    public void start() throws Exception {
-        Activity activity = rule.getActivity();
-    }
+    public void start() throws Exception {}
 
     /**
      * Test opening add book activity
