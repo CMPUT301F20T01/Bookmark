@@ -83,6 +83,11 @@ public class FirebaseStorageService implements StorageService {
     }
 
     @Override
+    public void deleteBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        deleteEntity(Collection.BOOKS, book.getId(), onSuccessListener, onFailureListener);
+    }
+
+    @Override
     public void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         storeEntity(Collection.REQUESTS, request, onSuccessListener, onFailureListener);
     }
