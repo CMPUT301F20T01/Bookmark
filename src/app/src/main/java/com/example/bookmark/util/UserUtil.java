@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * This class implements utility funcitons to set and retrieve the logged in user
+ *
+ * @author Kyle Hennig, Konrad Staniszewski
+ */
 public class UserUtil {
     public static String getLoggedInUser(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
