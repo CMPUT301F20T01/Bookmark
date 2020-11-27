@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.EmptyTextFocusListener;
+import com.example.bookmark.util.UserUtil;
 import com.google.android.material.textfield.TextInputLayout;
 
 import static com.example.bookmark.util.UserInfoFormValidator.validateEditTextEmpty;
@@ -95,10 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     userNameLayout.setError("User not registered!");
                 } else {
                     // store user object in shared preferences
-                    SharedPreferences sharedPreferences = getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("USER_NAME", user.getUsername());
-                    editor.commit();
+                    UserUtil.setLoggedInUser(this, user.getUsername());
                     // launch my books activity
                     Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
                     startActivity(intent);
