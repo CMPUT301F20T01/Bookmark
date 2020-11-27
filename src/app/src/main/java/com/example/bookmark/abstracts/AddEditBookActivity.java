@@ -16,8 +16,11 @@ import com.example.bookmark.ScanIsbnActivity;
 import com.example.bookmark.fragments.ImageSelectDialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * @author Eric Claerhout
+ */
 public abstract class AddEditBookActivity extends BackButtonActivity
-        implements ImageSelectDialogFragment.ImageSelectListener {
+    implements ImageSelectDialogFragment.ImageSelectListener {
     private static final int ISBN_REQUEST_CODE = 100;
     private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
@@ -52,6 +55,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
      * Helper function called in onCreate() to retrieve the layout. This should be overridden by
      * subclasses to return the desired layout so it can be set in this abstract class layer. The
      * subclass should not call setContentView() itself.
+     *
      * @return The layout resource ID
      */
     protected abstract int getLayoutResourceId();
