@@ -73,12 +73,30 @@ public class Book implements FirestoreIndexable, Serializable {
     }
 
     /**
+     * Set the author.
+     *
+     * @param author The author.
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
      * Gets the ISBN.
      *
      * @return The ISBN.
      */
     public String getIsbn() {
         return isbn;
+    }
+
+    /**
+     * Sets the ISBN.
+     *
+     * @param isbn The ISBN.
+     */
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     /**
@@ -142,24 +160,6 @@ public class Book implements FirestoreIndexable, Serializable {
      */
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    /**
-     * Set the author
-     *
-     * @param author The author.
-     */
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    /**
-     * Sets the isbn
-     *
-     * @param isbn The isbn.
-     */
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
     }
 
     @Override
