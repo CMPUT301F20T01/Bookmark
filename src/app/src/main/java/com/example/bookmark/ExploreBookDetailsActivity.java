@@ -19,7 +19,10 @@ import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
 
 /**
- * TODO: Description of class.
+ * This activity shows the details of a book. As well, the user can click the "Request"
+ * which will start a new request on the book with the current user and will denote the book
+ * as Requested.
+ *
  * @author Nayan Prakash.
  */
 public class ExploreBookDetailsActivity extends AppCompatActivity {

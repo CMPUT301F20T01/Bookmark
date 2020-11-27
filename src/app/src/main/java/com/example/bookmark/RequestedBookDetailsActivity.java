@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.bookmark.models.Book;
 
 /**
- * TODO: Description of class.
+ *  This activity shows the details of a book.
  *
  * @author Nayan Prakash.
  */

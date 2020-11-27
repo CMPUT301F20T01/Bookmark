@@ -16,7 +16,10 @@ import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 
 /**
- * TODO: Description of class.
+ * This activity shows the details of a book. As well, the user can click the "Return"
+ * button to which navigates the user to ScanIsbnActivity to get a Book's ISBN. Upon
+ * completion of retrieving the ISBN, this Activity denotes the book available and
+ * deletes it's associated request with the current user.
  *
  * @author Nayan Prakash.
  */
