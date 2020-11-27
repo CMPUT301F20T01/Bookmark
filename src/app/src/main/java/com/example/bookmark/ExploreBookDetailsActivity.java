@@ -25,7 +25,7 @@ import com.example.bookmark.util.UserUtil;
  *
  * @author Nayan Prakash.
  */
-public class ExploreBookDetailsActivity extends AppCompatActivity {
+public class ExploreBookDetailsActivity extends BackButtonActivity {
 
     String isbn;
     String title;
