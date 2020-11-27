@@ -63,6 +63,7 @@ public class BookList extends ArrayAdapter<Book> {
         owner = view.findViewById(R.id.book_preview_owner_text);
         status = view.findViewById(R.id.book_preview_status_text);
 
+        image.setImageResource(R.drawable.ic_baseline_menu_book_24); // set placeholder
         //image.setImageBitmap(book.getPhotograph());
 
         String bookStatus = "Status: " + book.getStatus().toString();
