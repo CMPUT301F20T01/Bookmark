@@ -110,7 +110,8 @@ public class MyBooksActivity extends NavigationDrawerActivity
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(
             username,
-            user ->
+            user -> {
+                this.user = user;
                 StorageServiceProvider.getStorageService().retrieveBooksByOwner(
                     user,
                     books -> {
@@ -119,7 +120,8 @@ public class MyBooksActivity extends NavigationDrawerActivity
                         setFilteredBooks();
                     },
                     onFailureListener
-                ),
+                );
+            },
             onFailureListener
         );
     }
