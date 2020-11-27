@@ -61,19 +61,6 @@ public class BorrowedActivity extends NavigationDrawerActivity
         });
     }
 
-    private void getBorrowedBooks() {
-        String username = UserUtil.getLoggedInUser(this);
-        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
-            StorageServiceProvider.getStorageService().retrieveBooksByRequester(user, books -> {
-                borrowedBooks.addAll(books);
-            }, e -> {
-                DialogUtil.showErrorDialog(this, e);
-            });
-        }, e -> {
-            DialogUtil.showErrorDialog(this, e);
-        });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflates the menu with the search icon
@@ -96,5 +83,19 @@ public class BorrowedActivity extends NavigationDrawerActivity
         Intent intent = new Intent(BorrowedActivity.this, ExploreActivity.class);
         intent.putExtra(SEARCHED_KEYWORDS, searchString);
         startActivity(intent);
+    }
+
+    private void getBorrowedBooks() {
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
+            StorageServiceProvider.getStorageService().retrieveBooksByOwner(user, books -> {
+                borrowedBooks.addAll(books);
+                borrowedBooksAdapter.notifyDataSetChanged();
+            }, e -> {
+                DialogUtil.showErrorDialog(this, e);
+            });
+        }, e -> {
+            DialogUtil.showErrorDialog(this, e);
+        });
     }
 }
