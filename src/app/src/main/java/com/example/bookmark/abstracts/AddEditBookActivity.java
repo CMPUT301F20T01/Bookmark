@@ -16,6 +16,9 @@ import com.example.bookmark.ScanIsbnActivity;
 import com.example.bookmark.fragments.ImageSelectDialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * @author Eric Claerhout
+ */
 public abstract class AddEditBookActivity extends BackButtonActivity
     implements ImageSelectDialogFragment.ImageSelectListener {
     private static final int ISBN_REQUEST_CODE = 100;
