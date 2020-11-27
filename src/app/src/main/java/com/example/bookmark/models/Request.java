@@ -117,8 +117,8 @@ public class Request implements FirestoreIndexable, Serializable {
     @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
-        map.put("bookId", bookId);
-        map.put("requesterId", requesterId);
+        map.put("bookId", bookId.toString());
+        map.put("requesterId", requesterId.toString());
         map.put("createdDate", createdDate);
         map.put("location", location != null ? location.toFirestoreDocument() : null);
         map.put("status", status);

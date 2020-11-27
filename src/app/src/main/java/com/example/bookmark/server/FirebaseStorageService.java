@@ -64,7 +64,7 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void retrieveBooksByOwner(User owner, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.BOOKS, query -> query.whereEqualTo("ownerId", owner.getId()), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.BOOKS, query -> query.whereEqualTo("ownerId", owner.getId().toString()), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
@@ -103,12 +103,12 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void retrieveRequestsByBook(Book book, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("bookId", book.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("bookId", book.getId().toString()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
     public void retrieveRequestsByRequester(User requester, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requesterId", requester.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requesterId", requester.getId().toString()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
