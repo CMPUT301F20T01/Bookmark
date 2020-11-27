@@ -3,8 +3,6 @@ package com.example.bookmark.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * This class implements utility functions to set and retrieve the logged in user
  *
