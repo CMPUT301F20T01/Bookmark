@@ -3,6 +3,7 @@ package com.example.bookmark.server;
 import android.util.Log;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,8 +53,8 @@ public class FirebaseStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveBook(String id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntity(Collection.BOOKS, id, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    public void retrieveBook(EntityId id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveEntity(Collection.BOOKS, id.toString(), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class FirebaseStorageService implements StorageService {
     @Override
     public void retrieveBooksByRequester(User requester, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveRequestsByRequester(requester, requests -> {
-            List<String> bookIds = new ArrayList<>();
+            List<EntityId> bookIds = new ArrayList<>();
             for (Request request : requests) {
                 bookIds.add(request.getBookId());
             }
@@ -87,7 +88,7 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void deleteBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        deleteEntity(Collection.BOOKS, book.getId(), onSuccessListener, onFailureListener);
+        deleteEntity(Collection.BOOKS, book.getId().toString(), onSuccessListener, onFailureListener);
     }
 
     @Override
@@ -96,8 +97,8 @@ public class FirebaseStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveRequest(String id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntity(Collection.REQUESTS, id, Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    public void retrieveRequest(EntityId id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveEntity(Collection.REQUESTS, id.toString(), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
@@ -112,12 +113,12 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void deleteRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        deleteEntity(Collection.REQUESTS, request.getId(), onSuccessListener, onFailureListener);
+        deleteEntity(Collection.REQUESTS, request.getId().toString(), onSuccessListener, onFailureListener);
     }
 
     protected void storeEntity(String collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection(collection)
-            .document(entity.getId())
+            .document(entity.getId().toString())
             .set(entity.toFirestoreDocument())
             .addOnSuccessListener(aVoid -> {
                 Log.d(TAG, String.format("Stored %s with id %s to collection %s.", entity.getClass().getName().toLowerCase(), entity.getId(), collection));

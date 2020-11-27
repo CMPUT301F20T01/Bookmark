@@ -17,10 +17,9 @@ public class Book implements FirestoreIndexable, Serializable {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }
 
-    // Null if not stored to Firebase.
-    private final String id;
+    private final EntityId id;
 
-    private final String ownerId;
+    private final EntityId ownerId;
     private String title;
     private String author;
     private String isbn;
@@ -38,10 +37,10 @@ public class Book implements FirestoreIndexable, Serializable {
      * @param isbn   The ISBN.
      */
     public Book(User owner, String title, String author, String isbn) {
-        this(null, owner.getId(), title, author, isbn);
+        this(new EntityId(), owner.getId(), title, author, isbn);
     }
 
-    private Book(String id, String ownerId, String title, String author, String isbn) {
+    private Book(EntityId id, EntityId ownerId, String title, String author, String isbn) {
         this.id = id;
         this.ownerId = ownerId;
         this.title = title;
@@ -54,7 +53,7 @@ public class Book implements FirestoreIndexable, Serializable {
      *
      * @return The id of the owner.
      */
-    public String getOwnerId() {
+    public EntityId getOwnerId() {
         return ownerId;
     }
 
@@ -167,14 +166,14 @@ public class Book implements FirestoreIndexable, Serializable {
     }
 
     @Override
-    public String getId() {
+    public EntityId getId() {
         return id;
     }
 
     @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
-        map.put("ownerId", ownerId);
+        map.put("ownerId", ownerId.toString());
         map.put("title", title);
         map.put("author", author);
         map.put("isbn", isbn);
@@ -189,8 +188,8 @@ public class Book implements FirestoreIndexable, Serializable {
             return null;
         }
         Book book = new Book(
-            id,
-            (String) map.get("ownerId"),
+            new EntityId(id),
+            new EntityId((String) map.get("ownerId")),
             (String) map.get("title"),
             (String) map.get("author"),
             (String) map.get("isbn")

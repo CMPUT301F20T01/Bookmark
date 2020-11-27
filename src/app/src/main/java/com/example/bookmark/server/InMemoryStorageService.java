@@ -1,6 +1,7 @@
 package com.example.bookmark.server;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,9 +20,9 @@ import java.util.UUID;
  * @author Kyle Hennig.
  */
 public class InMemoryStorageService implements StorageService {
-    private final Map<String, User> users = new HashMap<>();
-    private final Map<String, Book> books = new HashMap<>();
-    private final Map<String, Request> requests = new HashMap<>();
+    private final Map<EntityId, User> users = new HashMap<>();
+    private final Map<EntityId, Book> books = new HashMap<>();
+    private final Map<EntityId, Request> requests = new HashMap<>();
 
     /**
      * Creates an InMemoryStorageService.
@@ -73,7 +74,7 @@ public class InMemoryStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveBook(String id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+    public void retrieveBook(EntityId id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
         onSuccessListener.onSuccess(books.get(id));
     }
 
@@ -95,7 +96,7 @@ public class InMemoryStorageService implements StorageService {
 
     @Override
     public void retrieveBooksByRequester(User requester, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
-        List<String> bookIds = new ArrayList<>();
+        List<EntityId> bookIds = new ArrayList<>();
         for (Request request : requests.values()) {
             bookIds.add(request.getBookId());
         }
@@ -121,7 +122,7 @@ public class InMemoryStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveRequest(String id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
+    public void retrieveRequest(EntityId id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
         onSuccessListener.onSuccess(requests.get(id));
     }
 
@@ -153,11 +154,11 @@ public class InMemoryStorageService implements StorageService {
         onSuccessListener.onSuccess(null);
     }
 
-    private <T extends FirestoreIndexable> void storeEntity(Map<String, T> map, T entity) {
+    private <T extends FirestoreIndexable> void storeEntity(Map<EntityId, T> map, T entity) {
         if (entity.getId() != null) {
             map.put(entity.getId(), entity);
         } else {
-            map.put(UUID.randomUUID().toString(), entity);
+            map.put(new EntityId(), entity);
         }
     }
 }

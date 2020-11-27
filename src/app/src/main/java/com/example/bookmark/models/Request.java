@@ -18,11 +18,10 @@ public class Request implements FirestoreIndexable, Serializable {
         REQUESTED, ACCEPTED, BORROWED
     }
 
-    // Null if not stored to Firebase.
-    private final String id;
+    private final EntityId id;
 
-    private final String bookId;
-    private final String requesterId;
+    private final EntityId bookId;
+    private final EntityId requesterId;
     private final long createdDate; // Stored as a long since Date::equals is flawed.
 
     private Geolocation location;
@@ -36,10 +35,10 @@ public class Request implements FirestoreIndexable, Serializable {
      * @param location  The pickup location.
      */
     public Request(Book book, User requester, Geolocation location) {
-        this(null, book.getId(), requester.getId(), new Date().getTime(), location);
+        this(new EntityId(), book.getId(), requester.getId(), new Date().getTime(), location);
     }
 
-    private Request(String id, String bookId, String requesterId, long createdDate, Geolocation location) {
+    private Request(EntityId id, EntityId bookId, EntityId requesterId, long createdDate, Geolocation location) {
         this.id = id;
         this.bookId = bookId;
         this.requesterId = requesterId;
@@ -52,7 +51,7 @@ public class Request implements FirestoreIndexable, Serializable {
      *
      * @return The id of the requested book.
      */
-    public String getBookId() {
+    public EntityId getBookId() {
         return bookId;
     }
 
@@ -61,7 +60,7 @@ public class Request implements FirestoreIndexable, Serializable {
      *
      * @return The id of the requester.
      */
-    public String getRequesterId() {
+    public EntityId getRequesterId() {
         return requesterId;
     }
 
@@ -111,7 +110,7 @@ public class Request implements FirestoreIndexable, Serializable {
     }
 
     @Override
-    public String getId() {
+    public EntityId getId() {
         return id;
     }
 
@@ -132,9 +131,9 @@ public class Request implements FirestoreIndexable, Serializable {
         }
         Geolocation location = Geolocation.fromFirestoreDocument((Map<String, Object>) map.get("location"));
         Request request = new Request(
-            id,
-            (String) map.get("bookId"),
-            (String) map.get("requesterId"),
+            new EntityId(id),
+            new EntityId((String) map.get("bookId")),
+            new EntityId((String) map.get("requesterId")),
             (long) map.get("createdDate"),
             location
         );

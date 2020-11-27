@@ -1,6 +1,7 @@
 package com.example.bookmark.server;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,7 +49,7 @@ public interface StorageService {
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    void retrieveBook(String id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener);
+    void retrieveBook(EntityId id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener);
 
     /**
      * Retrieves all the books.
@@ -101,7 +102,7 @@ public interface StorageService {
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    void retrieveRequest(String id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener);
+    void retrieveRequest(EntityId id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener);
 
     /**
      * Retrieves the requests for a book.

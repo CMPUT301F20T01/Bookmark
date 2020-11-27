@@ -13,8 +13,7 @@ import java.util.Objects;
  * @author Kyle Hennig.
  */
 public class User implements FirestoreIndexable, Serializable {
-    // Null if not stored to Firebase.
-    private final String id;
+    private final EntityId id;
 
     private final String username;
     private String firstName;
@@ -32,10 +31,10 @@ public class User implements FirestoreIndexable, Serializable {
      * @param phoneNumber  The user's phone number.
      */
     public User(String username, String firstName, String lastName, String emailAddress, String phoneNumber) {
-        this(null, username, firstName, lastName, emailAddress, phoneNumber);
+        this(new EntityId(), username, firstName, lastName, emailAddress, phoneNumber);
     }
 
-    private User(String id, String username, String firstName, String lastName, String emailAddress, String phoneNumber) {
+    private User(EntityId id, String username, String firstName, String lastName, String emailAddress, String phoneNumber) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -126,7 +125,7 @@ public class User implements FirestoreIndexable, Serializable {
     }
 
     @Override
-    public String getId() {
+    public EntityId getId() {
         return id;
     }
 
@@ -146,7 +145,7 @@ public class User implements FirestoreIndexable, Serializable {
             return null;
         }
         return new User(
-            id,
+            new EntityId(id),
             (String) map.get("username"),
             (String) map.get("firstName"),
             (String) map.get("lastName"),
