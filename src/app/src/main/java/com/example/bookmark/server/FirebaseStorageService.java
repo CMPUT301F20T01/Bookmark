@@ -52,12 +52,6 @@ public class FirebaseStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveBook(User owner, String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
-        String id = String.format("%s:%s", owner.getId(), isbn);
-        retrieveEntity(Collection.BOOKS, id, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
-    }
-
-    @Override
     public void retrieveBooks(OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveEntities(Collection.BOOKS, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
@@ -94,12 +88,6 @@ public class FirebaseStorageService implements StorageService {
     @Override
     public void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         storeEntity(Collection.REQUESTS, request, onSuccessListener, onFailureListener);
-    }
-
-    @Override
-    public void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
-        String id = String.format("%s:%s", book.getId(), requester.getId());
-        retrieveEntity(Collection.REQUESTS, id, Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
@@ -167,7 +155,7 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions,FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+    protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
         conditions.apply(db.collection(collection))
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {

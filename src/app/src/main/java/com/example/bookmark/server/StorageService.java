@@ -42,16 +42,6 @@ public interface StorageService {
     void storeBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener);
 
     /**
-     * Retrieves a book.
-     *
-     * @param owner             The owner of the book.
-     * @param isbn              The ISBN of the book.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
-    void retrieveBook(User owner, String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener);
-
-    /**
      * Retrieves all the books.
      *
      * @param onSuccessListener Callback to run on success.
@@ -94,16 +84,6 @@ public interface StorageService {
      * @param onFailureListener Callback to run on failure.
      */
     void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener);
-
-    /**
-     * Retrieves a request.
-     *
-     * @param book              The book the request was for.
-     * @param requester         The user who made the request.
-     * @param onSuccessListener Callback to run on success.
-     * @param onFailureListener Callback to run on failure.
-     */
-    void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener);
 
     /**
      * Retrieves the requests for a book.

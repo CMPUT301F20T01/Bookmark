@@ -64,17 +64,6 @@ public class InMemoryStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveBook(User owner, String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
-        for (Book book : books) {
-            if (book.getOwnerId().equals(owner.getId()) && book.getIsbn().equals(isbn)) {
-                onSuccessListener.onSuccess(book);
-                return;
-            }
-        }
-        onSuccessListener.onSuccess(null);
-    }
-
-    @Override
     public void retrieveBooks(OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         onSuccessListener.onSuccess(books);
     }
@@ -114,17 +103,6 @@ public class InMemoryStorageService implements StorageService {
     @Override
     public void storeRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         requests.add(request);
-        onSuccessListener.onSuccess(null);
-    }
-
-    @Override
-    public void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
-        for (Request request : requests) {
-            if (request.getBookId().equals(book.getId()) && request.getRequesterId().equals(requester.getId())) {
-                onSuccessListener.onSuccess(request);
-                return;
-            }
-        }
         onSuccessListener.onSuccess(null);
     }
 
