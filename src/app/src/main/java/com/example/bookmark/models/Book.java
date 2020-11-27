@@ -76,7 +76,7 @@ public class Book implements FirestoreIndexable, Serializable {
     }
 
     /**
-     * Set the author.
+     * Sets the author.
      *
      * @param author The author.
      */
