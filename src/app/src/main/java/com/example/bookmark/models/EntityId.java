@@ -2,10 +2,17 @@ package com.example.bookmark.models;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EntityId {
+/**
+ * Represents a unique id that can identify an entity.
+ * Assigns new ids using version 4 UUID generation.
+ *
+ * @author Kyle Hennig.
+ */
+public class EntityId implements Serializable {
     private final String id;
 
     public EntityId() {
