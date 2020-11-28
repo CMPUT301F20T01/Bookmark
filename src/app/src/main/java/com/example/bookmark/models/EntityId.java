@@ -5,6 +5,12 @@ import androidx.annotation.NonNull;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Represents a unique id that can identify an entity.
+ * Assigns new ids using version 4 UUID generation.
+ *
+ * @author Kyle Hennig.
+ */
 public class EntityId {
     private final String id;
 
