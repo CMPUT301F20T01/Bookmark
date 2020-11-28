@@ -2,6 +2,7 @@ package com.example.bookmark.models;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
  *
  * @author Kyle Hennig.
  */
-public class EntityId {
+public class EntityId implements Serializable {
     private final String id;
 
     public EntityId() {
