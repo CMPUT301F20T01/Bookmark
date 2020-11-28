@@ -48,15 +48,16 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
         setIntentDestination();
         getSupportActionBar().setTitle(activityTitle);
 
-        getBooks();
-
         visibleBooksAdapter = new BookList(this, visibleBooks, showOwner,
             showStatus);
         visibleBooksListView.setAdapter(visibleBooksAdapter);
+
+        getBooks();
+
         visibleBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ListingBooksActivity.this,
+                Intent intent = new Intent(intentStartingPoint,
                     intentDestination);
                 intent.putExtra(EXTRA_BOOK, relevantBooks.get(i));
                 startActivity(intent);
@@ -65,7 +66,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -74,7 +76,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         });
     }
 
@@ -83,11 +86,13 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
             case R.id.menu_filter_search_search_btn:
                 // Changes visibility of search bar
                 if (searchBar.getVisibility() == View.GONE) {
+                    searchBar.setHint(R.string.search_hint);
                     searchBar.setVisibility(View.VISIBLE);
                     searchBar.setText("");
                 } else {
-                    searchBar.setText("");
                     searchBar.setVisibility(View.GONE);
+                    searchBar.setText("");
+                    searchBar.setHint("");
                 }
             case R.id.menu_filter_search_filter_btn:
                 // TODO open filter fragment

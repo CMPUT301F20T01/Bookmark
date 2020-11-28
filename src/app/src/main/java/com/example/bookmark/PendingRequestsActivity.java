@@ -1,24 +1,10 @@
 package com.example.bookmark;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
 import com.example.bookmark.abstracts.ListingBooksActivity;
-import com.example.bookmark.adapters.BookList;
-import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This activity shows a user a list of books that they have pending requests
@@ -61,11 +47,14 @@ public class PendingRequestsActivity extends ListingBooksActivity {
                     }
                     visibleBooks.addAll(relevantBooks);
                     visibleBooksAdapter.notifyDataSetChanged();
-            }, e -> {
-                DialogUtil.showErrorDialog(this, e);
-            });
+                    System.out.println(visibleBooks);
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                });
         }, e -> {
             DialogUtil.showErrorDialog(this, e);
         });
+
+        // System.out.println("visible " + visibleBooks.toString());
     }
 }
