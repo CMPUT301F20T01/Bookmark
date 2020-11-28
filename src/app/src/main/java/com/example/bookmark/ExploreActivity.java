@@ -10,8 +10,10 @@ import android.widget.ListView;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class ExploreActivity extends NavigationDrawerActivity
     private BookList searchResultsAdapter;
     private ListView searchResultsListView;
 
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +55,19 @@ public class ExploreActivity extends NavigationDrawerActivity
         // TODO remove line below when we want to start using search
         searchedKeywords = "";
 
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(
+            username,
+            u -> user = u,
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
+
         executeSearch(searchedKeywords);
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
         searchResultsListView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(this, ExploreBookDetailsActivity.class);
+            intent.putExtra("User", user);
             intent.putExtra(EXTRA_BOOK, searchResults.get(position));
             startActivity(intent);
         });
