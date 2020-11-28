@@ -23,23 +23,24 @@ import java.util.List;
 
 public abstract class ListingBooksActivity extends NavigationDrawerActivity {
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
-    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
-        ".SEARCH";
-
     protected String activityTitle = "";
     protected boolean showOwner = true;
     protected boolean showStatus = true;
     protected List<Book> relevantBooks = new ArrayList<>();
+    protected List<Book> visibleBooks = new ArrayList<>();
     protected Context intentStartingPoint;
     protected Class<?> intentDestination;
-    protected BookList relevantBooksAdapter;
-    protected ListView relevantBooksListView;
+    protected BookList visibleBooksAdapter;
+    protected ListView visibleBooksListView;
     protected TextInputEditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_borrowed);
+        setContentView(R.layout.activity_listing_books);
+
+        searchBar = (TextInputEditText) findViewById(R.id.search_bar_textInput);
+        visibleBooksListView = (ListView) findViewById(R.id.visible_books_listView);
 
         setActivityTitle();
         setBookOwnerAndStatusVisibility();
@@ -47,15 +48,12 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
         setIntentDestination();
         getSupportActionBar().setTitle(activityTitle);
 
-        searchBar = findViewById(R.id.search_bar_textInput);
-        relevantBooksListView = findViewById(R.id.relevant_books_listView);
+        getBooks();
 
-        getRelevantBooks();
-
-        relevantBooksAdapter = new BookList(this, relevantBooks, showOwner,
+        visibleBooksAdapter = new BookList(this, visibleBooks, showOwner,
             showStatus);
-        relevantBooksListView.setAdapter(relevantBooksAdapter);
-        relevantBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        visibleBooksListView.setAdapter(visibleBooksAdapter);
+        visibleBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ListingBooksActivity.this,
@@ -67,30 +65,17 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ArrayList<String> keywords;
                 String searchString = charSequence.toString();
-                updateSearchResults(charSequence.toString());
+                updateSearchResults(searchString.split(" "));
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) {}
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflates the menu with the filter and search icons
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_filter_search, menu);
-        return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -99,7 +84,9 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
                 // Changes visibility of search bar
                 if (searchBar.getVisibility() == View.INVISIBLE) {
                     searchBar.setVisibility(View.VISIBLE);
+                    searchBar.setText("");
                 } else {
+                    searchBar.setText("");
                     searchBar.setVisibility(View.INVISIBLE);
                 }
             case R.id.menu_filter_search_filter_btn:
@@ -107,6 +94,37 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
                 break;
         }
         return (super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflates the menu with the filter and search icons
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getBooks();
+    }
+
+    protected void updateSearchResults(String[] keywords) {
+        visibleBooks.clear();
+        if (keywords.length == 0) {
+            visibleBooks.addAll(relevantBooks);
+        } else {
+            for (Book book : relevantBooks) {
+                for (String keyword : keywords) {
+                    if (book.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                        visibleBooks.add(book);
+                        break;
+                    }
+                }
+            }
+        }
+        visibleBooksAdapter.notifyDataSetChanged();
     }
 
     protected abstract void setActivityTitle();
@@ -117,9 +135,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
 
     protected abstract void setIntentDestination();
 
-    protected abstract void getRelevantBooks();
-
-    protected abstract void updateSearchResults(String keywords);
+    protected abstract void getBooks();
 }
 
 

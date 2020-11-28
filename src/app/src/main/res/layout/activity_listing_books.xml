@@ -24,7 +24,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ListView
-        android:id="@+id/relevant_books_listView"
+        android:id="@+id/visible_books_listView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="4dp"

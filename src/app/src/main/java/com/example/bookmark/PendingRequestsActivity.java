@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
@@ -27,83 +28,42 @@ import java.util.List;
  *
  * @author Ryan Kortbeek.
  */
-public class PendingRequestsActivity extends NavigationDrawerActivity
-    implements SearchDialogFragment.OnFragmentInteractionListener {
-    public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
-    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
-        ".SEARCH";
+public class PendingRequestsActivity extends ListingBooksActivity {
 
-    private List<Book> requestedBooks = new ArrayList<>();
-    private BookList requestedBooksAdapter;
-    private ListView requestedBooksListView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_requests);
-
-        getSupportActionBar().setTitle("Pending Requests");
-
-        requestedBooksListView = findViewById(R.id.requested_books_listview);
-
-        getRequestedBooks();
-        requestedBooksAdapter = new BookList(this, requestedBooks,
-            true, true);
-        requestedBooksListView.setAdapter(requestedBooksAdapter);
-        requestedBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(PendingRequestsActivity.this,
-                    RequestedBookDetailsActivity.class);
-                intent.putExtra(EXTRA_BOOK, requestedBooks.get(i));
-                startActivity(intent);
-            }
-        });
+    protected void setActivityTitle() {
+        activityTitle = "Pending Requests";
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflates the menu with the filter and search icons
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_filter_search, menu);
-        return true;
+    protected void setBookOwnerAndStatusVisibility() {
+        showOwner = true;
+        showStatus = true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_filter_search_search_btn:
-                // Opens search fragment
-                new SearchDialogFragment().show(getSupportFragmentManager(),
-                    "SEARCH_AVAILABLE_BOOKS");
-            case R.id.menu_filter_search_filter_btn:
-                // TODO open filter fragment
-                break;
-        }
-        return (super.onOptionsItemSelected(item));
+    protected void setIntentStartingPoint() {
+        intentStartingPoint = this;
     }
 
-    @Override
-    public void sendSearchedKeywords(String searchString) {
-        Intent intent = new Intent(PendingRequestsActivity.this, ExploreActivity.class);
-        intent.putExtra(SEARCHED_KEYWORDS, searchString);
-        startActivity(intent);
+    protected void setIntentDestination() {
+        intentDestination = ExploreBookDetailsActivity.class;
     }
 
-    private void getRequestedBooks() {
+    protected void getBooks() {
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             StorageServiceProvider.getStorageService().retrieveBooksByRequester(user,
                 books -> {
-                    requestedBooks.clear();
+                    relevantBooks.clear();
+                    visibleBooks.clear();
                     for (Book book : books) {
                         if (book.getStatus() == Book.Status.REQUESTED) {
-                            requestedBooks.add(book);
+                            relevantBooks.add(book);
                         }
                     }
-                    requestedBooksAdapter.notifyDataSetChanged();
-                }, e -> {
-                    DialogUtil.showErrorDialog(this, e);
-                });
+                    visibleBooks.addAll(relevantBooks);
+                    visibleBooksAdapter.notifyDataSetChanged();
+            }, e -> {
+                DialogUtil.showErrorDialog(this, e);
+            });
         }, e -> {
             DialogUtil.showErrorDialog(this, e);
         });

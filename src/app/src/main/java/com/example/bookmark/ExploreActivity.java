@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,43 +27,7 @@ import java.util.List;
  *
  * @author Ryan Kortbeek.
  */
-public class ExploreActivity extends NavigationDrawerActivity
-    implements SearchDialogFragment.OnFragmentInteractionListener {
-
-    public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
-    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
-        ".SEARCH";
-
-    private List<Book> searchResults = new ArrayList<>();
-    private BookList searchResultsAdapter;
-    private ListView searchResultsListView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_explore);
-
-        getSupportActionBar().setTitle("Explore");
-
-        searchResultsListView = findViewById(R.id.search_results_listview);
-
-        Intent searchIntent = getIntent();
-        String searchedKeywords =
-            searchIntent.getStringExtra(SEARCHED_KEYWORDS);
-
-        if (searchedKeywords == null) {
-            searchedKeywords = "";
-        }
-
-        executeSearch(searchedKeywords);
-        searchResultsAdapter = new BookList(this, searchResults, true, true);
-        searchResultsListView.setAdapter(searchResultsAdapter);
-        searchResultsListView.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(this, ExploreBookDetailsActivity.class);
-            intent.putExtra(EXTRA_BOOK, searchResults.get(position));
-            startActivity(intent);
-        });
-    }
+public class ExploreActivity extends ListingBooksActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,37 +37,43 @@ public class ExploreActivity extends NavigationDrawerActivity
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_filter_search_search_btn:
-                // Opens search fragment
-                SearchDialogFragment.newInstance().show(getSupportFragmentManager(),
-                    "SEARCH_AVAILABLE_BOOKS");
-            case R.id.menu_filter_search_filter_btn:
-                // TODO open filter fragment
-                break;
-        }
-        return (super.onOptionsItemSelected(item));
+    protected void setActivityTitle() {
+        activityTitle = "Explore";
     }
 
-    @Override
-    public void sendSearchedKeywords(String searchString) {
-        executeSearch(searchString);
+    protected void setBookOwnerAndStatusVisibility() {
+        showOwner = true;
+        showStatus = true;
     }
 
-    public void executeSearch(String searchedKeywords) {
-        if (!searchedKeywords.isEmpty()) {
+    protected void setIntentStartingPoint() {
+        intentStartingPoint = this;
+    }
+
+    protected void setIntentDestination() {
+        intentDestination = ExploreBookDetailsActivity.class;
+    }
+
+    protected void getBooks() {
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             StorageServiceProvider.getStorageService().retrieveBooks(books -> {
-                searchResults.clear();
-                for (Book book : books) {
-                    if (book.getDescription().toLowerCase().contains(searchedKeywords.toLowerCase()) &&
-                        (book.getStatus() != Book.Status.BORROWED) &&
-                        (book.getStatus() != Book.Status.ACCEPTED)) {
-                        searchResults.add(book);
+                    relevantBooks.clear();
+                    visibleBooks.clear();
+                    for (Book book : books) {
+                        if ((book.getOwnerId() != user.getId()) &&
+                            (book.getStatus() != Book.Status.BORROWED) &&
+                            (book.getStatus() != Book.Status.ACCEPTED)) {
+                            relevantBooks.add(book);
+                        }
                     }
-                }
-                searchResultsAdapter.notifyDataSetChanged();
-            }, e -> DialogUtil.showErrorDialog(this, e));
-        }
+                    visibleBooks.addAll(relevantBooks);
+                    visibleBooksAdapter.notifyDataSetChanged();
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                });
+        }, e -> {
+            DialogUtil.showErrorDialog(this, e);
+        });
     }
 }
