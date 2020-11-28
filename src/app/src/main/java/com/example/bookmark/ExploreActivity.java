@@ -8,12 +8,14 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.bookmark.adapters.BookList;
+import com.example.bookmark.fragments.FilterDialogFragment;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,8 +27,9 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public class ExploreActivity extends NavigationDrawerActivity
-    implements SearchDialogFragment.OnFragmentInteractionListener {
-
+    implements SearchDialogFragment.OnFragmentInteractionListener,
+        FilterDialogFragment.FilterDialogListener {
+    private static final String FILTER_FRAGMENT_TAG = "FilterFragment";
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
@@ -34,14 +37,18 @@ public class ExploreActivity extends NavigationDrawerActivity
     private List<Book> searchResults = new ArrayList<>();
     private BookList searchResultsAdapter;
     private ListView searchResultsListView;
+    private boolean[] statusFilterEnabled = new boolean[Book.Status.values().length];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
-
         getSupportActionBar().setTitle("Explore");
 
+        // Initialize status filter to include all statuses (true)
+        Arrays.fill(statusFilterEnabled, true);
+
+        // Setup search
         searchResultsListView = findViewById(R.id.search_results_listview);
 
         Intent searchIntent = getIntent();
@@ -75,11 +82,18 @@ public class ExploreActivity extends NavigationDrawerActivity
                 // Opens search fragment
                 new SearchDialogFragment().show(getSupportFragmentManager(),
                     "SEARCH_AVAILABLE_BOOKS");
+                break;
             case R.id.menu_filter_search_filter_btn:
-                // TODO open filter fragment
+                FilterDialogFragment.newInstance(statusFilterEnabled)
+                    .show(getSupportFragmentManager(), FILTER_FRAGMENT_TAG);
                 break;
         }
         return (super.onOptionsItemSelected(item));
+    }
+
+    public void onFilterUpdate(boolean[] statusFilterEnabled) {
+        this.statusFilterEnabled = statusFilterEnabled;
+
     }
 
     @Override

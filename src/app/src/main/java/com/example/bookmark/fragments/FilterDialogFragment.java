@@ -3,6 +3,7 @@ package com.example.bookmark.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,25 +14,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import com.example.bookmark.R;
+import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Photograph;
 
 /**
  * TODO: Description of class.
  * @author Eric Claerhout.
  */
 public class FilterDialogFragment extends DialogFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String FILTER_CHECK_ENABLED = "CHECK_STATUS";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private FilterDialogFragment.FilterDialogListener listener;
     private Context context;
     private String TAG;
+    private final CheckBox[] checkboxes = new CheckBox[Book.Status.values().length];
+    private final int[] checkboxIds = new int[] {
+        R.id.filter_available_checkbox,
+        R.id.filter_requested_checkbox,
+        R.id.filter_accepted_checkbox,
+        R.id.filter_borrowed_checkbox
+    };
+
+    public interface FilterDialogListener {
+        void onFilterUpdate(boolean[] statusFilterEnabled);
+    }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -41,22 +52,23 @@ public class FilterDialogFragment extends DialogFragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment FilterDialogFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    // public static FilterDialogFragment newInstance(String param1, String param2) {
-    //     FilterDialogFragment fragment = new FilterDialogFragment();
-    //     Bundle args = new Bundle();
-    //     args.putString(ARG_PARAM1, param1);
-    //     args.putString(ARG_PARAM2, param2);
-    //     fragment.setArguments(args);
-    //     return fragment;
-    // }
-    public static FilterDialogFragment newInstance() {
-        return new FilterDialogFragment();
+    public static FilterDialogFragment newInstance(boolean[] checkboxEnabled) {
+        FilterDialogFragment fragment = new FilterDialogFragment();
+        Bundle args = new Bundle();
+        args.putBooleanArray(FILTER_CHECK_ENABLED, checkboxEnabled);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        if (context instanceof ImageSelectDialogFragment.ImageSelectListener) {
+            listener = (FilterDialogFragment.FilterDialogListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                + " must implement FilterDialogListener");
+        }
         this.context = context;
     }
 
@@ -67,11 +79,25 @@ public class FilterDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View filterView = LayoutInflater.from(context).inflate(R.layout.fragment_filter_dialog, null);
 
+        boolean[] checkboxEnabled = savedInstanceState.getBooleanArray(FILTER_CHECK_ENABLED);
+        for (int i=0; i < checkboxes.length; i++) {
+            checkboxes[i] = filterView.findViewById(checkboxIds[i]);
+            checkboxes[i].setChecked(checkboxEnabled[i]);
+        }
+
         return builder
             .setView(filterView)
             .setTitle(getString(R.string.filter_book))
-            .setPositiveButton(getString(R.string.apply), null)
+            .setPositiveButton(getString(R.string.apply), (d,w) -> updateFilters())
             .setNegativeButton(getString(R.string.cancel), null)
             .create();
+    }
+
+    private void updateFilters() {
+        boolean[] checkboxEnabled = new boolean[checkboxes.length];
+        for (int i=0; i < checkboxes.length; i++) {
+            checkboxEnabled[i] = checkboxes[i].isChecked();
+        }
+        listener.onFilterUpdate(checkboxEnabled);
     }
 }

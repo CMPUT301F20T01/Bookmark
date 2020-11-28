@@ -8,24 +8,28 @@
     tools:context=".fragments.FilterDialogFragment">
 
     <CheckBox
+        android:id="@+id/filter_available_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/available" />
 
     <CheckBox
+        android:id="@+id/filter_requested_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/requested" />
 
     <CheckBox
+        android:id="@+id/filter_accepted_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/accepted" />
 
     <CheckBox
+        android:id="@+id/filter_borrowed_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
