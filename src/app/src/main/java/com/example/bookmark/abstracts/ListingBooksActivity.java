@@ -253,7 +253,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
      * intent that is created when a Book in the visibleBooksListView is
      * clicked.
      *
-     * @return Class<?></?>
+     * @return Class<?>
      */
     protected abstract Class<?> getIntentDestination();
 }

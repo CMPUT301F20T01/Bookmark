@@ -112,7 +112,7 @@ public class PendingRequestsActivity extends ListingBooksActivity {
      * intent that is created when a Book in the visibleBooksListView is
      * clicked.
      *
-     * @return Class<?></?>
+     * @return Class<?>
      */
     @Override
     protected Class<?> getIntentDestination() {
