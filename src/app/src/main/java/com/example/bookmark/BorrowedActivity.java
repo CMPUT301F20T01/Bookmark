@@ -88,12 +88,18 @@ public class BorrowedActivity extends NavigationDrawerActivity
     private void getBorrowedBooks() {
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
-            StorageServiceProvider.getStorageService().retrieveBooksByOwner(user, books -> {
-                borrowedBooks.addAll(books);
-                borrowedBooksAdapter.notifyDataSetChanged();
-            }, e -> {
-                DialogUtil.showErrorDialog(this, e);
-            });
+            StorageServiceProvider.getStorageService().retrieveBooksByRequester(user,
+                books -> {
+                    borrowedBooks.clear();
+                    for (Book book : books) {
+                        if (book.getStatus() == Book.Status.BORROWED) {
+                            borrowedBooks.add(book);
+                        }
+                    }
+                    borrowedBooksAdapter.notifyDataSetChanged();
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                });
         }, e -> {
             DialogUtil.showErrorDialog(this, e);
         });
