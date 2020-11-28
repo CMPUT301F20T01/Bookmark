@@ -48,9 +48,6 @@ public class ExploreActivity extends NavigationDrawerActivity
         String searchedKeywords =
             searchIntent.getStringExtra(SEARCHED_KEYWORDS);
 
-        // TODO remove line below when we want to start using search
-        searchedKeywords = "";
-
         executeSearch(searchedKeywords);
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
@@ -73,7 +70,7 @@ public class ExploreActivity extends NavigationDrawerActivity
         switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:
                 // Opens search fragment
-                new SearchDialogFragment().show(getSupportFragmentManager(),
+                SearchDialogFragment.newInstance().show(getSupportFragmentManager(),
                     "SEARCH_AVAILABLE_BOOKS");
             case R.id.menu_filter_search_filter_btn:
                 // TODO open filter fragment
@@ -84,23 +81,22 @@ public class ExploreActivity extends NavigationDrawerActivity
 
     @Override
     public void sendSearchedKeywords(String searchString) {
-        // Instead of sending intent to this same activity just calls
-        // executeSearch again
-
-        // TODO replace line below with searchString when we want to start
-        //  using search
-        executeSearch("");
+        executeSearch(searchString);
     }
 
     public void executeSearch(String searchedKeywords) {
-        StorageServiceProvider.getStorageService().retrieveBooks(books -> {
-            searchResults.clear();
-            for (Book book : books) {
-                if (book.getDescription().contains(searchedKeywords)) {
-                    searchResults.add(book);
+        if (!searchedKeywords.isEmpty()) {
+            StorageServiceProvider.getStorageService().retrieveBooks(books -> {
+                searchResults.clear();
+                for (Book book : books) {
+                    if (book.getDescription().toLowerCase().contains(searchedKeywords.toLowerCase()) &&
+                        (book.getStatus() != Book.Status.BORROWED) &&
+                        (book.getStatus() != Book.Status.ACCEPTED)) {
+                        searchResults.add(book);
+                    }
                 }
-            }
-            searchResultsAdapter.notifyDataSetChanged();
-        }, e -> DialogUtil.showErrorDialog(this, e));
+                searchResultsAdapter.notifyDataSetChanged();
+            }, e -> DialogUtil.showErrorDialog(this, e));
+        }
     }
 }
