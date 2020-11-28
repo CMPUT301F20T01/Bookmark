@@ -11,8 +11,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:visibility="invisible">
+        android:layout_marginBottom="0dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_bar_textInput"
@@ -20,7 +19,8 @@
             android:layout_height="match_parent"
             android:hint="@string/search_hint"
             android:inputType="text"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <ListView

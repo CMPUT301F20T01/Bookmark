@@ -82,12 +82,12 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
         switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:
                 // Changes visibility of search bar
-                if (searchBar.getVisibility() == View.INVISIBLE) {
+                if (searchBar.getVisibility() == View.GONE) {
                     searchBar.setVisibility(View.VISIBLE);
                     searchBar.setText("");
                 } else {
                     searchBar.setText("");
-                    searchBar.setVisibility(View.INVISIBLE);
+                    searchBar.setVisibility(View.GONE);
                 }
             case R.id.menu_filter_search_filter_btn:
                 // TODO open filter fragment
