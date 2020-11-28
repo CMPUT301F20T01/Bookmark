@@ -9,13 +9,11 @@ import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
-import com.example.bookmark.util.UserUtil;
 
 /**
  * This activity shows a user a list of books that they have pending requests
  * for. They can select a book which takes them to the
  * RequestedBookDetailsActivity where they can see the books details.
- * TODO what else do we want here?
  *
  * @author Ryan Kortbeek.
  */
@@ -25,6 +23,13 @@ public class PendingRequestsActivity extends ListingBooksActivity {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Inflates the menu with the search icon. Override this
+     * method if different menu icons are desired.
+     *
+     * @param menu menu to inflate
+     * @return true (shows the inflated option menu)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflates the menu with the filter and search icons
@@ -72,25 +77,22 @@ public class PendingRequestsActivity extends ListingBooksActivity {
      */
     @Override
     protected void getBooks() {
-        String username = UserUtil.getLoggedInUser(this);
-        StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
-            StorageServiceProvider.getStorageService().retrieveBooksByRequester(user,
-                books -> {
-                    visibleBooks.clear();
-                    relevantBooks.clear();
-                    for (Book book : books) {
-                        if (book.getStatus() == Book.Status.REQUESTED) {
-                            relevantBooks.add(book);
-                        }
+        StorageServiceProvider.getStorageService().retrieveBooksByRequester(
+            user,
+            books -> {
+                visibleBooks.clear();
+                relevantBooks.clear();
+                for (Book book : books) {
+                    if (book.getStatus() == Book.Status.REQUESTED) {
+                        relevantBooks.add(book);
                     }
-                    visibleBooks.addAll(relevantBooks);
-                    visibleBooksAdapter.notifyDataSetChanged();
-                }, e -> {
-                    DialogUtil.showErrorDialog(this, e);
-                });
-        }, e -> {
-            DialogUtil.showErrorDialog(this, e);
-        });
+                }
+                visibleBooks.addAll(relevantBooks);
+                visibleBooksAdapter.notifyDataSetChanged();
+            }, e -> {
+                DialogUtil.showErrorDialog(this, e);
+            }
+        );
     }
 
     /**

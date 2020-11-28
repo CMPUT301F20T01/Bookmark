@@ -16,6 +16,10 @@ import com.example.bookmark.NavigationDrawerActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -33,6 +37,7 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public abstract class ListingBooksActivity extends NavigationDrawerActivity {
+    public static final String USER = "com.example.bookmark.USER";
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
 
     // All books that match the broad restrictions of the implementing
@@ -49,6 +54,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
     protected TextInputLayout searchBarLayout;
     protected TextInputEditText searchBar;
 
+    protected User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,14 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
         searchBarLayout.setVisibility(View.GONE);
         searchBar = (TextInputEditText) searchBarLayout.getEditText();
         visibleBooksListView = findViewById(R.id.visible_books_listview);
+
+        // Gets the logged in user
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(
+            username,
+            u -> user = u,
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
 
         getSupportActionBar().setTitle(getActivityTitle());
 
@@ -71,6 +86,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
                 // Passes the selected book to the specified intent destination
                 Intent intent = new Intent(getPackageContext(),
                     getIntentDestination());
+                intent.putExtra(USER, user);
                 intent.putExtra(EXTRA_BOOK, visibleBooks.get(i));
                 startActivity(intent);
             }
