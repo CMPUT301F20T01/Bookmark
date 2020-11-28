@@ -1,14 +1,13 @@
 package com.example.bookmark;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 /**
  * TODO: Description of class.
+ *
  * @author Nayan Prakash.
  */
-public class ExploreBookDetailsActivity extends AppCompatActivity {
+public class ExploreBookDetailsActivity extends BackButtonActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
