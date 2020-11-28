@@ -8,11 +8,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.ImageSelectDialogFragment;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -22,9 +28,6 @@ import java.util.List;
  * This activity shows a user a list of their books.
  * They can select a book to see and edit the details of a book.
  * They can also add a book from here
- * <p>
- * Outstanding Issues/TODOs
- * Need to hook up to DB
  *
  * @author Mitch Adam.
  */
@@ -32,10 +35,11 @@ public class MyBooksActivity extends NavigationDrawerActivity
     implements SearchDialogFragment.OnFragmentInteractionListener, MenuOptions {
     public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
         ".SEARCH";
-    // Going to need some sort of owner or uid
+
+    private User user;
 
     private final List<Book> allBooks = new ArrayList<Book>();
-    private List<Book> filteredBooks;
+    private List<Book> filteredBooks = allBooks;
 
     private BookList booksAdapter;
     private ListView booksListView;
@@ -59,46 +63,83 @@ public class MyBooksActivity extends NavigationDrawerActivity
 
         addBookBtn = findViewById(R.id.my_books_add_btn);
         addBookBtn.setOnClickListener(addBookListener);
-
-        getBooks();
-        setFilteredBooks();
         booksAdapter = new BookList(this, filteredBooks, false, true);
         booksListView.setAdapter(booksAdapter);
+
+        // Fetch users books
+        getBooks();
+
         booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Book", filteredBooks.get(position));
+                bundle.putSerializable("User", user);
                 Intent intent = new Intent(MyBooksActivity.this, MyBookDetailsActivity.class);
-                intent.putExtra("ISBN", filteredBooks.get(position).getIsbn());
+                intent.putExtras(bundle);
+
                 startActivity(intent);
             }
+
         });
+
+        // Pull down to refresh
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getBooks();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getBooks();
+    }
+
+    /**
+     * Get list of users books
+     */
     private void getBooks() {
-        // TODO: Get books from firebase by owner
-
-        //Temp add some books
-        User owner = new User("u", "fn", "ln",
-            "email", "pn");
-
-        Book b1 = new Book(owner, "Title 1", "Author 1", "1111111");
-        b1.setDescription("Book 1 description");
-
-        Book b2 = new Book(owner, "Title 2", "Author 2", "22222");
-        b2.setDescription("Book 2 description");
-
-        allBooks.add(b1);
-        allBooks.add(b2);
+        OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
+        String username = UserUtil.getLoggedInUser(this);
+        StorageServiceProvider.getStorageService().retrieveUserByUsername(
+            username,
+            user -> {
+                this.user = user;
+                StorageServiceProvider.getStorageService().retrieveBooksByOwner(
+                    user,
+                    books -> {
+                        allBooks.clear();
+                        allBooks.addAll(books);
+                        setFilteredBooks();
+                    },
+                    onFailureListener
+                );
+            },
+            onFailureListener
+        );
     }
 
+
+    /**
+     * Set the list of books to display to user based on what is filtered
+     */
     private void setFilteredBooks() {
         // TODO: Implement filtering
-        // I think eric is working on part of this?
         filteredBooks = allBooks;
+        booksAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Start add book intent
+     */
     private void goToAddBook() {
         Intent intent = new Intent(MyBooksActivity.this, AddBookActivity.class);
         startActivity(intent);
@@ -112,6 +153,9 @@ public class MyBooksActivity extends NavigationDrawerActivity
         return true;
     }
 
+    /**
+     * Handle menu selection
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:

@@ -16,8 +16,11 @@ import com.example.bookmark.ScanIsbnActivity;
 import com.example.bookmark.fragments.ImageSelectDialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * @author Eric Claerhout
+ */
 public abstract class AddEditBookActivity extends BackButtonActivity
-        implements ImageSelectDialogFragment.ImageSelectListener {
+    implements ImageSelectDialogFragment.ImageSelectListener {
     private static final int ISBN_REQUEST_CODE = 100;
     private static final String IMG_SELECT_TAG = "ImageSelectFragment";
 
@@ -28,12 +31,18 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     protected EditText isbnEditText;
     protected EditText descriptionEditText;
 
+    protected TextInputLayout titleTextInputLayout;
+    protected TextInputLayout authorTextInputLayout;
+    protected TextInputLayout isbnTextInputLayout;
+
+    protected Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
 
-        TextInputLayout isbnTextInputLayout = findViewById(R.id.add_edit_book_isbn);
+        isbnTextInputLayout = findViewById(R.id.add_edit_book_isbn);
         isbnTextInputLayout.setEndIconOnClickListener(v -> goToScanISBN());
 
         bookImage = findViewById(R.id.book_image);
@@ -46,15 +55,27 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         authorEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_author)).getEditText();
         isbnEditText = isbnTextInputLayout.getEditText();
         descriptionEditText = ((TextInputLayout) findViewById(R.id.add_edit_book_description)).getEditText();
+
+        titleTextInputLayout = findViewById(R.id.add_edit_book_title);
+        authorTextInputLayout = findViewById(R.id.add_edit_book_author);
     }
 
     /**
      * Helper function called in onCreate() to retrieve the layout. This should be overridden by
      * subclasses to return the desired layout so it can be set in this abstract class layer. The
      * subclass should not call setContentView() itself.
+     *
      * @return The layout resource ID
      */
     protected abstract int getLayoutResourceId();
+
+    /**
+     * Gets called if an isbn number is scanned in.
+     *
+     * @param isbn
+     * @return
+     */
+    protected abstract void getBookDetails(String isbn);
 
     /**
      * Launch the activity to scan ISBN codes.
@@ -76,6 +97,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
      */
     public void onImageSelect(Uri uri) {
         // TODO: Save URI for when creating a book class
+        imageUri = uri;
         bookImage.setImageURI(uri);
         deleteBookImageButton.setVisibility(View.VISIBLE);
     }
@@ -86,9 +108,11 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     private void deleteImage() {
         // TODO: Sync up with Kyle on Firebase stuff
         // TODO: Clear saved URI
+        imageUri = null;
         bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
         deleteBookImageButton.setVisibility(View.GONE);
     }
+
 
     /**
      * Callback for when the scan ISBN activity returns.
@@ -104,6 +128,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
         if (requestCode == ISBN_REQUEST_CODE) {
             String isbn = data.getStringExtra("ISBN");
             isbnEditText.setText(isbn);
+            getBookDetails(isbn);
         }
     }
 }

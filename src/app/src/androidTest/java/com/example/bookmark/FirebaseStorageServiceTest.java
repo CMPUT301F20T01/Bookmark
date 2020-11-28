@@ -181,6 +181,25 @@ public class FirebaseStorageServiceTest {
     }
 
     /**
+     * Tests deleting a book.
+     */
+    @Test
+    public void testDeleteBook() {
+        Semaphore semaphore = new Semaphore(0);
+        User owner = MockModels.getMockOwner();
+        Book book = MockModels.getMockBook1();
+        storageService.deleteBook(book, aVoid ->
+                storageService.retrieveBook(owner, book.getIsbn(), book2 ->
+                        storageService.storeBook(book, aVoid2 -> {
+                            assertNull(book2);
+                            semaphore.release();
+                        }, e -> fail("An error occurred while recreating the deleted book.")),
+                    e -> fail("An error occurred while retrieving the deleted book.")),
+            e -> fail("An error occurred while deleting the book"));
+        acquire(semaphore);
+    }
+
+    /**
      * Tests retrieving a request.
      */
     @Test
