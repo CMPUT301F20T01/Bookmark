@@ -18,8 +18,10 @@ public class Request implements FirestoreIndexable, Serializable {
         REQUESTED, ACCEPTED, BORROWED
     }
 
-    private final String bookId;
-    private final String requesterId;
+    private final EntityId id;
+
+    private final EntityId bookId;
+    private final EntityId requesterId;
     private final long createdDate; // Stored as a long since Date::equals is flawed.
 
     private Geolocation location;
@@ -33,10 +35,11 @@ public class Request implements FirestoreIndexable, Serializable {
      * @param location  The pickup location.
      */
     public Request(Book book, User requester, Geolocation location) {
-        this(book.getId(), requester.getId(), new Date().getTime(), location);
+        this(new EntityId(), book.getId(), requester.getId(), new Date().getTime(), location);
     }
 
-    private Request(String bookId, String requesterId, long createdDate, Geolocation location) {
+    private Request(EntityId id, EntityId bookId, EntityId requesterId, long createdDate, Geolocation location) {
+        this.id = id;
         this.bookId = bookId;
         this.requesterId = requesterId;
         this.createdDate = createdDate;
@@ -48,7 +51,7 @@ public class Request implements FirestoreIndexable, Serializable {
      *
      * @return The id of the requested book.
      */
-    public String getBookId() {
+    public EntityId getBookId() {
         return bookId;
     }
 
@@ -57,7 +60,7 @@ public class Request implements FirestoreIndexable, Serializable {
      *
      * @return The id of the requester.
      */
-    public String getRequesterId() {
+    public EntityId getRequesterId() {
         return requesterId;
     }
 
@@ -107,27 +110,33 @@ public class Request implements FirestoreIndexable, Serializable {
     }
 
     @Override
-    public String getId() {
-        return String.format("%s:%s", bookId, requesterId);
+    public EntityId getId() {
+        return id;
     }
 
     @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
-        map.put("bookId", bookId);
-        map.put("requesterId", requesterId);
+        map.put("bookId", bookId.toString());
+        map.put("requesterId", requesterId.toString());
         map.put("createdDate", createdDate);
         map.put("location", location != null ? location.toFirestoreDocument() : null);
         map.put("status", status);
         return map;
     }
 
-    public static Request fromFirestoreDocument(Map<String, Object> map) {
+    public static Request fromFirestoreDocument(String id, Map<String, Object> map) {
         if (map == null) {
             return null;
         }
         Geolocation location = Geolocation.fromFirestoreDocument((Map<String, Object>) map.get("location"));
-        Request request = new Request((String) map.get("bookId"), (String) map.get("requesterId"), (long) map.get("createdDate"), location);
+        Request request = new Request(
+            new EntityId(id),
+            new EntityId((String) map.get("bookId")),
+            new EntityId((String) map.get("requesterId")),
+            (long) map.get("createdDate"),
+            location
+        );
         request.status = Status.valueOf((String) map.get("status"));
         return request;
     }

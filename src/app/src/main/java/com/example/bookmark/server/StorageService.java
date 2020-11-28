@@ -1,6 +1,7 @@
 package com.example.bookmark.server;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,12 +45,11 @@ public interface StorageService {
     /**
      * Retrieves a book.
      *
-     * @param owner             The owner of the book.
-     * @param isbn              The ISBN of the book.
+     * @param id                The id of the book.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    void retrieveBook(User owner, String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener);
+    void retrieveBook(EntityId id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener);
 
     /**
      * Retrieves all the books.
@@ -98,12 +98,11 @@ public interface StorageService {
     /**
      * Retrieves a request.
      *
-     * @param book              The book the request was for.
-     * @param requester         The user who made the request.
+     * @param id                The id of the request.
      * @param onSuccessListener Callback to run on success.
      * @param onFailureListener Callback to run on failure.
      */
-    void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener);
+    void retrieveRequest(EntityId id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener);
 
     /**
      * Retrieves the requests for a book.

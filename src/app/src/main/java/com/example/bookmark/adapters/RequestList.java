@@ -69,7 +69,7 @@ public class RequestList extends ArrayAdapter<Request> {
         TextView borrowerName = view.findViewById(R.id.borrower_text);
         TextView requestDate = view.findViewById(R.id.request_date_text);
 
-        borrowerName.setText(request.getRequesterId());
+        borrowerName.setText(request.getRequesterId().toString());
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
