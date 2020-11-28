@@ -1,5 +1,10 @@
 package com.example.bookmark;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+
 import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
@@ -16,44 +21,100 @@ import com.example.bookmark.util.UserUtil;
  * @author Ryan Kortbeek.
  */
 public class BorrowedActivity extends ListingBooksActivity {
-
-    protected void setActivityTitle() {
-        activityTitle = "Borrowed";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
-    protected void setBookOwnerAndStatusVisibility() {
-        showOwner = true;
-        showStatus = false;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflates the menu with the filter and search icons
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        return true;
     }
 
-    protected void setIntentStartingPoint() {
-        intentStartingPoint = this;
+    /**
+     * Returns the title that is to be used for this activity.
+     *
+     * @return String
+     */
+    @Override
+    protected String getActivityTitle() {
+        return "Borrowed";
     }
 
-    protected void setIntentDestination() {
-        intentDestination = BorrowedBookDetailsActivity.class;
+    /**
+     * Returns whether the the owner field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
+     */
+    @Override
+    protected boolean getBookOwnerVisibility() {
+        return true;
     }
 
+    /**
+     * Returns whether the the status field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
+     */
+    @Override
+    protected boolean getBookStatusVisibility() {
+        return false;
+    }
+
+    /**
+     * Gets all books from the firestore database that are borrowed by the
+     * current user and sets the values of visibleBooks and relevantBooks
+     * accordingly.
+     */
+    @Override
     protected void getBooks() {
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             StorageServiceProvider.getStorageService().retrieveBooksByRequester(user,
-                books -> {
-                    relevantBooks.clear();
-                    visibleBooks.clear();
-                    for (Book book : books) {
-                        if (book.getStatus() == Book.Status.BORROWED) {
-                            relevantBooks.add(book);
+                    books -> {
+                        visibleBooks.clear();
+                        relevantBooks.clear();
+                        for (Book book : books) {
+                            if (book.getStatus() == Book.Status.BORROWED) {
+                                relevantBooks.add(book);
+                            }
                         }
-                    }
-                    visibleBooks.addAll(relevantBooks);
-                }, e -> {
-                    DialogUtil.showErrorDialog(this, e);
-                });
+                        visibleBooks.addAll(relevantBooks);
+                        visibleBooksAdapter.notifyDataSetChanged();
+                    }, e -> {
+                        DialogUtil.showErrorDialog(this, e);
+                    });
         }, e -> {
             DialogUtil.showErrorDialog(this, e);
         });
-        System.out.println(visibleBooks);
-        visibleBooksAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Returns the context that is used for the starting point of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Context
+     */
+    @Override
+    protected Context getPackageContext() {
+        return BorrowedActivity.this;
+    }
+
+    /**
+     * Returns the class that is used for the destination of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Class<?></?>
+     */
+    @Override
+    protected Class<?> getIntentDestination() {
+        return BorrowedBookDetailsActivity.class;
     }
 }

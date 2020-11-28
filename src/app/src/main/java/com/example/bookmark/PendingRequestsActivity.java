@@ -1,5 +1,10 @@
 package com.example.bookmark;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+
 import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
@@ -15,31 +20,64 @@ import com.example.bookmark.util.UserUtil;
  * @author Ryan Kortbeek.
  */
 public class PendingRequestsActivity extends ListingBooksActivity {
-
-    protected void setActivityTitle() {
-        activityTitle = "Pending Requests";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
-    protected void setBookOwnerAndStatusVisibility() {
-        showOwner = true;
-        showStatus = true;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflates the menu with the filter and search icons
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        return true;
     }
 
-    protected void setIntentStartingPoint() {
-        intentStartingPoint = this;
+    /**
+     * Returns the title that is to be used for this activity.
+     *
+     * @return String
+     */
+    @Override
+    protected String getActivityTitle() {
+        return "Pending Requests";
     }
 
-    protected void setIntentDestination() {
-        intentDestination = ExploreBookDetailsActivity.class;
+    /**
+     * Returns whether the the owner field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
+     */
+    @Override
+    protected boolean getBookOwnerVisibility() {
+        return true;
     }
 
+    /**
+     * Returns whether the the status field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
+     */
+    @Override
+    protected boolean getBookStatusVisibility() {
+        return false;
+    }
+
+    /**
+     * Gets all books from the firestore database that are requested by the
+     * current user and sets the values of visibleBooks and relevantBooks
+     * accordingly.
+     */
+    @Override
     protected void getBooks() {
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             StorageServiceProvider.getStorageService().retrieveBooksByRequester(user,
                 books -> {
-                    relevantBooks.clear();
                     visibleBooks.clear();
+                    relevantBooks.clear();
                     for (Book book : books) {
                         if (book.getStatus() == Book.Status.REQUESTED) {
                             relevantBooks.add(book);
@@ -47,14 +85,35 @@ public class PendingRequestsActivity extends ListingBooksActivity {
                     }
                     visibleBooks.addAll(relevantBooks);
                     visibleBooksAdapter.notifyDataSetChanged();
-                    System.out.println(visibleBooks);
                 }, e -> {
                     DialogUtil.showErrorDialog(this, e);
                 });
         }, e -> {
             DialogUtil.showErrorDialog(this, e);
         });
+    }
 
-        // System.out.println("visible " + visibleBooks.toString());
+    /**
+     * Returns the context that is used for the starting point of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Context
+     */
+    @Override
+    protected Context getPackageContext() {
+        return PendingRequestsActivity.this;
+    }
+
+    /**
+     * Returns the class that is used for the destination of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Class<?></?>
+     */
+    @Override
+    protected Class<?> getIntentDestination() {
+        return RequestedBookDetailsActivity.class;
     }
 }
