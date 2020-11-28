@@ -48,6 +48,10 @@ public class ExploreActivity extends NavigationDrawerActivity
         String searchedKeywords =
             searchIntent.getStringExtra(SEARCHED_KEYWORDS);
 
+        if (searchedKeywords == null) {
+            searchedKeywords = "";
+        }
+
         executeSearch(searchedKeywords);
         searchResultsAdapter = new BookList(this, searchResults, true, true);
         searchResultsListView.setAdapter(searchResultsAdapter);
