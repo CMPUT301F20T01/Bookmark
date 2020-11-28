@@ -1,95 +1,122 @@
 package com.example.bookmark;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.example.bookmark.adapters.BookList;
-import com.example.bookmark.fragments.SearchDialogFragment;
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
 
 /**
  * This activity shows a user a list of books that they are currently
  * borrowing. They can select a book which takes them to the
  * BorrowedBookDetailsActivity where they can see the books details and
  * return the book.
- * TODO what else do we want here?
  *
  * @author Ryan Kortbeek.
  */
-public class BorrowedActivity extends NavigationDrawerActivity
-    implements SearchDialogFragment.OnFragmentInteractionListener {
-    public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
-    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
-        ".SEARCH";
-
-    private List<Book> borrowedBooks = new ArrayList<>();
-    private BookList borrowedBooksAdapter;
-    private ListView borrowedBooksListView;
-
+public class BorrowedActivity extends ListingBooksActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_borrowed);
-
-        getSupportActionBar().setTitle("Borrowed");
-
-        borrowedBooksListView = findViewById(R.id.borrowed_books_listview);
-
-        getBorrowedBooks();
-        borrowedBooksAdapter = new BookList(this, borrowedBooks, true, false);
-        borrowedBooksListView.setAdapter(borrowedBooksAdapter);
-        borrowedBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(BorrowedActivity.this,
-                    BorrowedBookDetailsActivity.class);
-                intent.putExtra(EXTRA_BOOK, borrowedBooks.get(i));
-                startActivity(intent);
-            }
-        });
     }
 
-    private void getBorrowedBooks() {
-        // TODO get books currently borrowed by current user - need access to
-        //  current user and firebase
-
-        // Proof of concept
-        // Book b1 = new Book("Title 1", "Author 1", "1111111", "o");
-        // b1.setDescription("Book 1 description");
-
-        // borrowedBooks.add(b1);
-    }
-
+    /**
+     * Inflates the menu with the search icon. Override this
+     * method if different menu icons are desired.
+     *
+     * @param menu menu to inflate
+     * @return true (shows the inflated option menu)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflates the menu with the search icon
+        // Inflates the menu with the filter and search icons
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_filter_search_search_btn) {
-            // Opens search fragment
-            new SearchDialogFragment().show(getSupportFragmentManager(),
-                "SEARCH_AVAILABLE_BOOKS");
-        }
-        return (super.onOptionsItemSelected(item));
+    /**
+     * Returns the title that is to be used for this activity.
+     *
+     * @return String
+     */
+    @Override
+    protected String getActivityTitle() {
+        return "Borrowed";
     }
 
+    /**
+     * Returns whether the the owner field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
+     */
     @Override
-    public void sendSearchedKeywords(String searchString) {
-        Intent intent = new Intent(BorrowedActivity.this, ExploreActivity.class);
-        intent.putExtra(SEARCHED_KEYWORDS, searchString);
-        startActivity(intent);
+    protected boolean getBookOwnerVisibility() {
+        return true;
+    }
+
+    /**
+     * Returns whether the the status field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
+     */
+    @Override
+    protected boolean getBookStatusVisibility() {
+        return false;
+    }
+
+    /**
+     * Gets all books from the firestore database that are borrowed by the
+     * current user and sets the values of visibleBooks and relevantBooks
+     * accordingly.
+     */
+    @Override
+    protected void getBooks() {
+        StorageServiceProvider.getStorageService().retrieveBooksByRequester(
+                user,
+                books -> {
+                    visibleBooks.clear();
+                    relevantBooks.clear();
+                    for (Book book : books) {
+                        if (book.getStatus() == Book.Status.BORROWED) {
+                            relevantBooks.add(book);
+                        }
+                    }
+                    visibleBooks.addAll(relevantBooks);
+                    visibleBooksAdapter.notifyDataSetChanged();
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                }
+        );
+    }
+
+    /**
+     * Returns the context that is used for the starting point of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Context
+     */
+    @Override
+    protected Context getPackageContext() {
+        return BorrowedActivity.this;
+    }
+
+    /**
+     * Returns the class that is used for the destination of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Class<?>
+     */
+    @Override
+    protected Class<?> getIntentDestination() {
+        return BorrowedBookDetailsActivity.class;
     }
 }

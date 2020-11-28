@@ -19,6 +19,7 @@
     <string name="login">LOGIN</string>
     <string name="signup">SIGN UP</string>
 
+    <string name="confirm">Confirm</string>
 
     <string name="request_string">Has requested to borrow this book.</string>
     <string name="accept_request">ACCEPT</string>

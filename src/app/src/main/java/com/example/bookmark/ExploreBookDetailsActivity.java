@@ -1,7 +1,5 @@
 package com.example.bookmark;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +11,8 @@ import android.widget.TextView;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.StorageService;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
-import com.example.bookmark.util.UserUtil;
 
 /**
  * This activity shows the details of a book. As well, the user can click the "Request"
