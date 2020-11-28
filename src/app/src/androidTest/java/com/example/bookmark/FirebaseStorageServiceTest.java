@@ -90,6 +90,10 @@ public class FirebaseStorageServiceTest {
         storageService.storeBook(book2, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 2."));
         acquire(semaphore);
 
+        Book book3 = MockModels.getMockBook3();
+        storageService.storeBook(book3, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 3."));
+        acquire(semaphore);
+
         Request request1 = MockModels.getMockRequest1();
         storageService.storeRequest(request1, aVoid -> semaphore.release(), e -> fail("An error occurred while storing request 1."));
         acquire(semaphore);

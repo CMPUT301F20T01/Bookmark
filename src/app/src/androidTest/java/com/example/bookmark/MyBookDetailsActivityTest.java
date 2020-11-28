@@ -1,7 +1,9 @@
 package com.example.bookmark;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -21,19 +23,25 @@ import org.junit.Test;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Perform intent testing on the MyBookDetailsActivity
- * <p>
- * Outstanding Issues/TODOs
- * Test that the text values match title, author, etc
  *
  * @author Mitch Adam.
  */
 public class MyBookDetailsActivityTest {
     private Solo solo;
 
+    /**
+     * Set Storage provider and current user
+     */
     @BeforeClass
     public static void setUpOnce() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("USER_NAME", "john.smith42").commit();
         StorageServiceProvider.setStorageService(MockStorageService.getMockStorageService());
     }
 
@@ -42,8 +50,7 @@ public class MyBookDetailsActivityTest {
         new ActivityTestRule<MyBookDetailsActivity>(MyBookDetailsActivity.class, true, true) {
             @Override
             protected Intent getActivityIntent() {
-                User owner = MockModels.getMockOwner();
-                Book book = new Book(owner, "TEST", "TEST", "TEST");
+                Book book = MockModels.getMockBook3();
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Book", book);
@@ -76,7 +83,7 @@ public class MyBookDetailsActivityTest {
      * Test Opening Edit book activity
      */
     @Test
-    public void editBook() {
+    public void openEditBook() {
         View scanISBNBtn = rule.getActivity().findViewById(R.id.menu_edit_edit_btn);
         solo.clickOnView(scanISBNBtn);
         solo.assertCurrentActivity("WRONG ACTIVITY", EditBookActivity.class);
