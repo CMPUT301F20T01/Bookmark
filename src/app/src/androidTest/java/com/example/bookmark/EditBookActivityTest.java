@@ -21,6 +21,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -102,31 +104,36 @@ public class EditBookActivityTest {
     public void editBook() {
         final String title = "Edited Title";
         final String author = "Edited Author";
+        final String isbn = "1111111";
         final String description = "Edited description";
 
         solo.clearEditText(((TextInputLayout) solo.getView(R.id.add_edit_book_title)).getEditText());
         solo.clearEditText(((TextInputLayout) solo.getView(R.id.add_edit_book_author)).getEditText());
+        solo.clearEditText(((TextInputLayout) solo.getView(R.id.add_edit_book_isbn)).getEditText());
         solo.clearEditText(((TextInputLayout) solo.getView(R.id.add_edit_book_description)).getEditText());
         solo.enterText(((TextInputLayout) solo.getView(R.id.add_edit_book_title)).getEditText(),
             title);
         solo.enterText(((TextInputLayout) solo.getView(R.id.add_edit_book_author)).getEditText(),
             author);
+        solo.enterText(((TextInputLayout) solo.getView(R.id.add_edit_book_isbn)).getEditText(),
+            isbn);
         solo.enterText(((TextInputLayout) solo.getView(R.id.add_edit_book_description)).getEditText(),
             description);
 
         solo.clickOnButton("DONE");
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         User owner = MockModels.getMockOwner();
-        StorageServiceProvider.getStorageService().retrieveBook(owner, testBook.getIsbn(), book -> {
+        StorageServiceProvider.getStorageService().retrieveBook(testBook.getId(), book -> {
             assertEquals(title, book.getTitle());
             assertEquals(author, book.getAuthor());
+            assertEquals(isbn, book.getIsbn());
             assertEquals(description, book.getDescription());
         }, e -> fail("An error occurred while retrieving the book."));
-    }
-
-    /**
-     * Test Back Button does not edit book
-     */
-    public void doNotEditBook() {
     }
 
     /**
@@ -136,8 +143,14 @@ public class EditBookActivityTest {
     public void deleteBook() {
 
         solo.clickOnButton("Delete");
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         User owner = MockModels.getMockOwner();
-        StorageServiceProvider.getStorageService().retrieveBook(owner, testBook.getIsbn(), book2 ->
+        StorageServiceProvider.getStorageService().retrieveBook(testBook.getId(), book2 ->
                 StorageServiceProvider.getStorageService().storeBook(testBook, aVoid2 -> {
                     assertNull(book2);
                 }, e -> fail("An error occurred while recreating the deleted book.")),

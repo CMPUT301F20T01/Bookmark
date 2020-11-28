@@ -30,6 +30,8 @@ import androidx.test.rule.ActivityTestRule;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -113,13 +115,25 @@ public class AddBookActivityTest {
         }
 
         User owner = MockModels.getMockOwner();
-        StorageServiceProvider.getStorageService().retrieveBook(owner, isbn, book -> {
-            assertEquals(book.getTitle(), title);
-            assertEquals(book.getAuthor(), author);
-            assertEquals(book.getDescription(), description);
-            StorageServiceProvider.getStorageService().deleteBook(book, aVoid -> {
-            }, e -> fail("Error deleting added book"));
-        }, e -> fail("An error occurred while retrieving the book."));
+        StorageServiceProvider.getStorageService().retrieveBooksByOwner(owner, books -> {
+            Boolean isBookInList = false;
+            for (Book book : books) {
+                if (book.getTitle().equals(title)
+                    && book.getAuthor().equals(author)
+                    && book.getDescription().equals(description)
+                    && book.getIsbn().equals(isbn)
+                ) {
+                    isBookInList = true;
+                    StorageServiceProvider.getStorageService().deleteBook(book, aVoid -> {
+                        },
+                        e -> fail("An error occurred while deleting the book"));
+                    break;
+                }
+            }
+            assertTrue(isBookInList);
+
+
+        }, e -> fail("An error occurred while retrieving the books by owner."));
     }
 
     /**
