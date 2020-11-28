@@ -62,7 +62,7 @@ public class PendingRequestsActivity extends ListingBooksActivity {
      */
     @Override
     protected boolean getBookStatusVisibility() {
-        return false;
+        return true;
     }
 
     /**
