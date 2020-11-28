@@ -92,17 +92,18 @@ public class PendingRequestsActivity extends NavigationDrawerActivity
     private void getRequestedBooks() {
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
-            StorageServiceProvider.getStorageService().retrieveBooksByRequester(user, books -> {
-                for (int i = 0; i < books.size(); i++) {
-                    Book book = books.get(i);
-                    if (book.getStatus() == Book.Status.REQUESTED) {
-                        requestedBooks.add(book);
+            StorageServiceProvider.getStorageService().retrieveBooksByRequester(user,
+                books -> {
+                    requestedBooks.clear();
+                    for (Book book : books) {
+                        if (book.getStatus() == Book.Status.REQUESTED) {
+                            requestedBooks.add(book);
+                        }
                     }
-                }
-                requestedBooksAdapter.notifyDataSetChanged();
-            }, e -> {
-                DialogUtil.showErrorDialog(this, e);
-            });
+                    requestedBooksAdapter.notifyDataSetChanged();
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                });
         }, e -> {
             DialogUtil.showErrorDialog(this, e);
         });
