@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.bookmark.mocks.MockStorageService;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.robotium.solo.Solo;
 
@@ -48,10 +50,12 @@ public class MyBooksActivityTest {
      */
     @BeforeClass
     public static void setUpSharedPref() {
+        StorageServiceProvider.setStorageService(MockStorageService.getMockStorageService());
+
         SharedPreferences sharedPreferences = InstrumentationRegistry.getInstrumentation().getTargetContext()
             .getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("USER_NAME", "mary.jane9").commit();
+        editor.putString("USER_NAME", "john.smith42").commit();
     }
 
     /**

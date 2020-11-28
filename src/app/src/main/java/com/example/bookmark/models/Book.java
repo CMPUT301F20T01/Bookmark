@@ -17,10 +17,12 @@ public class Book implements FirestoreIndexable, Serializable {
         AVAILABLE, REQUESTED, ACCEPTED, BORROWED
     }
 
-    private final String ownerId;
-    private final String title;
-    private final String author;
-    private final String isbn;
+    private final EntityId id;
+
+    private final EntityId ownerId;
+    private String title;
+    private String author;
+    private String isbn;
 
     private Photograph photograph = null;
     private String description = "";
@@ -35,10 +37,11 @@ public class Book implements FirestoreIndexable, Serializable {
      * @param isbn   The ISBN.
      */
     public Book(User owner, String title, String author, String isbn) {
-        this(owner.getId(), title, author, isbn);
+        this(new EntityId(), owner.getId(), title, author, isbn);
     }
 
-    private Book(String ownerId, String title, String author, String isbn) {
+    private Book(EntityId id, EntityId ownerId, String title, String author, String isbn) {
+        this.id = id;
         this.ownerId = ownerId;
         this.title = title;
         this.author = author;
@@ -50,7 +53,7 @@ public class Book implements FirestoreIndexable, Serializable {
      *
      * @return The id of the owner.
      */
-    public String getOwnerId() {
+    public EntityId getOwnerId() {
         return ownerId;
     }
 
@@ -73,12 +76,30 @@ public class Book implements FirestoreIndexable, Serializable {
     }
 
     /**
+     * Sets the author.
+     *
+     * @param author The author.
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
      * Gets the ISBN.
      *
      * @return The ISBN.
      */
     public String getIsbn() {
         return isbn;
+    }
+
+    /**
+     * Sets the ISBN.
+     *
+     * @param isbn The ISBN.
+     */
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     /**
@@ -135,15 +156,24 @@ public class Book implements FirestoreIndexable, Serializable {
         this.status = status;
     }
 
+    /**
+     * Sets the title
+     *
+     * @param title The title.
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
-    public String getId() {
-        return String.format("%s:%s", ownerId, isbn);
+    public EntityId getId() {
+        return id;
     }
 
     @Override
     public Map<String, Object> toFirestoreDocument() {
         Map<String, Object> map = new HashMap<>();
-        map.put("ownerId", ownerId);
+        map.put("ownerId", ownerId.toString());
         map.put("title", title);
         map.put("author", author);
         map.put("isbn", isbn);
@@ -153,11 +183,17 @@ public class Book implements FirestoreIndexable, Serializable {
         return map;
     }
 
-    public static Book fromFirestoreDocument(Map<String, Object> map) {
+    public static Book fromFirestoreDocument(String id, Map<String, Object> map) {
         if (map == null) {
             return null;
         }
-        Book book = new Book((String) map.get("ownerId"), (String) map.get("title"), (String) map.get("author"), (String) map.get("isbn"));
+        Book book = new Book(
+            new EntityId(id),
+            new EntityId((String) map.get("ownerId")),
+            (String) map.get("title"),
+            (String) map.get("author"),
+            (String) map.get("isbn")
+        );
         book.photograph = Photograph.fromFirestoreDocument((Map<String, Object>) map.get("photograph"));
         book.description = (String) map.get("description");
         book.status = Status.valueOf((String) map.get("status"));

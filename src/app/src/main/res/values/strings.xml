@@ -35,4 +35,6 @@
     <string name="choose_book_image">Choose Book Image</string>
     <string name="choose_from_gallery">Choose From Gallery</string>
     <string name="take_photo">Take Photo</string>
+    <string name="action">Action</string>
+    <string name="book_image">Book image</string>
 </resources>

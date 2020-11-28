@@ -13,6 +13,8 @@ import java.util.Objects;
  * @author Kyle Hennig.
  */
 public class User implements FirestoreIndexable, Serializable {
+    private final EntityId id;
+
     private final String username;
     private String firstName;
     private String lastName;
@@ -29,6 +31,11 @@ public class User implements FirestoreIndexable, Serializable {
      * @param phoneNumber  The user's phone number.
      */
     public User(String username, String firstName, String lastName, String emailAddress, String phoneNumber) {
+        this(new EntityId(username), username, firstName, lastName, emailAddress, phoneNumber);
+    }
+
+    private User(EntityId id, String username, String firstName, String lastName, String emailAddress, String phoneNumber) {
+        this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -118,8 +125,8 @@ public class User implements FirestoreIndexable, Serializable {
     }
 
     @Override
-    public String getId() {
-        return username;
+    public EntityId getId() {
+        return id;
     }
 
     @Override
@@ -133,11 +140,12 @@ public class User implements FirestoreIndexable, Serializable {
         return map;
     }
 
-    public static User fromFirestoreDocument(Map<String, Object> map) {
+    public static User fromFirestoreDocument(String id, Map<String, Object> map) {
         if (map == null) {
             return null;
         }
         return new User(
+            new EntityId(id),
             (String) map.get("username"),
             (String) map.get("firstName"),
             (String) map.get("lastName"),

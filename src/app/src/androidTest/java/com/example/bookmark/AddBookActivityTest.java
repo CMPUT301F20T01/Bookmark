@@ -3,11 +3,14 @@ package com.example.bookmark;
 import android.app.Activity;
 import android.view.View;
 
+import com.example.bookmark.mocks.MockStorageService;
+import com.example.bookmark.server.StorageServiceProvider;
 import com.google.android.material.textfield.TextInputLayout;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,6 +29,12 @@ import androidx.test.rule.ActivityTestRule;
  */
 public class AddBookActivityTest {
     private Solo solo;
+
+    @BeforeClass
+    public static void setUpOnce() {
+        StorageServiceProvider.setStorageService(MockStorageService.getMockStorageService());
+    }
+
     @Rule
     public ActivityTestRule<AddBookActivity> rule =
         new ActivityTestRule<>(AddBookActivity.class, true, true);

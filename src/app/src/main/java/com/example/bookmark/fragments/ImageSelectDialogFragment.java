@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.bookmark.R;
@@ -42,15 +43,16 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
  * a new photo with the camera. Redirects the user to the appropriate system utility on selection,
  * and on successful retrieval of an image, the image is passed back through
  * ImageSelectListener.onImageSelect()
- *
+ * <p>
  * Any class which shows this dialog fragment should implement ImageSelectListener to receive the
  * resulting image.
+ *
  * @author Eric Claerhout.
  */
 public class ImageSelectDialogFragment extends DialogFragment {
     private static final int PICK_IMAGE_REQUEST_CODE = 200;
     private static final int PICK_IMAGE_PERMISSIONS_REQUEST_CODE = 201;
-    private static final String[] PICK_IMAGE_PERMISSIONS = new String[] {
+    private static final String[] PICK_IMAGE_PERMISSIONS = new String[]{
         Manifest.permission.READ_EXTERNAL_STORAGE
     };
     private static final int TAKE_PHOTO_REQUEST_CODE = 300;
@@ -72,6 +74,7 @@ public class ImageSelectDialogFragment extends DialogFragment {
 
         /**
          * Fired when an image is selected.
+         *
          * @param uri The URI of the selected imaged
          */
         void onImageSelect(Uri uri);
@@ -79,10 +82,11 @@ public class ImageSelectDialogFragment extends DialogFragment {
         /**
          * Utility function for converting an image URI to a Photograph object. Note that this
          * function is relatively expensive, so extraneous calls should be avoided.
+         *
          * @param uri The URI of the selected imaged
          * @return Photograph object with data from URI
          */
-        default Photograph uriToPhotograph(Uri uri) {
+        default Photograph uriToPhotograph(ImageView uri) {
             // TODO: Convert Uri to Bitmap and create Photograph
             // Use https://developer.android.com/reference/android/graphics/BitmapFactory or
             // https://developer.android.com/reference/android/graphics/BitmapRegionDecoder if image
@@ -94,6 +98,7 @@ public class ImageSelectDialogFragment extends DialogFragment {
 
     /**
      * Use this factory method to create a new instance of this fragment.
+     *
      * @return A new instance of fragment ImageSelectDialogFragment.
      */
     public static ImageSelectDialogFragment newInstance() {
@@ -170,7 +175,7 @@ public class ImageSelectDialogFragment extends DialogFragment {
 
         Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePhotoUri = FileProvider.getUriForFile(context,
-                                         "com.example.bookmark.fileprovider", imageFile);
+            "com.example.bookmark.fileprovider", imageFile);
         takePhoto.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoUri);
         try {
             startActivityForResult(takePhoto, TAKE_PHOTO_REQUEST_CODE);
@@ -181,6 +186,7 @@ public class ImageSelectDialogFragment extends DialogFragment {
 
     /**
      * Creates a new image file for future saving into.
+     *
      * @return A new image file
      */
     private File createImageFile() throws IOException {
@@ -230,7 +236,9 @@ public class ImageSelectDialogFragment extends DialogFragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) { return; }
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE) {
             listener.onImageSelect(data.getData());
