@@ -2,8 +2,6 @@ package com.example.bookmark;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 
 import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
@@ -22,21 +20,6 @@ public class PendingRequestsActivity extends ListingBooksActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    /**
-     * Inflates the menu with the search icon. Override this
-     * method if different menu icons are desired.
-     *
-     * @param menu menu to inflate
-     * @return true (shows the inflated option menu)
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflates the menu with the filter and search icons
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_search, menu);
-        return true;
     }
 
     /**
