@@ -6,7 +6,7 @@ import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.server.StorageServiceProvider;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.Semaphore;
 
 /**
  * This class implements utility functions related to managing requests
@@ -14,20 +14,24 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Nayan Prakash
  */
 public class RequestUtil {
-    public static Request retrieveRequestsOnBookByStatus(Book book, Request.Status status, Context context) {
-        AtomicReference<Request> r = null;
+    public static Request retrieveRequestsOnBookByStatus(Book book, Request.Status status, Context context) throws InterruptedException {
+        Semaphore semaphore = new Semaphore(0);
+        // a final single-element Request array is used to allow assignment within onSuccessListener
+        final Request[] request = {null};
         StorageServiceProvider.getStorageService().retrieveRequestsByBook(
             book,
-            requests -> {
-                for (Request request: requests) {
-                    if (request.getStatus().equals(status)) {
-                        r.set(request);
+            requestList -> {
+                for (Request r: requestList) {
+                    if (r.getStatus().equals(status)) {
+                        request[0] = r;
                         break;
                     }
                 }
+                semaphore.release();
             },
             e -> DialogUtil.showErrorDialog(context, e)
         );
-        return r.get();
+        semaphore.acquire();
+        return request[0];
     }
 }
