@@ -28,6 +28,7 @@ public class RequestUtil {
                 for (Request r: requestList) {
                     if (r.getStatus().equals(status)) {
                         onSuccessListener.onSuccess(r);
+                        return;
                     }
                 }
             },
