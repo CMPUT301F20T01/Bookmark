@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 
 /**
@@ -48,7 +49,7 @@ public class RequestedBookDetailsActivity extends BackButtonActivity {
 
         Intent myIntent = getIntent();
         Bundle myBundle = myIntent.getExtras();
-        book = (Book) myBundle.getSerializable("Book");
+        book = (Book) myBundle.getSerializable(ListingBooksActivity.EXTRA_BOOK);
 
         titleTextView = findViewById(R.id.requested_details_title_text);
         authorTextView = findViewById(R.id.requested_details_author_text);
@@ -70,7 +71,7 @@ public class RequestedBookDetailsActivity extends BackButtonActivity {
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
-        ownedBy = book.getOwnerId();
+        ownedBy = book.getOwnerId().toString();
         status = book.getStatus().toString();
     }
 
