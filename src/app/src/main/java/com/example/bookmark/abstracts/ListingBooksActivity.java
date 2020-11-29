@@ -54,7 +54,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
     protected TextInputLayout searchBarLayout;
     protected TextInputEditText searchBar;
 
-    protected User user;
+    protected User user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +103,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String searchString = charSequence.toString();
-                // Updates the search results everytime the search text is
+                // Updates the search results every time the search text is
                 // changed
                 updateSearchResults(searchString.split(" "));
             }

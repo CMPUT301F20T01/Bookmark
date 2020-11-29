@@ -7,6 +7,7 @@ import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.UserUtil;
 
 /**
  * This activity shows a user a list of books that match the keyword(s) from
@@ -60,21 +61,47 @@ public class ExploreActivity extends ListingBooksActivity {
      */
     @Override
     protected void getBooks() {
-        StorageServiceProvider.getStorageService().retrieveBooks(books -> {
-            visibleBooks.clear();
-            relevantBooks.clear();
-            for (Book book : books) {
-                if ((book.getOwnerId() != user.getId()) &&
-                    (book.getStatus() != Book.Status.BORROWED) &&
-                    (book.getStatus() != Book.Status.ACCEPTED)) {
-                    relevantBooks.add(book);
+        if (user == null) {
+            String username = UserUtil.getLoggedInUser(this);
+            StorageServiceProvider.getStorageService().retrieveUserByUsername(
+                username,
+                user1 -> {
+                    StorageServiceProvider.getStorageService().retrieveBooks(books -> {
+                        visibleBooks.clear();
+                        relevantBooks.clear();
+                        for (Book book : books) {
+                            if ((book.getOwnerId() != user1.getId()) &&
+                                (book.getStatus() != Book.Status.BORROWED) &&
+                                (book.getStatus() != Book.Status.ACCEPTED)) {
+                                relevantBooks.add(book);
+                            }
+                        }
+                        visibleBooks.addAll(relevantBooks);
+                        visibleBooksAdapter.notifyDataSetChanged();
+                    }, e -> {
+                        DialogUtil.showErrorDialog(this, e);
+                    });
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
                 }
-            }
-            visibleBooks.addAll(relevantBooks);
-            visibleBooksAdapter.notifyDataSetChanged();
-        }, e -> {
-            DialogUtil.showErrorDialog(this, e);
-        });
+            );
+        } else {
+            StorageServiceProvider.getStorageService().retrieveBooks(books -> {
+                visibleBooks.clear();
+                relevantBooks.clear();
+                for (Book book : books) {
+                    if ((book.getOwnerId() != user.getId()) &&
+                        (book.getStatus() != Book.Status.BORROWED) &&
+                        (book.getStatus() != Book.Status.ACCEPTED)) {
+                        relevantBooks.add(book);
+                    }
+                }
+                visibleBooks.addAll(relevantBooks);
+                visibleBooksAdapter.notifyDataSetChanged();
+            }, e -> {
+                DialogUtil.showErrorDialog(this, e);
+            });
+        }
     }
 
     /**
