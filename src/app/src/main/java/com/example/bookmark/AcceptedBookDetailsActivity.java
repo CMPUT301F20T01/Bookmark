@@ -27,6 +27,8 @@ import com.example.bookmark.util.RequestUtil;
  */
 public class AcceptedBookDetailsActivity extends BackButtonActivity {
 
+    private static final String TAG = "Accepted Book Details";
+
     public static final int GET_ISBN = 1;
 
     String isbn;
@@ -96,12 +98,12 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
                 request.setStatus(Request.Status.BORROWED);
                 StorageServiceProvider.getStorageService().storeRequest(
                     request,
-                    aVoid -> Log.d("Accepted Book Details", "Request stored"),
+                    aVoid -> Log.d(TAG, "Request stored"),
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
                 StorageServiceProvider.getStorageService().storeBook(
                     book,
-                    aVoid -> Log.d("Accepted Book Details", "Book stored"),
+                    aVoid -> Log.d(TAG, "Book stored"),
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
             } else {

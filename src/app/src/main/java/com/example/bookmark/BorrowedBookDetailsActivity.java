@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class BorrowedBookDetailsActivity extends BackButtonActivity {
 
+    private static final String TAG = "Borrowed Book Details";
+
     public static final int GET_ISBN = 1;
 
     String isbn;
@@ -97,12 +99,12 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
                 book.setStatus(Book.Status.AVAILABLE);
                 StorageServiceProvider.getStorageService().deleteRequest(
                     request,
-                    aVoid -> Log.d("Accepted Book Details", "Request stored"),
+                    aVoid -> Log.d(TAG, "Request stored"),
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
                 StorageServiceProvider.getStorageService().storeBook(
                     book,
-                    aVoid -> Log.d("Accepted Book Details", "Book stored"),
+                    aVoid -> Log.d(TAG, "Book stored"),
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
             } else {

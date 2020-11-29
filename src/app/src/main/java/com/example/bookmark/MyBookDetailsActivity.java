@@ -28,9 +28,12 @@ import com.example.bookmark.util.RequestUtil;
  * @author Mitch Adam.
  */
 public class MyBookDetailsActivity extends BackButtonActivity implements MenuOptions {
+
+    private static final String TAG = "My Book Details";
+
     private static final int EDIT_REQUEST_CODE = 101;
-    private static final int GET_ISBN_TO_GIVE_BOOK = 1;
-    private static final int GET_ISBN_TO_RECEIVE_BOOK = 1;
+    private static final int GET_ISBN_TO_GIVE_BOOK = 102;
+    private static final int GET_ISBN_TO_RECEIVE_BOOK = 103;
 
     private User user;
     private Book book;
@@ -200,12 +203,12 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
                     request.setStatus(Request.Status.BORROWED);
                     StorageServiceProvider.getStorageService().storeRequest(
                         request,
-                        aVoid -> Log.d("My Book Details", "Request marked BORROWED"),
+                        aVoid -> Log.d(TAG, "Request marked BORROWED"),
                         e -> DialogUtil.showErrorDialog(this, e)
                     );
                     StorageServiceProvider.getStorageService().storeBook(
                         book,
-                        aVoid -> Log.d("My Book Details", "Book marked BORROWED"),
+                        aVoid -> Log.d(TAG, "Book marked BORROWED"),
                         e -> DialogUtil.showErrorDialog(this, e)
                     );
                 } else if (requestCode == GET_ISBN_TO_RECEIVE_BOOK) {
@@ -213,12 +216,12 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
                     book.setStatus(Book.Status.AVAILABLE);
                     StorageServiceProvider.getStorageService().deleteRequest(
                         request,
-                        aVoid -> Log.d("My Book Details", "Request deleted"),
+                        aVoid -> Log.d(TAG, "Request deleted"),
                         e -> DialogUtil.showErrorDialog(this, e)
                     );
                     StorageServiceProvider.getStorageService().storeBook(
                         book,
-                        aVoid -> Log.d("My Book Details", "Book marked AVAILABLE"),
+                        aVoid -> Log.d(TAG, "Book marked AVAILABLE"),
                         e -> DialogUtil.showErrorDialog(this, e)
                     );
                 }
@@ -226,7 +229,6 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }
         }
-        // Get ISBN
         else if (requestCode == EDIT_REQUEST_CODE) {
             Bundle bundle = data.getExtras();
             book = (Book) bundle.getSerializable("Book");
