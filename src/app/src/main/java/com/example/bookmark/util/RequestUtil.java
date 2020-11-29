@@ -31,6 +31,7 @@ public class RequestUtil {
                         return;
                     }
                 }
+                onSuccessListener.onSuccess(null);
             },
             onFailureListener
         );
