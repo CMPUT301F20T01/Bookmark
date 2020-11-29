@@ -1,5 +1,6 @@
 package com.example.bookmark;
 
+import com.example.bookmark.mocks.MockModels;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
@@ -15,11 +16,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.function.Function;
-
-import com.example.bookmark.mocks.MockModels;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -42,18 +40,18 @@ public class FirebaseStorageServiceTest {
         }
 
         @Override
-        protected <T> void retrieveEntity(String collection, String id, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntity(mock(collection), id, fromFirestoreDocument, onSuccessListener, onFailureListener);
+        protected <T> void retrieveEntity(String collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
+            super.retrieveEntity(mock(collection), id, deserializer, onSuccessListener, onFailureListener);
         }
 
         @Override
-        protected <T> void retrieveEntities(String collection, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntities(mock(collection), fromFirestoreDocument, onSuccessListener, onFailureListener);
+        protected <T> void retrieveEntities(String collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+            super.retrieveEntities(mock(collection), deserializer, onSuccessListener, onFailureListener);
         }
 
         @Override
-        protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntitiesMatching(mock(collection), conditions, fromFirestoreDocument, onSuccessListener, onFailureListener);
+        protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+            super.retrieveEntitiesMatching(mock(collection), conditions, deserializer, onSuccessListener, onFailureListener);
         }
 
         @Override
@@ -92,6 +90,10 @@ public class FirebaseStorageServiceTest {
         storageService.storeBook(book2, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 2."));
         acquire(semaphore);
 
+        Book book3 = MockModels.getMockBook3();
+        storageService.storeBook(book3, aVoid -> semaphore.release(), e -> fail("An error occurred while storing book 3."));
+        acquire(semaphore);
+
         Request request1 = MockModels.getMockRequest1();
         storageService.storeRequest(request1, aVoid -> semaphore.release(), e -> fail("An error occurred while storing request 1."));
         acquire(semaphore);
@@ -121,9 +123,8 @@ public class FirebaseStorageServiceTest {
     @Test
     public void testRetrieveBook() {
         Semaphore semaphore = new Semaphore(0);
-        User owner = MockModels.getMockOwner();
         Book book = MockModels.getMockBook1();
-        storageService.retrieveBook(owner, book.getIsbn(), book2 -> {
+        storageService.retrieveBook(book.getId(), book2 -> {
             assertEquals(book, book2);
             semaphore.release();
         }, e -> fail("An error occurred while retrieving the book."));
@@ -186,10 +187,9 @@ public class FirebaseStorageServiceTest {
     @Test
     public void testDeleteBook() {
         Semaphore semaphore = new Semaphore(0);
-        User owner = MockModels.getMockOwner();
         Book book = MockModels.getMockBook1();
         storageService.deleteBook(book, aVoid ->
-                storageService.retrieveBook(owner, book.getIsbn(), book2 ->
+                storageService.retrieveBook(book.getId(), book2 ->
                         storageService.storeBook(book, aVoid2 -> {
                             assertNull(book2);
                             semaphore.release();
@@ -205,10 +205,8 @@ public class FirebaseStorageServiceTest {
     @Test
     public void testRetrieveRequest() {
         Semaphore semaphore = new Semaphore(0);
-        Book book = MockModels.getMockBook1();
-        User requester = MockModels.getMockRequester();
         Request request = MockModels.getMockRequest1();
-        storageService.retrieveRequest(book, requester, request2 -> {
+        storageService.retrieveRequest(request.getId(), request2 -> {
             assertEquals(request, request2);
             semaphore.release();
         }, e -> fail("An error occurred while retrieving the request."));
@@ -221,11 +219,9 @@ public class FirebaseStorageServiceTest {
     @Test
     public void testDeleteRequest() {
         Semaphore semaphore = new Semaphore(0);
-        Book book = MockModels.getMockBook1();
-        User requester = MockModels.getMockRequester();
         Request request = MockModels.getMockRequest1();
         storageService.deleteRequest(request, aVoid ->
-                storageService.retrieveRequest(book, requester, request2 ->
+                storageService.retrieveRequest(request.getId(), request2 ->
                         storageService.storeRequest(request, aVoid2 -> {
                             assertNull(request2);
                             semaphore.release();

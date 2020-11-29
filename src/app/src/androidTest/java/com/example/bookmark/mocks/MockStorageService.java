@@ -22,6 +22,7 @@ public class MockStorageService {
         List<Book> books = new ArrayList<>();
         books.add(MockModels.getMockBook1());
         books.add(MockModels.getMockBook2());
+        books.add(MockModels.getMockBook3());
         List<Request> requests = new ArrayList<>();
         requests.add(MockModels.getMockRequest1());
         requests.add(MockModels.getMockRequest2());

@@ -14,9 +14,6 @@ import android.widget.TextView;
 import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
-import com.example.bookmark.server.StorageServiceProvider;
-import com.example.bookmark.util.DialogUtil;
-import com.example.bookmark.util.UserUtil;
 
 /**
  * This activity shows the details of a book. Depending on the

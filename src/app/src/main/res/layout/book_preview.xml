@@ -18,14 +18,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/book_preview_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp">
 
             <ImageView
                 android:id="@+id/book_preview_image"
                 android:layout_width="61dp"
                 android:layout_height="56dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 android:contentDescription="@string/book_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +37,6 @@
                 android:layout_width="0dp"
                 android:layout_height="27dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:ellipsize="marquee"
                 android:singleLine="true"
@@ -51,11 +50,14 @@
             <TextView
                 android:id="@+id/book_preview_description_text"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:lines="2"
+                android:ellipsize="end"
                 android:text="@string/description"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/book_preview_image" />
@@ -63,7 +65,7 @@
             <TextView
                 android:id="@+id/book_preview_status_text"
                 android:layout_width="0dp"
-                android:layout_height="26dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
@@ -75,9 +77,10 @@
             <TextView
                 android:id="@+id/book_preview_owner_text"
                 android:layout_width="0dp"
-                android:layout_height="26dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/owner"
                 app:layout_constraintEnd_toEndOf="parent"

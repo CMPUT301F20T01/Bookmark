@@ -21,11 +21,11 @@
         <item name="android:layout_marginBottom">8dp</item>
     </style>
 
-    <style name="OutlinedSpacedTextInputLayout.Top" >
+    <style name="OutlinedSpacedTextInputLayout.Top">
         <item name="android:layout_marginTop">0dp</item>
     </style>
 
-    <style name="OutlinedSpacedTextInputLayout.Bottom" >
+    <style name="OutlinedSpacedTextInputLayout.Bottom">
         <item name="android:layout_marginBottom">0dp</item>
     </style>
 

@@ -3,6 +3,7 @@ package com.example.bookmark.server;
 import android.util.Log;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,6 +23,10 @@ import java.util.function.Function;
  * @author Kyle Hennig.
  */
 public class FirebaseStorageService implements StorageService {
+    public interface FirestoreDeserializer<T> {
+        T deserialize(String id, Map<String, Object> map);
+    }
+
     private static class Collection {
         private static final String USERS = "users";
         private static final String BOOKS = "books";
@@ -48,9 +53,8 @@ public class FirebaseStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveBook(User owner, String isbn, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
-        String id = String.format("%s:%s", owner.getId(), isbn);
-        retrieveEntity(Collection.BOOKS, id, Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    public void retrieveBook(EntityId id, OnSuccessListener<Book> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveEntity(Collection.BOOKS, id.toString(), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
@@ -60,13 +64,13 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void retrieveBooksByOwner(User owner, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.BOOKS, query -> query.whereEqualTo("ownerId", owner.getId()), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.BOOKS, query -> query.whereEqualTo("ownerId", owner.getId().toString()), Book::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
     public void retrieveBooksByRequester(User requester, OnSuccessListener<List<Book>> onSuccessListener, OnFailureListener onFailureListener) {
         retrieveRequestsByRequester(requester, requests -> {
-            List<String> bookIds = new ArrayList<>();
+            List<EntityId> bookIds = new ArrayList<>();
             for (Request request : requests) {
                 bookIds.add(request.getBookId());
             }
@@ -84,7 +88,7 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void deleteBook(Book book, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        deleteEntity(Collection.BOOKS, book.getId(), onSuccessListener, onFailureListener);
+        deleteEntity(Collection.BOOKS, book.getId().toString(), onSuccessListener, onFailureListener);
     }
 
     @Override
@@ -93,29 +97,28 @@ public class FirebaseStorageService implements StorageService {
     }
 
     @Override
-    public void retrieveRequest(Book book, User requester, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
-        String id = String.format("%s:%s", book.getId(), requester.getId());
-        retrieveEntity(Collection.REQUESTS, id, Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+    public void retrieveRequest(EntityId id, OnSuccessListener<Request> onSuccessListener, OnFailureListener onFailureListener) {
+        retrieveEntity(Collection.REQUESTS, id.toString(), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
     public void retrieveRequestsByBook(Book book, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("bookId", book.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("bookId", book.getId().toString()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
     public void retrieveRequestsByRequester(User requester, OnSuccessListener<List<Request>> onSuccessListener, OnFailureListener onFailureListener) {
-        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requesterId", requester.getId()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
+        retrieveEntitiesMatching(Collection.REQUESTS, query -> query.whereEqualTo("requesterId", requester.getId().toString()), Request::fromFirestoreDocument, onSuccessListener, onFailureListener);
     }
 
     @Override
     public void deleteRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        deleteEntity(Collection.REQUESTS, request.getId(), onSuccessListener, onFailureListener);
+        deleteEntity(Collection.REQUESTS, request.getId().toString(), onSuccessListener, onFailureListener);
     }
 
     protected void storeEntity(String collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection(collection)
-            .document(entity.getId())
+            .document(entity.getId().toString())
             .set(entity.toFirestoreDocument())
             .addOnSuccessListener(aVoid -> {
                 Log.d(TAG, String.format("Stored %s with id %s to collection %s.", entity.getClass().getName().toLowerCase(), entity.getId(), collection));
@@ -127,14 +130,14 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected <T> void retrieveEntity(String collection, String id, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
+    protected <T> void retrieveEntity(String collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection(collection)
             .document(id)
             .get()
             .addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
                     Log.d(TAG, String.format("Retrieved entity with id %s from collection %s.", id, collection));
-                    onSuccessListener.onSuccess(fromFirestoreDocument.apply(documentSnapshot.getData()));
+                    onSuccessListener.onSuccess(deserializer.deserialize(id, documentSnapshot.getData()));
                 } else {
                     Log.d(TAG, String.format("No entity with id %s exists in collection %s.", id, collection));
                     onSuccessListener.onSuccess(null);
@@ -146,13 +149,13 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected <T> void retrieveEntities(String collection, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+    protected <T> void retrieveEntities(String collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
         db.collection(collection)
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
                 for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                    entities.add(fromFirestoreDocument.apply(queryDocumentSnapshot.getData()));
+                    entities.add(deserializer.deserialize(queryDocumentSnapshot.getId(), queryDocumentSnapshot.getData()));
                 }
                 Log.d(TAG, String.format("Retrieved entities from collection %s", collection));
                 onSuccessListener.onSuccess(entities);
@@ -163,13 +166,13 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, Function<Map<String, Object>, T> fromFirestoreDocument, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+    protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
         conditions.apply(db.collection(collection))
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
                 for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                    entities.add(fromFirestoreDocument.apply(queryDocumentSnapshot.getData()));
+                    entities.add(deserializer.deserialize(queryDocumentSnapshot.getId(), queryDocumentSnapshot.getData()));
                 }
                 Log.d(TAG, String.format("Retrieved entities from collection %s matching conditions.", collection));
                 onSuccessListener.onSuccess(entities);
