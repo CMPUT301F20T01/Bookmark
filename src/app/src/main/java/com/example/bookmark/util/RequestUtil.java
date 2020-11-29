@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
  * @author Nayan Prakash
  */
 public class RequestUtil {
-    public static Request retrieveRequestsOnBookByStatus(Book book, Request.Status status, Context context) throws InterruptedException {
+    public static Request retrieveRequestsOnBookByStatus(Book book, Request.Status status, Context context) {
         Semaphore semaphore = new Semaphore(0);
         // a final single-element Request array is used to allow assignment within onSuccessListener
         final Request[] request = {null};
@@ -31,7 +31,11 @@ public class RequestUtil {
             },
             e -> DialogUtil.showErrorDialog(context, e)
         );
-        semaphore.acquire();
+        try {
+            semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return request[0];
     }
 }
