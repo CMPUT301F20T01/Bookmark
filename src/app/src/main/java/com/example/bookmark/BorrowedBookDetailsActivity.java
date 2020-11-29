@@ -95,18 +95,23 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
         if (requestCode == BorrowedBookDetailsActivity.GET_ISBN && resultCode == Activity.RESULT_OK) {
             String isbn = data.getStringExtra("ISBN");
             if(book.getIsbn().equals(isbn)) {
-                Request request = RequestUtil.retrieveRequestsOnBookByStatus(book, Request.Status.BORROWED, this);
-                book.setStatus(Book.Status.AVAILABLE);
-                StorageServiceProvider.getStorageService().deleteRequest(
-                    request,
-                    aVoid -> Log.d(TAG, "Request stored"),
-                    e -> DialogUtil.showErrorDialog(this, e)
-                );
-                StorageServiceProvider.getStorageService().storeBook(
+                RequestUtil.retrieveRequestsOnBookByStatus(
                     book,
-                    aVoid -> Log.d(TAG, "Book stored"),
-                    e -> DialogUtil.showErrorDialog(this, e)
-                );
+                    Request.Status.BORROWED,
+                    request -> {
+                        book.setStatus(Book.Status.AVAILABLE);
+                        StorageServiceProvider.getStorageService().deleteRequest(
+                            request,
+                            aVoid -> Log.d(TAG, "Request stored"),
+                            e -> DialogUtil.showErrorDialog(this, e)
+                        );
+                        StorageServiceProvider.getStorageService().storeBook(
+                            book,
+                            aVoid -> Log.d(TAG, "Book stored"),
+                            e -> DialogUtil.showErrorDialog(this, e)
+                        );
+                    },
+                    e -> DialogUtil.showErrorDialog(this, e));
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }

@@ -198,32 +198,42 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
             String isbn = data.getStringExtra("ISBN");
             if (book.getIsbn().equals(isbn)) {
                 if (requestCode == GET_ISBN_TO_GIVE_BOOK) {
-                    Request request = RequestUtil.retrieveRequestsOnBookByStatus(book, Request.Status.ACCEPTED, this);
-                    book.setStatus(Book.Status.BORROWED);
-                    request.setStatus(Request.Status.BORROWED);
-                    StorageServiceProvider.getStorageService().storeRequest(
-                        request,
-                        aVoid -> Log.d(TAG, "Request marked BORROWED"),
-                        e -> DialogUtil.showErrorDialog(this, e)
-                    );
-                    StorageServiceProvider.getStorageService().storeBook(
+                    RequestUtil.retrieveRequestsOnBookByStatus(
                         book,
-                        aVoid -> Log.d(TAG, "Book marked BORROWED"),
-                        e -> DialogUtil.showErrorDialog(this, e)
-                    );
+                        Request.Status.ACCEPTED,
+                        request -> {
+                            book.setStatus(Book.Status.BORROWED);
+                            request.setStatus(Request.Status.BORROWED);
+                            StorageServiceProvider.getStorageService().storeRequest(
+                                request,
+                                aVoid -> Log.d(TAG, "Request marked BORROWED"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                            StorageServiceProvider.getStorageService().storeBook(
+                                book,
+                                aVoid -> Log.d(TAG, "Book marked BORROWED"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                        },
+                        e -> DialogUtil.showErrorDialog(this, e));
                 } else if (requestCode == GET_ISBN_TO_RECEIVE_BOOK) {
-                    Request request = RequestUtil.retrieveRequestsOnBookByStatus(book, Request.Status.BORROWED, this);
-                    book.setStatus(Book.Status.AVAILABLE);
-                    StorageServiceProvider.getStorageService().deleteRequest(
-                        request,
-                        aVoid -> Log.d(TAG, "Request deleted"),
-                        e -> DialogUtil.showErrorDialog(this, e)
-                    );
-                    StorageServiceProvider.getStorageService().storeBook(
+                    RequestUtil.retrieveRequestsOnBookByStatus(
                         book,
-                        aVoid -> Log.d(TAG, "Book marked AVAILABLE"),
-                        e -> DialogUtil.showErrorDialog(this, e)
-                    );
+                        Request.Status.BORROWED,
+                        request -> {
+                            book.setStatus(Book.Status.AVAILABLE);
+                            StorageServiceProvider.getStorageService().deleteRequest(
+                                request,
+                                aVoid -> Log.d(TAG, "Request deleted"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                            StorageServiceProvider.getStorageService().storeBook(
+                                book,
+                                aVoid -> Log.d(TAG, "Book marked AVAILABLE"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                        },
+                        e -> DialogUtil.showErrorDialog(this, e));
                 }
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();

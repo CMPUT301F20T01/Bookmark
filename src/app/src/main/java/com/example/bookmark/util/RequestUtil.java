@@ -5,6 +5,8 @@ import android.content.Context;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.server.StorageServiceProvider;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.concurrent.Semaphore;
 
@@ -14,28 +16,22 @@ import java.util.concurrent.Semaphore;
  * @author Nayan Prakash
  */
 public class RequestUtil {
-    public static Request retrieveRequestsOnBookByStatus(Book book, Request.Status status, Context context) {
-        Semaphore semaphore = new Semaphore(0);
-        // a final single-element Request array is used to allow assignment within onSuccessListener
-        final Request[] request = {null};
+    public static void retrieveRequestsOnBookByStatus(
+        Book book,
+        Request.Status status,
+        OnSuccessListener<Request> onSuccessListener,
+        OnFailureListener onFailureListener
+    ) {
         StorageServiceProvider.getStorageService().retrieveRequestsByBook(
             book,
             requestList -> {
                 for (Request r: requestList) {
                     if (r.getStatus().equals(status)) {
-                        request[0] = r;
-                        break;
+                        onSuccessListener.onSuccess(r);
                     }
                 }
-                semaphore.release();
             },
-            e -> DialogUtil.showErrorDialog(context, e)
+            onFailureListener
         );
-        try {
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return request[0];
     }
 }

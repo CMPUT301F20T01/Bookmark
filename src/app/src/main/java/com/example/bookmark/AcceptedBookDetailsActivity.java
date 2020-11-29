@@ -93,19 +93,24 @@ public class AcceptedBookDetailsActivity extends BackButtonActivity {
         if (requestCode == AcceptedBookDetailsActivity.GET_ISBN && resultCode == Activity.RESULT_OK) {
             String isbn = data.getStringExtra("ISBN");
             if(book.getIsbn().equals(isbn)) {
-                Request request = RequestUtil.retrieveRequestsOnBookByStatus(book, Request.Status.ACCEPTED, this);
-                book.setStatus(Book.Status.BORROWED);
-                request.setStatus(Request.Status.BORROWED);
-                StorageServiceProvider.getStorageService().storeRequest(
-                    request,
-                    aVoid -> Log.d(TAG, "Request stored"),
+                RequestUtil.retrieveRequestsOnBookByStatus(
+                    book, Request.Status.ACCEPTED,
+                    request -> {
+                        book.setStatus(Book.Status.BORROWED);
+                        request.setStatus(Request.Status.BORROWED);
+                        StorageServiceProvider.getStorageService().storeRequest(
+                            request,
+                            aVoid -> Log.d(TAG, "Request stored"),
+                            e -> DialogUtil.showErrorDialog(this, e)
+                        );
+                        StorageServiceProvider.getStorageService().storeBook(
+                            book,
+                            aVoid -> Log.d(TAG, "Book stored"),
+                            e -> DialogUtil.showErrorDialog(this, e)
+                        );
+                    },
                     e -> DialogUtil.showErrorDialog(this, e)
-                );
-                StorageServiceProvider.getStorageService().storeBook(
-                    book,
-                    aVoid -> Log.d(TAG, "Book stored"),
-                    e -> DialogUtil.showErrorDialog(this, e)
-                );
+                    );
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }
