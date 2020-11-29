@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
@@ -56,8 +57,8 @@ public class ExploreBookDetailsActivity extends BackButtonActivity {
         getSupportActionBar().setTitle("Book Details");
 
         Intent intent = getIntent();
-        book = (Book) intent.getSerializableExtra(ExploreActivity.EXTRA_BOOK);
-        user = (User) intent.getSerializableExtra("User");
+        book = (Book) intent.getSerializableExtra(ListingBooksActivity.EXTRA_BOOK);
+        user = (User) intent.getSerializableExtra(ListingBooksActivity.USER);
 
         titleTextView = findViewById(R.id.explore_details_title_text);
         authorTextView = findViewById(R.id.explore_details_author_text);
@@ -80,7 +81,7 @@ public class ExploreBookDetailsActivity extends BackButtonActivity {
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
-        ownedBy = book.getOwnerId();
+        ownedBy = book.getOwnerId().toString();
         status = book.getStatus().toString();
     }
 
