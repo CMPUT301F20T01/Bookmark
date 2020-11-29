@@ -9,7 +9,6 @@ import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
-import com.example.bookmark.util.UserUtil;
 
 /**
  * This activity shows a user a list of books that they are currently
@@ -78,49 +77,23 @@ public class BorrowedActivity extends ListingBooksActivity {
      * accordingly.
      */
     @Override
-    protected void getBooks() {
-        if (user == null) {
-            String username = UserUtil.getLoggedInUser(this);
-            StorageServiceProvider.getStorageService().retrieveUserByUsername(username,
-                    user1 -> {
-                        StorageServiceProvider.getStorageService().retrieveBooksByRequester(
-                                user1,
-                                books -> {
-                                    visibleBooks.clear();
-                                    relevantBooks.clear();
-                                    for (Book book : books) {
-                                        if (book.getStatus() == Book.Status.BORROWED) {
-                                            relevantBooks.add(book);
-                                        }
-                                    }
-                                    visibleBooks.addAll(relevantBooks);
-                                    visibleBooksAdapter.notifyDataSetChanged();
-                                }, e -> {
-                                    DialogUtil.showErrorDialog(this, e);
-                                }
-                        );
-                    }, e -> {
-                        DialogUtil.showErrorDialog(this, e);
-                    }
-            );
-        } else {
-            StorageServiceProvider.getStorageService().retrieveBooksByRequester(
-                    user,
-                    books -> {
-                        visibleBooks.clear();
-                        relevantBooks.clear();
-                        for (Book book : books) {
-                            if (book.getStatus() == Book.Status.BORROWED) {
-                                relevantBooks.add(book);
-                            }
+    protected void getRelevantBooks() {
+        StorageServiceProvider.getStorageService().retrieveBooksByRequester(
+                user,
+                books -> {
+                    visibleBooks.clear();
+                    relevantBooks.clear();
+                    for (Book book : books) {
+                        if (book.getStatus() == Book.Status.BORROWED) {
+                            relevantBooks.add(book);
                         }
-                        visibleBooks.addAll(relevantBooks);
-                        visibleBooksAdapter.notifyDataSetChanged();
-                    }, e -> {
-                        DialogUtil.showErrorDialog(this, e);
                     }
-            );
-        }
+                    visibleBooks.addAll(relevantBooks);
+                    visibleBooksAdapter.notifyDataSetChanged();
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                }
+        );
     }
 
     /**

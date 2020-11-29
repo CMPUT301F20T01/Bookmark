@@ -205,6 +205,26 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
     }
 
     /**
+     * Gets all relevant books.
+     */
+    private void getBooks() {
+        if (user == null) {
+            String username = UserUtil.getLoggedInUser(this);
+            StorageServiceProvider.getStorageService().retrieveUserByUsername(
+                username,
+                user1 -> {
+                    this.user = user1;
+                    getRelevantBooks();
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                }
+            );
+        } else {
+            getRelevantBooks();
+        }
+    }
+
+    /**
      * This method must return the desired title of the activity. This title
      * will be displayed in the top left corner of the options menu.
      *
@@ -237,7 +257,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
      * visibleBooks ArrayList and notifyDataSetChanged should be called on the
      * visibleBooksAdapter.
      */
-    protected abstract void getBooks();
+    protected abstract void getRelevantBooks();
 
     /**
      * Returns the context that is used for the starting point of the
