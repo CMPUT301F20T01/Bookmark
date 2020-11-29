@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bookmark.abstracts.AddEditBookActivity;
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
@@ -79,10 +80,8 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent(); // gets the previously created intent
-        Bundle bundle = intent.getExtras();
-
-        user = (User) bundle.getSerializable("User");
-        book = (Book) bundle.getSerializable("Book");
+        book = (Book) intent.getSerializableExtra(ListingBooksActivity.EXTRA_BOOK);
+        user = (User) intent.getSerializableExtra(ListingBooksActivity.USER);
 
         titleTextView = findViewById(R.id.book_details_title_text);
         authorTextView = findViewById(R.id.book_details_author_text);
@@ -238,8 +237,7 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }
-        }
-        else if (requestCode == EDIT_REQUEST_CODE) {
+        } else if (requestCode == EDIT_REQUEST_CODE) {
             Bundle bundle = data.getExtras();
             book = (Book) bundle.getSerializable("Book");
 

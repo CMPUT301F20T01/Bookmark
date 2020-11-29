@@ -7,6 +7,49 @@
     android:focusable="true"
     tools:context=".ExploreActivity">
 
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        Of="@+id/search_bar_textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar_textInputLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ListView
+            android:id="@+id/visible_books_listview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:divider="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_bar_textInputLayout">
+
+        </ListView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/listing_books_action_btn"
+        android:layout_width="59dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#00BCD4"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#9C27B0"
+        app:srcCompat="@drawable/ic_iconmonstr_plus_2" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_bar_textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -24,19 +67,5 @@
             android:inputType="text"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <ListView
-        android:id="@+id/visible_books_listview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:divider="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar_textInputLayout">
-
-    </ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

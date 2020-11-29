@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.mocks.MockModels;
 import com.example.bookmark.mocks.MockStorageService;
 import com.example.bookmark.models.Book;
@@ -52,9 +53,7 @@ public class MyBookDetailsActivityTest {
             protected Intent getActivityIntent() {
                 Book book = MockModels.getMockBook3();
                 Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Book", book);
-                intent.putExtras(bundle);
+                intent.putExtra(ListingBooksActivity.EXTRA_BOOK, book);
                 return intent;
             }
         };
