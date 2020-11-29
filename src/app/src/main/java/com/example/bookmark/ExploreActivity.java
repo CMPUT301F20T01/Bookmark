@@ -59,7 +59,7 @@ public class ExploreActivity extends ListingBooksActivity {
      * accordingly.
      */
     @Override
-    protected void getBooks() {
+    protected void getRelevantBooks() {
         StorageServiceProvider.getStorageService().retrieveBooks(books -> {
             visibleBooks.clear();
             relevantBooks.clear();
