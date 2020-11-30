@@ -64,6 +64,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     protected User user = null;
 
     private boolean[] statusFilterEnabled = new boolean[Book.Status.values().length];
+    private String statusFilterConstrainString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
 
         // Initialize status filter to include all statuses (true)
         Arrays.fill(statusFilterEnabled, true);
+        statusFilterConstrainString = "";
 
         // Gets the logged in user
         String username = UserUtil.getLoggedInUser(this);
@@ -114,10 +116,11 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String searchString = charSequence.toString();
+                updateAdapterFilter();
+                // String searchString = charSequence.toString();
                 // Updates the search results every time the search text is
                 // changed
-                updateSearchResults(searchString.split(" "));
+                // updateSearchResults(searchString.split(" "));
             }
 
             @Override
@@ -194,6 +197,12 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         }
     }
 
+    private void updateAdapterFilter() {
+        String constraint = statusFilterConstrainString + " " + searchBar.getText().toString();
+        visibleBooksAdapter.getFilter()
+            .filter(constraint.length() == 1 ? null : constraint);
+    }
+
     public void onFilterUpdate(boolean[] statusFilterEnabled) {
         this.statusFilterEnabled = statusFilterEnabled;
 
@@ -203,17 +212,15 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
             if (statusFilterEnabled[i]) {
                 enabledFilterStrings.add(statusEnums[i].toString());
             }
-         }
-
-        // If all are true (no filtering), just send null constraint
-        if (enabledFilterStrings.size() == statusFilterEnabled.length) {
-            visibleBooksAdapter.getFilter().filter(null);
-            return;
         }
 
-        String constraint = BookList.STATUS_FILTER_OP
-            + TextUtils.join(BookList.FILTER_OP_DELIM, enabledFilterStrings);
-        visibleBooksAdapter.getFilter().filter(constraint);
+        if (enabledFilterStrings.size() == statusFilterEnabled.length) {
+            statusFilterConstrainString = "";
+        } else {
+            statusFilterConstrainString = BookList.STATUS_FILTER_OP
+                + TextUtils.join(BookList.FILTER_OP_DELIM, enabledFilterStrings);
+        }
+        updateAdapterFilter();
     }
 
     /**
