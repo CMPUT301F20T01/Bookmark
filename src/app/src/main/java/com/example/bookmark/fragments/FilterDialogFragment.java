@@ -18,7 +18,10 @@ import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
 
 /**
- * TODO: Description of class.
+ * Dialog fragment that allows the user to select checkboxes for each Book state (available,
+ * requested, accepted, borrowed). Any class which shows this dialog fragment should implement
+ * FilterDialogListener to receive the boolean values of the checkboxes for future filtering.
+ *
  * @author Eric Claerhout.
  */
 public class FilterDialogFragment extends DialogFragment {
@@ -35,17 +38,22 @@ public class FilterDialogFragment extends DialogFragment {
         R.id.filter_borrowed_checkbox
     };
 
+    /**
+     * Listener interface for when filter checkboxes are updated
+     */
     public interface FilterDialogListener {
+        /**
+         * Fires when the filter checkboxes have been updated by the user.
+         * @param statusFilterEnabled list of checkbox states (true = enabled)
+         */
         void onFilterUpdate(boolean[] statusFilterEnabled);
     }
 
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Use this factory method to create a new instance of this fragment.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param checkboxEnabled list of states to initialize checkboxes to
      * @return A new instance of fragment FilterDialogFragment.
      */
     public static FilterDialogFragment newInstance(boolean[] checkboxEnabled) {
@@ -101,6 +109,9 @@ public class FilterDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Returns an updated list of checkbox states via the FilterDialogListener.
+     */
     private void updateFilters() {
         boolean[] checkboxEnabled = new boolean[checkboxes.length];
         for (int i=0; i < checkboxes.length; i++) {
