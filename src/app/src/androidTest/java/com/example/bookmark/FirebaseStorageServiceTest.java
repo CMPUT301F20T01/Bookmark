@@ -276,7 +276,7 @@ public class FirebaseStorageServiceTest {
         Semaphore semaphore = new Semaphore(0);
         Photograph photograph = MockModels.getMockPhotograph();
         storageService.retrievePhotograph(photograph.getId(), photograph2 -> {
-            assertEquals(photograph, photograph2);
+            assertEquals(photograph.getId(), photograph2.getId());
             semaphore.release();
         }, e -> fail("An error occurred while retrieving the photograph."));
         acquire(semaphore);

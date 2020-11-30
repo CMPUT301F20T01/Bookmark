@@ -61,6 +61,7 @@ public class Photograph implements FirestoreIndexable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Photograph that = (Photograph) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) &&
+            Objects.equals(imageUri, that.imageUri);
     }
 }
