@@ -55,7 +55,8 @@ public class ExploreActivityTest {
     @BeforeClass
     public static void setUpOnce() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences("LOGGED_IN_USER", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+            "LOGGED_IN_USER", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("USER_NAME", "mary.jane9").commit();
         StorageServiceProvider.setStorageService(MockStorageService.getMockStorageService());
@@ -81,7 +82,8 @@ public class ExploreActivityTest {
     @Before
     public void setUp() throws Exception {
         rule.launchActivity(new Intent());
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(),
+            rule.getActivity());
     }
 
     /**
@@ -95,7 +97,8 @@ public class ExploreActivityTest {
     }
 
     /**
-     * Tests search functionality.
+     * Tests search functionality. Specifically the TextWatcher,
+     * toggleSearchVisibility(), updateAdapterFilter(), etc.
      */
     @Test
     public void search() {
@@ -110,9 +113,12 @@ public class ExploreActivityTest {
         EditText searchEditText = searchBarLayout.getEditText();
         ListView listView =
             rule.getActivity().findViewById(R.id.books_listview);
+
+        // Changes description of mock books
         MockModels.getMockBook1().setDescription("Learning to code!");
         MockModels.getMockBook2().setDescription("LEARNT BEHAVIOUR...");
         MockModels.getMockBook3().setDescription("Trying to LeArN.");
+
         solo.enterText(searchEditText, "lEaRn");
         assertTrue(solo.searchText("Code Complete 2"));
         assertTrue(solo.searchText("Programming Pearls"));
@@ -133,7 +139,7 @@ public class ExploreActivityTest {
     }
 
     /**
-     * Ensures "Owner:" of each book is visible. Tests getBookOwnerVisibility().
+     * Ensures "Owner:" of each book is visible.
      */
     @Test
     public void checkBookOwnerVisibility() {
@@ -149,8 +155,7 @@ public class ExploreActivityTest {
     }
 
     /**
-     * Ensures "Status:" of each book is visible. Tests
-     * getBookStatusVisibility().
+     * Ensures "Status:" of each book is visible.
      */
     @Test
     public void checkBookStatusVisibility() {
@@ -168,7 +173,7 @@ public class ExploreActivityTest {
     /**
      * Check the count of displayed books. In doing so, tests the
      * getRelevantBooks() method of ExploreActivity and the getBooks() method
-     * of ListingBooksActivity.
+     * and updateBookList() of ListingBooksActivity.
      */
     @Test
     public void numberOfBooks() {
@@ -192,13 +197,14 @@ public class ExploreActivityTest {
 
     /**
      * Ensures that clicking on a book takes the user to the appropriate
-     * activity. In doing so, tests getPackageContext() and
+     * activity. In doing so, tests getPackageContext(), goToBookDetails() and
      * getIntentDestination().
      */
     @Test
     public void goToBookDetails() {
         solo.clickInList(0, 0);
-        solo.assertCurrentActivity("WRONG ACTIVITY", BorrowerBookDetailsActivity.class);
+        solo.assertCurrentActivity("WRONG ACTIVITY",
+            BorrowerBookDetailsActivity.class);
     }
 
     /**
