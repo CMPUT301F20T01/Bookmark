@@ -21,14 +21,34 @@ import java.io.IOException;
  * @author Kyle Hennig.
  */
 public class MockModels {
-    private static final User mockOwner = new User("john.smith42", "John", "Smith", "jsmith@ualberta.ca", "7801234567");
-    private static final User mockRequester = new User("mary.jane9", "Mary", "Jane", "mjane@ualberta.ca", "7809999999");
-    private static final Book mockBook1 = new Book(mockOwner, "Code Complete 2", "Steve McConnell", "0-7356-1976-0");
-    private static final Book mockBook2 = new Book(mockOwner, "Programming Pearls", "Jon Bentley", "978-0-201-65788-3");
-    private static final Book mockBook3 = new Book(mockOwner, "Unedited Title", "Unedited Author", "000000000");
-    private static final Geolocation mockLocation = new Geolocation(53.5461, -113.4938);
-    private static final Request request1 = new Request(mockBook1, mockRequester, mockLocation);
-    private static final Request request2 = new Request(mockBook2, mockRequester, mockLocation);
+    private static final User mockOwner = new User("john.smith42", "John",
+        "Smith", "jsmith@ualberta.ca", "7801234567");
+    private static final User mockRequester = new User("mary.jane9", "Mary",
+        "Jane", "mjane@ualberta.ca", "7809999999");
+    private static final Book mockBook1 = new Book(mockOwner, "Code Complete" +
+        " 2", "Steve McConnell", "0-7356-1976-0");
+    private static final Book mockBook2 = new Book(mockOwner, "Programming " +
+        "Pearls", "Jon Bentley", "978-0-201-65788-3");
+    private static final Book mockBook3 = new Book(mockOwner, "Unedited " +
+        "Title", "Unedited Author", "000000000");
+    private static final Book mockBook4 = new Book(mockOwner, "Borrowed " +
+        "Book 1", "John Apple", "000000001");
+    private static final Book mockBook5 = new Book(mockOwner, "Accepted " +
+        "Book 1", "John Apple", "000000002");
+    private static final Book mockBook6 = new Book(mockOwner, "Borrowed " +
+        "Book 2", "John Apple", "000000003");
+    private static final Geolocation mockLocation = new Geolocation(53.5461,
+        -113.4938);
+    private static final Request request1 = new Request(mockBook1,
+        mockRequester, mockLocation);
+    private static final Request request2 = new Request(mockBook2,
+        mockRequester, mockLocation);
+    private static final Request request4 = new Request(mockBook4,
+        mockRequester, mockLocation);
+    private static final Request request5 = new Request(mockBook5,
+        mockRequester, mockLocation);
+    private static final Request request6 = new Request(mockBook6,
+        mockRequester, mockLocation);
     private static final Photograph mockPhotograph;
 
     static {
@@ -79,12 +99,36 @@ public class MockModels {
         return mockBook3;
     }
 
+    public static Book getMockBook4() {
+        return mockBook4;
+    }
+
+    public static Book getMockBook5() {
+        return mockBook5;
+    }
+
+    public static Book getMockBook6() {
+        return mockBook6;
+    }
+
     public static Request getMockRequest1() {
         return request1;
     }
 
     public static Request getMockRequest2() {
         return request2;
+    }
+
+    public static Request getMockRequest4() {
+        return request4;
+    }
+
+    public static Request getMockRequest5() {
+        return request5;
+    }
+
+    public static Request getMockRequest6() {
+        return request6;
     }
 
     public static Photograph getMockPhotograph() {
