@@ -35,7 +35,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     protected TextInputLayout authorTextInputLayout;
     protected TextInputLayout isbnTextInputLayout;
 
-    protected Uri imageUri;
+    protected Uri imageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
