@@ -40,7 +40,7 @@
                 android:ellipsize="marquee"
                 android:singleLine="true"
                 android:text="@string/book_title"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/book_preview_notification_icon"
                 app:layout_constraintStart_toEndOf="@+id/book_preview_image"
@@ -102,8 +102,8 @@
 
             <ImageView
                 android:id="@+id/book_preview_notification_icon"
-                android:layout_width="27dp"
-                android:layout_height="27dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:visibility="invisible"
                 app:tint="@color/colorPrimary"
