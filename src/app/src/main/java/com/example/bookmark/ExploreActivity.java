@@ -2,11 +2,9 @@ package com.example.bookmark;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.EntityId;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 
