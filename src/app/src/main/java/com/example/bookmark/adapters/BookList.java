@@ -1,10 +1,13 @@
 package com.example.bookmark.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,9 +28,13 @@ import java.util.List;
  *
  * @author Mitch Adam.
  */
-public class BookList extends ArrayAdapter<Book> {
+public class BookList extends ArrayAdapter<Book> implements Filterable {
+    public static final String STATUS_FILTER_OP = "status:";
+    public static final String FILTER_OP_DELIM = ",";
 
-    private final List<Book> booksList;
+    private final List<Book> bookList;
+    private List<Book> filteredBookList;
+
     private final Context context;
 
     private final boolean showOwner;
@@ -41,7 +49,8 @@ public class BookList extends ArrayAdapter<Book> {
         super(context, 0, books);
         this.showOwner = showOwner;
         this.showStatus = showStatus;
-        this.booksList = books;
+        this.bookList = books;
+        filteredBookList = bookList;
         this.context = context;
     }
 
@@ -54,7 +63,7 @@ public class BookList extends ArrayAdapter<Book> {
             view = LayoutInflater.from(context).inflate(R.layout.book_preview, parent, false);
         }
 
-        Book book = booksList.get(position);
+        Book book = getItem(position);
 
         ImageView image = view.findViewById(R.id.book_preview_image);
         TextView title = view.findViewById(R.id.bok_preview_title_text);
@@ -98,5 +107,75 @@ public class BookList extends ArrayAdapter<Book> {
         constraintSet.connect(status.getId(), ConstraintSet.TOP,
             description.getId(), ConstraintSet.BOTTOM);
         constraintSet.applyTo(constraintLayout);
+    }
+
+    @Override
+    public int getCount() {
+        return filteredBookList.size();
+    }
+
+    @Override
+    public Book getItem(int i) {
+        return filteredBookList.get(i);
+    }
+
+    public Filter getFilter() {
+        return new BookFilter();
+    }
+
+    private interface FilterFunction {
+        boolean eval(Book book);
+    }
+
+    private class BookFilter extends Filter {
+        private List<FilterFunction> getFilters(String constraint) {
+            ArrayList<FilterFunction> filters = new ArrayList<>();
+
+            for (String tok: constraint.split("\\s+")) {
+                if (tok.startsWith(STATUS_FILTER_OP)) {
+                    for (String key: tok.replace(STATUS_FILTER_OP, "").split(FILTER_OP_DELIM)) {
+                        if (TextUtils.isEmpty(key)) {
+                            break;
+                        }
+                        filters.add((book) -> book.getStatus().toString().equals(key));
+                    }
+                }
+            }
+
+            return filters;
+        }
+
+        private FilterResults getFilterResults(List<Book> bookList) {
+            FilterResults results = new FilterResults();
+            results.count = bookList.size();
+            results.values = bookList;
+            return results;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<Book> resultsList = new ArrayList<>();
+            List<FilterFunction> filters = getFilters(constraint.toString());
+            if (filters.size() == 0) {
+                return getFilterResults(resultsList);
+            }
+
+            for (Book book: bookList) {
+                for (FilterFunction filter: filters) {
+                    if (filter.eval(book)) {
+                        resultsList.add(book);
+                        break;
+                    }
+                }
+            }
+
+            return getFilterResults(resultsList);
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredBookList = (List<Book>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }
