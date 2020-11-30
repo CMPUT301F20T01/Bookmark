@@ -297,7 +297,6 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     @Override
     protected void onResume() {
         super.onResume();
-        loadImage();
         if (book != null) {
             StorageServiceProvider.getStorageService().retrieveBook(
                 book.getId(),
@@ -305,6 +304,7 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
                     book = b;
                     fillBookDetails();
                     configureActionButton();
+                    loadImage();
                 },
                 e -> DialogUtil.showErrorDialog(this, e)
             );
