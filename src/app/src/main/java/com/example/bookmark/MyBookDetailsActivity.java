@@ -111,16 +111,14 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
             e -> DialogUtil.showErrorDialog(this, e)
         );
 
-        // Set the borrower if borrowed
-        if (book.getStatus().equals(Book.Status.BORROWED)) {
+        // Set the user if borrowed or accepted
+        if (book.getStatus().equals(Book.Status.BORROWED)
+            || book.getStatus().equals(Book.Status.ACCEPTED)) {
             StorageServiceProvider.getStorageService().retrieveRequestsByBook(
                 book,
                 requestList -> {
                     for (Request r : requestList) {
-                        Log.d("TEST", r.getStatus().toString());
-                        if (r.getStatus().toString().equals(Book.Status.BORROWED.toString())) {
-                            Log.d("TEST", r.getRequesterId().toString());
-                            Log.d("TEST", book.getTitle());
+                        if (r.getStatus().toString().equals(book.getStatus().toString())) {
                             String bookStatus = ("Status: "
                                 + book.getStatus().toString().charAt(0)
                                 + book.getStatus().toString().substring(1).toLowerCase()
@@ -132,7 +130,7 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
                 e -> DialogUtil.showErrorDialog(this, e)
             );
         } else {
-            // Otherwise just set the status
+            // Otherwise just set status
             String bookStatus = ("Status: "
                 + book.getStatus().toString().charAt(0)
                 + book.getStatus().toString().substring(1).toLowerCase());

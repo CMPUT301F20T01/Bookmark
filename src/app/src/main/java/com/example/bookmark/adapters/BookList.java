@@ -2,6 +2,7 @@ package com.example.bookmark.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,9 @@ import com.example.bookmark.MyBooksActivity;
 import com.example.bookmark.PendingRequestsActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Request;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +47,6 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
     private final Context context;
 
     private TextView owner;
-    private TextView status;
     private TextView description;
 
     public BookList(Context context, List<Book> books) {
@@ -70,20 +73,42 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         ImageView notificationIcon = view.findViewById(R.id.book_preview_notification_icon);
         description = view.findViewById(R.id.book_preview_description_text);
         owner = view.findViewById(R.id.book_preview_owner_text);
-        status = view.findViewById(R.id.book_preview_status_text);
+        TextView status = view.findViewById(R.id.book_preview_status_text);
 
         //image.setImageBitmap(book.getPhotograph());
 
-        String bookStatus = ("Status: "
-            + book.getStatus().toString().charAt(0)
-            + book.getStatus().toString().substring(1).toLowerCase());
+
+        // Set the user if borrowed or accepted
+        if (book.getStatus().equals(Book.Status.BORROWED)
+            || book.getStatus().equals(Book.Status.ACCEPTED)) {
+            StorageServiceProvider.getStorageService().retrieveRequestsByBook(
+                book,
+                requestList -> {
+                    for (Request r : requestList) {
+                        if (r.getStatus().toString().equals(book.getStatus().toString())) {
+                            String bookStatus = ("Status: "
+                                + book.getStatus().toString().charAt(0)
+                                + book.getStatus().toString().substring(1).toLowerCase()
+                                + " by " + r.getRequesterId().toString());
+                            status.setText(bookStatus);
+                        }
+                    }
+                },
+                e -> DialogUtil.showErrorDialog(context, e)
+            );
+        } else {
+            // Otherwise just set status
+            String bookStatus = ("Status: "
+                + book.getStatus().toString().charAt(0)
+                + book.getStatus().toString().substring(1).toLowerCase());
+            status.setText(bookStatus);
+        }
         String bookOwner = "Owner: " + book.getOwnerId().toString();
 
         title.setText(book.getTitle());
         author.setText(book.getAuthor());
         description.setText(book.getDescription());
         owner.setText(bookOwner);
-        status.setText(bookStatus);
 
         notificationIcon.setVisibility(View.INVISIBLE);
         if (context instanceof MyBooksActivity) {
@@ -105,6 +130,7 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
     private void hideBookOwner(View view) {
         // Hides book owner and constrains the top of book status to the
         // bottom of book description
+        TextView status = view.findViewById(R.id.book_preview_status_text);
         owner.setVisibility(TextView.INVISIBLE);
         ConstraintLayout constraintLayout =
             view.findViewById(R.id.book_preview_layout);
@@ -147,7 +173,7 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         private List<FilterFunction> getFilters(String constraint) {
             ArrayList<FilterFunction> filters = new ArrayList<>();
 
-            for (String tok: constraint.split("\\s+")) {
+            for (String tok : constraint.split("\\s+")) {
                 if (tok.startsWith(STATUS_FILTER_OP)) {
                     List<String> statuses = Arrays.asList(tok.replace(STATUS_FILTER_OP, "").split(FILTER_OP_DELIM));
                     filters.add((book) -> statuses.contains(book.getStatus().toString()));
@@ -188,9 +214,9 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
             }
 
             // Evaluate filters to build resultsList
-            for (Book book: bookList) {
+            for (Book book : bookList) {
                 boolean match = true;
-                for (FilterFunction filter: filters) {
+                for (FilterFunction filter : filters) {
                     if (!filter.eval(book)) {
                         match = false;
                         break;
