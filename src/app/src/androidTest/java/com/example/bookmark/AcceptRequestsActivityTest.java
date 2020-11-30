@@ -70,14 +70,4 @@ public class AcceptRequestsActivityTest {
     public void start() throws Exception {
         solo.assertCurrentActivity("WRONG ACTIVITY", AcceptRequestsActivity.class);
     }
-
-    /**
-     * Test clicking done button after setting marker
-     */
-    @Test
-    public void clickDoneButton() {
-        View buttonView = rule.getActivity().findViewById(R.id.done_button);
-        solo.clickOnView(buttonView);
-        solo.waitForLogMessage("Finishing Accept Requests Activity on done button press");
-    }
 }
