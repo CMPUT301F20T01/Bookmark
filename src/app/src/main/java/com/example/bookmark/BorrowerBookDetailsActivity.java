@@ -2,6 +2,7 @@ package com.example.bookmark;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
@@ -38,7 +40,7 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
     String description;
     String ownedBy;
     String status;
-    // TODO: Image image;
+    EntityId imageId;
 
     private TextView titleTextView;
     private TextView authorTextView;
@@ -115,6 +117,7 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
+        imageId = book.getPhotograph();
         ownedBy = book.getOwnerId().toString();
         status = book.getStatus().toString();
     }
@@ -127,7 +130,15 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         authorTextView.setText(author);
         isbnTextView.setText("ISBN: " + isbn);
         descriptionTextView.setText("Description: " + description);
-        // TODO: imageView.setImageBitmap();
+        StorageServiceProvider.getStorageService().retrievePhotograph(
+            imageId,
+            photograph -> {
+                if (photograph != null) {
+                    imageView.setImageURI(photograph.getImageUri());
+                }
+            },
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
         ownedByTextView.setText("Owned by: " + ownedBy);
         statusTextView.setText("Status: " + status);
     }
@@ -139,34 +150,34 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
     private void configureActionButton() {
         switch (book.getStatus()) {
             case AVAILABLE:
-                actionButton.setText("Request");
+                actionButton.setText("REQUEST");
                 actionButton.setOnClickListener(requestBookListener);
                 break;
             case REQUESTED:
+                // by default this user is not one of the requesters on this book so book is requestable
+                actionButton.setText("REQUEST");
+                actionButton.setOnClickListener(requestBookListener);
                 StorageServiceProvider.getStorageService().retrieveRequestsByBook(
                     book,
                     requestList -> {
                         for (Request r: requestList) {
                             if (r.getRequesterId().toString().equals(user.getId().toString())) {
                                 // TODO: set button style to OutlinedButton
-                                actionButton.setText("Requested");
+                                actionButton.setText("REQUESTED");
                                 actionButton.setOnClickListener(aVoid -> {});
                                 return;
                             }
-                            // this user is not one of the requesters on this book so book is requestable
-                            actionButton.setText("Request");
-                            actionButton.setOnClickListener(requestBookListener);
                         }
                     },
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
                 break;
             case ACCEPTED:
-                actionButton.setText("Borrow");
+                actionButton.setText("BORROW");
                 actionButton.setOnClickListener(borrowBookListener);
                 break;
             case BORROWED:
-                actionButton.setText("Return");
+                actionButton.setText("RETURN");
                 actionButton.setOnClickListener(returnBookListener);
                 break;
         }
@@ -210,8 +221,17 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
      * Handle borrowing a book
      */
     private void borrowBook() {
-        Intent intent = new Intent(this, ScanIsbnActivity.class);
-        startActivityForResult(intent, SCAN_ISBN_TO_BORROW);
+        RequestUtil.retrieveRequestsOnBookByStatus(
+            book,
+            Request.Status.ACCEPTED,
+            request -> {
+                Intent intent = new Intent(this, BorrowBookActivity.class);
+                intent.putExtra(ListingBooksActivity.EXTRA_BOOK, book);
+                intent.putExtra(BorrowBookActivity.EXTRA_REQUEST, request);
+                startActivityForResult(intent, SCAN_ISBN_TO_BORROW);
+            },
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
     }
 
     /**
@@ -257,6 +277,10 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                             aVoid -> Log.d(TAG, "Book stored"),
                             e -> DialogUtil.showErrorDialog(this, e)
                         );
+                        // update book details and action button
+                        setBookDetails();
+                        fillBookDetails();
+                        configureActionButton();
                     },
                     e -> DialogUtil.showErrorDialog(this, e));
             } else {
@@ -282,6 +306,10 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                             aVoid -> Log.d(TAG, "Book stored"),
                             e -> DialogUtil.showErrorDialog(this, e)
                         );
+                        // update book details and action button
+                        setBookDetails();
+                        fillBookDetails();
+                        configureActionButton();
                     },
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
@@ -289,9 +317,5 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }
         }
-        // update book details and action button
-        setBookDetails();
-        fillBookDetails();
-        configureActionButton();
     }
 }
