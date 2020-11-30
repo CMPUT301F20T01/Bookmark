@@ -20,6 +20,7 @@ import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -50,7 +51,10 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         this.showOwner = showOwner;
         this.showStatus = showStatus;
         this.bookList = books;
-        filteredBookList = bookList;
+        this.filteredBookList = books;
+        // TODO: FIX THIS
+        // filteredBookList = new ArrayList<>();
+        // filteredBookList.addAll(bookList);
         this.context = context;
     }
 
@@ -133,12 +137,14 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
 
             for (String tok: constraint.split("\\s+")) {
                 if (tok.startsWith(STATUS_FILTER_OP)) {
-                    for (String key: tok.replace(STATUS_FILTER_OP, "").split(FILTER_OP_DELIM)) {
-                        if (TextUtils.isEmpty(key)) {
-                            break;
-                        }
-                        filters.add((book) -> book.getStatus().toString().equals(key));
-                    }
+                    List<String> statuses = Arrays.asList(tok.replace(STATUS_FILTER_OP, "").split(FILTER_OP_DELIM));
+                    filters.add((book) -> statuses.contains(book.getStatus().toString()));
+                } else if (!TextUtils.isEmpty(tok)) {  // Regular search terms
+                    filters.add((book) ->
+                        book.getDescription().toLowerCase().contains(tok.toLowerCase()) ||
+                            book.getTitle().toLowerCase().contains(tok.toLowerCase()) ||
+                            book.getAuthor().toLowerCase().contains(tok.toLowerCase())
+                    );
                 }
             }
 
@@ -165,11 +171,15 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
             }
 
             for (Book book: bookList) {
+                boolean match = true;
                 for (FilterFunction filter: filters) {
-                    if (filter.eval(book)) {
-                        resultsList.add(book);
+                    if (!filter.eval(book)) {
+                        match = false;
                         break;
                     }
+                }
+                if (match) {
+                    resultsList.add(book);
                 }
             }
 
