@@ -28,6 +28,7 @@ import java.util.List;
  * is BookPreview
  *
  * @author Mitch Adam.
+ * @author Eric Claerhout.
  */
 public class BookList extends ArrayAdapter<Book> implements Filterable {
     public static final String STATUS_FILTER_OP = "status:";
@@ -124,11 +125,21 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         return new BookFilter();
     }
 
+    /**
+     * Interface to hold lambda filtering functions for future evaluation
+     */
     private interface FilterFunction {
         boolean eval(Book book);
     }
 
     private class BookFilter extends Filter {
+
+        /**
+         * Generates a list of filters based on the constraint string
+         *
+         * @param constraint
+         * @return list of filter functions
+         */
         private List<FilterFunction> getFilters(String constraint) {
             ArrayList<FilterFunction> filters = new ArrayList<>();
 
@@ -144,10 +155,15 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
                     );
                 }
             }
-
             return filters;
         }
 
+        /**
+         * Generates a FilterResults object based on a given list
+         *
+         * @param bookList List of books
+         * @return FilterResults object
+         */
         private FilterResults getFilterResults(List<Book> bookList) {
             FilterResults results = new FilterResults();
             results.count = bookList.size();
@@ -167,6 +183,7 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
                 return getFilterResults(bookList);
             }
 
+            // Evaluate filters to build resultsList
             for (Book book: bookList) {
                 boolean match = true;
                 for (FilterFunction filter: filters) {
