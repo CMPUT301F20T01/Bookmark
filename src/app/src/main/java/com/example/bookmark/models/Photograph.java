@@ -17,6 +17,11 @@ public class Photograph implements FirestoreIndexable {
     private final EntityId id;
     private Uri imageUri;
 
+    /**
+     * Creates a Photograph.
+     *
+     * @param imageUri The URI of the image.
+     */
     public Photograph(Uri imageUri) {
         this(new EntityId(), imageUri);
     }
@@ -26,10 +31,20 @@ public class Photograph implements FirestoreIndexable {
         this.imageUri = imageUri;
     }
 
+    /**
+     * Gets the image URI.
+     *
+     * @return The URI.
+     */
     public Uri getImageUri() {
         return imageUri;
     }
 
+    /**
+     * Sets the image URI.
+     *
+     * @param imageUri The URI.
+     */
     public void setImageUri(Uri imageUri) {
         this.imageUri = imageUri;
     }
