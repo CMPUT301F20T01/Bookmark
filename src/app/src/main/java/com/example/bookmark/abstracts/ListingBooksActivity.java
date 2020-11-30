@@ -36,8 +36,8 @@ import java.util.List;
  * Abstract class for activities that list books - some use cases include
  * browsing others' books (ExploreActivity), viewing books the user is
  * currently borrowing (BorrowedActivity), and viewing books the user has
- * currently requested. Child classes must implement the abstract methods
- * getActivityTitle(), getBookOwnerVisibility(), getBookStatusVisibility(),
+ * currently requested/accepted requests (PendingRequestsActivity). Child
+ * classes must implement the abstract methods getActivityTitle(),
  * getRelevantBooks(), getPackageContext(), and getIntentDestination().
  *
  * @author Ryan Kortbeek.
@@ -62,7 +62,6 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     private String statusFilterConstrainString;
 
     protected User user = null;
-    protected Book selectedBook = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
