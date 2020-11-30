@@ -43,7 +43,7 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public abstract class ListingBooksActivity extends NavigationDrawerActivity
-        implements FilterDialogFragment.FilterDialogListener{
+    implements FilterDialogFragment.FilterDialogListener {
     private static final String FILTER_FRAGMENT_TAG = "FilterFragment";
     public static final String USER = "com.example.bookmark.USER";
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
@@ -96,7 +96,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         booksListView.setOnItemClickListener((adapterView, view, i, l) -> goToBookDetails(i));
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -110,7 +111,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
