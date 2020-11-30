@@ -74,6 +74,7 @@ public class BookList extends ArrayAdapter<Book> {
         owner.setText(bookOwner);
         status.setText(bookStatus);
 
+        notificationIcon.setVisibility(View.INVISIBLE);
         if (context instanceof MyBooksActivity) {
             hideBookOwner(view);
             if (book.getStatus().toString().equals("REQUESTED")) {
@@ -86,7 +87,7 @@ public class BookList extends ArrayAdapter<Book> {
         } else if (context instanceof BorrowedActivity) {
             status.setVisibility(TextView.GONE);
         }
-
+        
         return view;
     }
 
