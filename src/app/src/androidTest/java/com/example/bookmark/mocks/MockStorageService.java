@@ -26,6 +26,6 @@ public class MockStorageService {
         List<Request> requests = new ArrayList<>();
         requests.add(MockModels.getMockRequest1());
         requests.add(MockModels.getMockRequest2());
-        return new InMemoryStorageService(users, books, requests);
+        return new InMemoryStorageService(users, books, requests, new ArrayList<>());
     }
 }

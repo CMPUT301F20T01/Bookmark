@@ -1,9 +1,10 @@
 package com.example.bookmark.models;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 
-import com.example.bookmark.server.FirestoreSerializable;
+import com.example.bookmark.server.FirestoreIndexable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -12,33 +13,46 @@ import java.util.Objects;
  *
  * @author Kyle Hennig.
  */
-public class Photograph implements FirestoreSerializable {
-    private Bitmap bitmap;
+public class Photograph implements FirestoreIndexable {
+    private final EntityId id;
+    private Uri imageUri;
 
-    public Photograph(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public Photograph(Uri imageUri) {
+        this(new EntityId(), imageUri);
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    private Photograph(EntityId id, Uri imageUri) {
+        this.id = id;
+        this.imageUri = imageUri;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    @Override
+    public EntityId getId() {
+        return id;
     }
 
     @Override
     public Map<String, Object> toFirestoreDocument() {
-        // TODO: Photograph will likely have to be compressed and serialized due to size.
-        return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("imageUri", imageUri.toString());
+        return map;
     }
 
-    public static Photograph fromFirestoreDocument(Map<String, Object> map) {
+    public static Photograph fromFirestoreDocument(String id, Map<String, Object> map) {
         if (map == null) {
             return null;
         }
-        // TODO: Deserialize and decompress the photograph.
-        return null;
+        return new Photograph(
+            Uri.parse((String) map.get("imageUri"))
+        );
     }
 
     @Override
@@ -46,6 +60,6 @@ public class Photograph implements FirestoreSerializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Photograph that = (Photograph) o;
-        return Objects.equals(bitmap, that.bitmap);
+        return Objects.equals(imageUri, that.imageUri);
     }
 }
