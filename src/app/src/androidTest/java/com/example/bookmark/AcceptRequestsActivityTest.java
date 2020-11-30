@@ -70,4 +70,12 @@ public class AcceptRequestsActivityTest {
     public void start() throws Exception {
         solo.assertCurrentActivity("WRONG ACTIVITY", AcceptRequestsActivity.class);
     }
+
+    /**
+     * Test clicking done button after setting marker
+     */
+    @Test
+    public void clickDoneButton() {
+        solo.assertCurrentActivity("WRONG ACTIVITY", AcceptRequestsActivity.class);
+    }
 }
