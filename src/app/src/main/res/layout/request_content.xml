@@ -9,9 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,18 +57,19 @@
 
             <Button
                 android:id="@+id/accept_button"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="#6200EE"
-                android:text="@string/accept_request"
-                android:textColor="#FFFFFF" />
+                android:text="@string/accept_request" />
 
             <Button
                 android:id="@+id/reject_button"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="10dp"
                 android:backgroundTint="#FFFFFF"
                 android:text="@string/reject_request"
                 android:textColor="#EE0000" />
