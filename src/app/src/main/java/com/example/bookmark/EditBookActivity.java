@@ -72,7 +72,7 @@ public class EditBookActivity extends AddEditBookActivity {
     }
 
     private void populatePhotograph() {
-        if (book.getPhotograph().toString() != null) {
+        if (book.getPhotograph() != null) {
             // if book has a photographId, fetch id
             EntityId photoId = book.getPhotograph();
             // fetch photograph from storage service
@@ -126,6 +126,8 @@ public class EditBookActivity extends AddEditBookActivity {
                 book.setPhotograph(bookPhoto);
                 StorageServiceProvider.getStorageService().storePhotograph(bookPhoto, aVoid -> {
                 }, e -> DialogUtil.showErrorDialog(this, e));
+            } else {
+                book.setPhotograph(null);
             }
             StorageServiceProvider.getStorageService().storeBook(book, aVoid -> {
             }, e -> DialogUtil.showErrorDialog(this, e));
