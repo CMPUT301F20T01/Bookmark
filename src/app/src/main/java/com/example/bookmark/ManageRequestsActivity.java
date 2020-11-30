@@ -55,7 +55,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
         if (bundle != null) {
             book = (Book) bundle.getSerializable("Book");
             owner = (User) bundle.getSerializable("User");
-            setRequestData();
             bookTitle = book.getTitle();
         }
 
@@ -66,6 +65,8 @@ public class ManageRequestsActivity extends BackButtonActivity {
         requestDataList = new ArrayList<>();
         requestAdapter = new RequestList(this, requestDataList);
         requestList.setAdapter(requestAdapter);
+
+        setRequestData();
     }
 
     /**

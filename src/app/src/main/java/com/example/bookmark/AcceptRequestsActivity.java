@@ -1,6 +1,5 @@
 package com.example.bookmark;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -32,6 +31,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * @author Nayan Prakash.
  */
 public class AcceptRequestsActivity extends BackButtonActivity implements OnMapReadyCallback {
+
+    public static final String TAG = "Accept Requests Activity";
 
     private static final int MY_PERMISSIONS_REQUEST_CODE = 100;
     private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -204,6 +205,7 @@ public class AcceptRequestsActivity extends BackButtonActivity implements OnMapR
         bundle.putSerializable("Geolocation", meetingLocation);
         intent.putExtras(bundle);
         setResult(Activity.RESULT_OK, intent);
+        Log.d(TAG, "Finishing Accept Requests Activity on done button press");
         finish();
     }
 }
