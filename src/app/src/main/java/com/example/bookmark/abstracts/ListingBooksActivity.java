@@ -55,6 +55,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     private TextInputLayout searchBarLayout;
     private EditText searchEditText;
     private MenuItem filterMenuItem;
+
     private MenuItem searchMenuItem;
 
     private boolean[] statusFilterEnabled = new boolean[Book.Status.values().length];
@@ -149,6 +150,15 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         filterMenuItem = menu.findItem(R.id.menu_filter_search_filter_btn);
         searchMenuItem = menu.findItem(R.id.menu_filter_search_search_btn);
         return true;
+    }
+
+    /**
+     * Allows a subclass to set private attribute searchMenuItem.
+     *
+     * @param searchMenuItem search item logo on menu
+     */
+    protected void setSearchMenuItem(MenuItem searchMenuItem) {
+        this.searchMenuItem = searchMenuItem;
     }
 
     /**
