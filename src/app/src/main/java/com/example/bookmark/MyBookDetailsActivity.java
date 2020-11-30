@@ -101,9 +101,15 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         authorTextView.setText(book.getAuthor());
         isbnTextView.setText("ISBN: " + book.getIsbn());
         descriptionTextView.setText("Description: " + book.getDescription());
-//        if (book.getPhotograph() != null) {
-//            imageView.setImageURI(book.getPhotograph().getUri());
-//        }
+        StorageServiceProvider.getStorageService().retrievePhotograph(
+            book.getPhotograph(),
+            photograph -> {
+                if (photograph != null) {
+                    imageView.setImageURI(photograph.getImageUri());
+                }
+            },
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
         statusTextView.setText("Status: "
             + book.getStatus().toString().charAt(0)
             + book.getStatus().toString().substring(1).toLowerCase());

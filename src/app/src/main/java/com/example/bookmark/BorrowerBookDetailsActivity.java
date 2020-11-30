@@ -2,6 +2,7 @@ package com.example.bookmark;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
@@ -38,7 +40,7 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
     String description;
     String ownedBy;
     String status;
-    // TODO: Image image;
+    EntityId imageId;
 
     private TextView titleTextView;
     private TextView authorTextView;
@@ -115,6 +117,7 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
+        imageId = book.getPhotograph();
         ownedBy = book.getOwnerId().toString();
         status = book.getStatus().toString();
     }
@@ -127,7 +130,15 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         authorTextView.setText(author);
         isbnTextView.setText("ISBN: " + isbn);
         descriptionTextView.setText("Description: " + description);
-        // TODO: imageView.setImageBitmap();
+        StorageServiceProvider.getStorageService().retrievePhotograph(
+            imageId,
+            photograph -> {
+                if (photograph != null) {
+                    imageView.setImageURI(photograph.getImageUri());
+                }
+            },
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
         ownedByTextView.setText("Owned by: " + ownedBy);
         statusTextView.setText("Status: " + status);
     }
