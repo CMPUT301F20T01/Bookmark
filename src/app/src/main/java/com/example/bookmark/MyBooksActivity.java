@@ -51,14 +51,7 @@ public class MyBooksActivity extends ListingBooksActivity {
         addBookBtn.setVisibility(View.VISIBLE);
         addBookBtn.setOnClickListener(addBookListener);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getRelevantBooks();
-    }
-
-
+    
     /**
      * Returns the title that is to be used for this activity.
      *
