@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,10 @@ import androidx.annotation.Nullable;
 import com.example.bookmark.AcceptRequestsActivity;
 import com.example.bookmark.ManageRequestsActivity;
 import com.example.bookmark.R;
+import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.server.StorageServiceProvider;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.bookmark.util.DialogUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,18 +96,29 @@ public class RequestList extends ArrayAdapter<Request> {
             @Override
             public void onClick(View v) {
                 Request r = requests.get(position);
-                StorageServiceProvider.getStorageService().deleteRequest(r, new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+                // set book status to available if this is the last request on the book
+                if (requests.size() == 1) {
+                    StorageServiceProvider.getStorageService().retrieveBook(
+                        r.getBookId(),
+                        book -> {
+                            book.setStatus(Book.Status.AVAILABLE);
+                            StorageServiceProvider.getStorageService().storeBook(
+                                book,
+                                aVoid -> Log.d("Request List", "Book marked AVAILABLE"),
+                                e -> DialogUtil.showErrorDialog(context, e)
+                            );
+                        },
+                        e -> DialogUtil.showErrorDialog(context, e)
+                    );
+                }
+                StorageServiceProvider.getStorageService().deleteRequest(
+                    r,
+                    aVoid -> {
                         requests.remove(position);
                         notifyDataSetChanged();
-                    }
-                }, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
+                    },
+                    e -> DialogUtil.showErrorDialog(context, e)
+                );
             }
         });
 

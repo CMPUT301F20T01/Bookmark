@@ -143,6 +143,9 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                 actionButton.setOnClickListener(requestBookListener);
                 break;
             case REQUESTED:
+                // by default this user is not one of the requesters on this book so book is requestable
+                actionButton.setText("REQUEST");
+                actionButton.setOnClickListener(requestBookListener);
                 StorageServiceProvider.getStorageService().retrieveRequestsByBook(
                     book,
                     requestList -> {
@@ -153,9 +156,6 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                                 actionButton.setOnClickListener(aVoid -> {});
                                 return;
                             }
-                            // this user is not one of the requesters on this book so book is requestable
-                            actionButton.setText("REQUEST");
-                            actionButton.setOnClickListener(requestBookListener);
                         }
                     },
                     e -> DialogUtil.showErrorDialog(this, e)

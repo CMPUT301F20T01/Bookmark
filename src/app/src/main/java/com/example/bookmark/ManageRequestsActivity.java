@@ -98,15 +98,6 @@ public class ManageRequestsActivity extends BackButtonActivity {
                                         e -> DialogUtil.showErrorDialog(this, e)
                                     );
                                 }
-                                // update book status to available if the (now) deleted request was only request
-                                if (requestList.size() == 1) {
-                                    book.setStatus(Book.Status.AVAILABLE);
-                                    StorageServiceProvider.getStorageService().storeBook(
-                                        book,
-                                        aVoid -> Log.d(TAG, "Book stored as AVAILABLE"),
-                                        e -> DialogUtil.showErrorDialog(this, e)
-                                    );
-                                }
                             }
                         },
                         e -> DialogUtil.showErrorDialog(this, e)
