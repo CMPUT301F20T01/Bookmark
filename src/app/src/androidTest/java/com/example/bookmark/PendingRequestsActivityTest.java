@@ -174,7 +174,7 @@ public class PendingRequestsActivityTest {
         solo.clickOnCheckBox(1);
         solo.clickOnText("Apply");
         assertFalse(solo.searchText("Requested"));
-        assertFalse(solo.searchText("Available"));
+        assertFalse(solo.searchText("Accepted"));
         assertEquals(0, listView.getCount());
 
         // Check all
@@ -184,7 +184,7 @@ public class PendingRequestsActivityTest {
         solo.clickOnCheckBox(2);
         solo.clickOnText("Apply");
         assertTrue(solo.searchText("Requested"));
-        assertTrue(solo.searchText("Available"));
+        assertTrue(solo.searchText("Accepted"));
         assertEquals(3, listView.getCount());
     }
 
