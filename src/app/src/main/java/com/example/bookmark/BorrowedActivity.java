@@ -50,28 +50,6 @@ public class BorrowedActivity extends ListingBooksActivity {
     }
 
     /**
-     * Returns whether the the owner field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookOwnerVisibility() {
-        return true;
-    }
-
-    /**
-     * Returns whether the the status field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookStatusVisibility() {
-        return false;
-    }
-
-    /**
      * Gets all books from the firestore database that are borrowed by the
      * current user and sets the values of visibleBooks and relevantBooks
      * accordingly.
