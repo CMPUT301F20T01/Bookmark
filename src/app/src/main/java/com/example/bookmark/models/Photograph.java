@@ -51,7 +51,8 @@ public class Photograph implements FirestoreIndexable {
             return null;
         }
         return new Photograph(
-            Uri.parse((String) map.get("imageUri"))
+            new EntityId(id),
+            (Uri) map.get("imageUri")
         );
     }
 
@@ -60,6 +61,6 @@ public class Photograph implements FirestoreIndexable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Photograph that = (Photograph) o;
-        return Objects.equals(imageUri, that.imageUri);
+        return Objects.equals(id, that.id);
     }
 }

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -143,6 +144,11 @@ public class FirebaseStorageService implements StorageService {
             Photograph photograph = Photograph.fromFirestoreDocument(id.toString(), map);
             onSuccessListener.onSuccess(photograph);
         }).addOnFailureListener(e -> {
+            if (e instanceof StorageException) {
+                // No photograph with the id exists. Returns null to be consistent.
+                onSuccessListener.onSuccess(null);
+                return;
+            }
             Log.w(TAG, String.format("Error retrieving photograph with id %s: ", id.toString()), e);
             onFailureListener.onFailure(e);
         });
