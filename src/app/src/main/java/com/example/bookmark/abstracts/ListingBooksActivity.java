@@ -79,8 +79,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
 
         getSupportActionBar().setTitle(getActivityTitle());
 
-        visibleBooksAdapter = new BookList(this, visibleBooks,
-            getBookOwnerVisibility(), getBookStatusVisibility());
+        visibleBooksAdapter = new BookList(this, visibleBooks);
         visibleBooksListView.setAdapter(visibleBooksAdapter);
 
         visibleBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -241,22 +240,6 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
      * @return String
      */
     protected abstract String getActivityTitle();
-
-    /**
-     * This method must return a boolean value corresponding to whether the
-     * owner of each listed book should be displayed.
-     *
-     * @return boolean
-     */
-    protected abstract boolean getBookOwnerVisibility();
-
-    /**
-     * This method must return a boolean value corresponding to whether the
-     * status of each listed book should be displayed.
-     *
-     * @return boolean
-     */
-    protected abstract boolean getBookStatusVisibility();
 
     /**
      * Must get all books that match the broad restrictions of the implementing

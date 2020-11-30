@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.bookmark.BorrowedActivity;
 import com.example.bookmark.MyBooksActivity;
 import com.example.bookmark.PendingRequestsActivity;
 import com.example.bookmark.R;
@@ -31,18 +32,12 @@ public class BookList extends ArrayAdapter<Book> {
     private final List<Book> booksList;
     private final Context context;
 
-    private final boolean showOwner;
-    private final boolean showStatus;
-
     private TextView owner;
     private TextView status;
     private TextView description;
 
-    public BookList(Context context, List<Book> books, boolean showOwner,
-                    boolean showStatus) {
+    public BookList(Context context, List<Book> books) {
         super(context, 0, books);
-        this.showOwner = showOwner;
-        this.showStatus = showStatus;
         this.booksList = books;
         this.context = context;
     }
@@ -80,20 +75,15 @@ public class BookList extends ArrayAdapter<Book> {
         status.setText(bookStatus);
 
         if (context instanceof MyBooksActivity) {
+            hideBookOwner(view);
             if (book.getStatus().toString().equals("REQUESTED")) {
                 notificationIcon.setVisibility(View.VISIBLE);
             }
-        }
-        if (context instanceof PendingRequestsActivity) {
+        } else if (context instanceof PendingRequestsActivity) {
             if (book.getStatus().toString().equals("ACCEPTED")) {
                 notificationIcon.setVisibility(View.VISIBLE);
             }
-        }
-
-        if (!showOwner) {
-            hideBookOwner(view);
-        }
-        if (!showStatus) {
+        } else if (context instanceof BorrowedActivity) {
             status.setVisibility(TextView.GONE);
         }
 
