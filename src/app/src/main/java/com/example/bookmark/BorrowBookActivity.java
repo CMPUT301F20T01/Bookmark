@@ -76,8 +76,9 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
         if (requestCode == BorrowBookActivity.GET_ISBN && resultCode == Activity.RESULT_OK) {
             String isbn = data.getStringExtra("ISBN");
             if (book.getIsbn().equals(isbn)) {
-                Intent intent = getIntent();
+                Intent intent = new Intent();
                 intent.putExtra("ISBN", isbn);
+                setResult(Activity.RESULT_OK, intent);
                 finish();
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as request ISBN", Toast.LENGTH_SHORT).show();
