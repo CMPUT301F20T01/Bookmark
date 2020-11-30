@@ -3,6 +3,13 @@ Bookmark is a book exchange app!
 
 [Go to the Bookmark Wiki](https://github.com/CMPUT301F20T01/Bookmark/wiki)
 
+### See list of finished user story flows:
+[View app progress](https://github.com/CMPUT301F20T01/Bookmark/wiki/User-Stories-Checklist)
+
+### Exceptional app features:
+- Mocked Database Store for testing
+
+
 ## Team 1
 
 | Name               | CCID     | Github ID                                          |
@@ -13,3 +20,5 @@ Bookmark is a book exchange app!
 | Konrad Staniszewski| kstanisz | [@konradstanski](https://github.com/konradstanski) |
 | Eric Claerhout     | claerhou | [@imswebra](https://github.com/imswebra)           |
 | Ryan Kortbeek      | rakortbe | [@ryankortbeek](https://github.com/ryankortbeek)   |
+
+
