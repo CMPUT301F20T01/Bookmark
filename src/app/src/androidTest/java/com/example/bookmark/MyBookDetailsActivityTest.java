@@ -51,7 +51,7 @@ public class MyBookDetailsActivityTest {
         new ActivityTestRule<MyBookDetailsActivity>(MyBookDetailsActivity.class, true, true) {
             @Override
             protected Intent getActivityIntent() {
-                Book book = MockModels.getMockBook2();
+                Book book = MockModels.getMockBook1();
                 Intent intent = new Intent();
                 intent.putExtra(ListingBooksActivity.EXTRA_BOOK, book);
                 return intent;
