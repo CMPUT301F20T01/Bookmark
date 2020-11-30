@@ -104,9 +104,34 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
 //        if (book.getPhotograph() != null) {
 //            imageView.setImageURI(book.getPhotograph().getUri());
 //        }
-        statusTextView.setText("Status: "
-            + book.getStatus().toString().charAt(0)
-            + book.getStatus().toString().substring(1).toLowerCase());
+
+        // Set the borrower if borrowed
+        if (book.getStatus().equals(Book.Status.BORROWED)) {
+            StorageServiceProvider.getStorageService().retrieveRequestsByBook(
+                book,
+                requestList -> {
+                    for (Request r : requestList) {
+                        Log.d("TEST", r.getStatus().toString());
+                        if (r.getStatus().toString().equals(Book.Status.BORROWED.toString())) {
+                            Log.d("TEST", r.getRequesterId().toString());
+                            Log.d("TEST", book.getTitle());
+                            String bookStatus = ("Status: "
+                                + book.getStatus().toString().charAt(0)
+                                + book.getStatus().toString().substring(1).toLowerCase()
+                                + " by " + r.getRequesterId().toString());
+                            statusTextView.setText(bookStatus);
+                        }
+                    }
+                },
+                e -> DialogUtil.showErrorDialog(this, e)
+            );
+        } else {
+            // Otherwise just set the status
+            String bookStatus = ("Status: "
+                + book.getStatus().toString().charAt(0)
+                + book.getStatus().toString().substring(1).toLowerCase());
+            statusTextView.setText(bookStatus);
+        }
 
     }
 

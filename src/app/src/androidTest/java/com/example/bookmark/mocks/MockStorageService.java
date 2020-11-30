@@ -21,6 +21,8 @@ public class MockStorageService {
         users.add(MockModels.getMockOwner());
         users.add(MockModels.getMockRequester());
         List<Book> books = new ArrayList<>();
+        MockModels.getMockBook1().setStatus(Book.Status.REQUESTED);
+        MockModels.getMockBook2().setStatus(Book.Status.BORROWED);
         books.add(MockModels.getMockBook1());
         books.add(MockModels.getMockBook2());
         books.add(MockModels.getMockBook3());
