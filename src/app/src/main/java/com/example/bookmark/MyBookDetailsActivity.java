@@ -12,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
@@ -101,15 +104,8 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         authorTextView.setText(book.getAuthor());
         isbnTextView.setText("ISBN: " + book.getIsbn());
         descriptionTextView.setText("Description: " + book.getDescription());
-        StorageServiceProvider.getStorageService().retrievePhotograph(
-            book.getPhotograph(),
-            photograph -> {
-                if (photograph != null) {
-                    imageView.setImageURI(photograph.getImageUri());
-                }
-            },
-            e -> DialogUtil.showErrorDialog(this, e)
-        );
+        loadImage();
+
 
         // Set the user if borrowed or accepted
         if (book.getStatus().equals(Book.Status.BORROWED)
@@ -158,6 +154,21 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         }
     }
 
+    private void loadImage() {
+        if (book.getPhotograph() != null) {
+            EntityId photoId = book.getPhotograph();
+            StorageServiceProvider.getStorageService().retrievePhotograph(
+                photoId,
+                photograph -> {
+                    if (photograph != null) {
+                        imageView.setImageURI(photograph.getImageUri());
+                    }
+                }, e -> DialogUtil.showErrorDialog(this, e));
+        } else {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_book));
+        }
+    }
+
     /**
      * Handle managing request
      */
@@ -192,6 +203,8 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         getMenuInflater().inflate(R.menu.menu_edit, menu);
         return true;
     }
+
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -284,6 +297,7 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     @Override
     protected void onResume() {
         super.onResume();
+        loadImage();
         if (book != null) {
             StorageServiceProvider.getStorageService().retrieveBook(
                 book.getId(),

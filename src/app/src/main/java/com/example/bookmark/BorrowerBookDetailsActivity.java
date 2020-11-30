@@ -130,15 +130,17 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         authorTextView.setText(author);
         isbnTextView.setText("ISBN: " + isbn);
         descriptionTextView.setText("Description: " + description);
-        StorageServiceProvider.getStorageService().retrievePhotograph(
-            imageId,
-            photograph -> {
-                if (photograph != null) {
-                    imageView.setImageURI(photograph.getImageUri());
-                }
-            },
-            e -> DialogUtil.showErrorDialog(this, e)
-        );
+        if (imageId != null) {
+            StorageServiceProvider.getStorageService().retrievePhotograph(
+                imageId,
+                photograph -> {
+                    if (photograph != null) {
+                        imageView.setImageURI(photograph.getImageUri());
+                    }
+                },
+                e -> DialogUtil.showErrorDialog(this, e)
+            );
+        }
         ownedByTextView.setText("Owned by: " + ownedBy);
         statusTextView.setText("Status: " + status);
     }

@@ -91,15 +91,10 @@ public class EditBookActivity extends AddEditBookActivity {
         // update book in db
         book.setPhotograph(null);
         StorageServiceProvider.getStorageService().storeBook(book,
-            aVoid -> {
-        }, e -> {
-        });
+            aVoid -> {}, e -> {});
         // delete photograph in db
-//        StorageServiceProvider.getStorageService().deletePhotograph(new Photograph(imageUri), aVoid -> {
-//            },
-//            e -> {
-//            });
-//        super.deleteImage();
+        StorageServiceProvider.getStorageService().deletePhotograph(new Photograph(imageUri), aVoid -> {
+            }, e -> {});
         imageUri = null;
         bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
         deleteBookImageButton.setVisibility(View.GONE);

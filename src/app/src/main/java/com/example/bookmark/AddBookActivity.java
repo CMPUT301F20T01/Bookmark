@@ -2,7 +2,10 @@ package com.example.bookmark;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -94,6 +97,15 @@ public class AddBookActivity extends AddEditBookActivity {
             finish();
         }, e -> DialogUtil.showErrorDialog(this, e));
     }
+
+
+    @Override
+    protected void deleteImage() {
+        imageUri = null;
+        bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
+        deleteBookImageButton.setVisibility(View.GONE);
+    }
+
 
     /**
      * Gets book details from Google API

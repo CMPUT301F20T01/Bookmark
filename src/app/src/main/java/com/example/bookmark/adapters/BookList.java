@@ -76,15 +76,19 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         owner = view.findViewById(R.id.book_preview_owner_text);
         TextView status = view.findViewById(R.id.book_preview_status_text);
 
-        EntityId id = book.getPhotograph();
-        StorageServiceProvider.getStorageService().retrievePhotograph(
-            id,
-            photograph -> {
-                if (photograph != null) {
-                    image.setImageURI(photograph.getImageUri());
-                }
-            },
-            e -> DialogUtil.showErrorDialog(context, e));
+
+        if (book.getPhotograph() != null) {
+            EntityId id = book.getPhotograph();
+            StorageServiceProvider.getStorageService().retrievePhotograph(
+                id,
+                photograph -> {
+                    if (photograph != null) {
+                        image.setImageURI(photograph.getImageUri());
+                    }
+                },
+                e -> DialogUtil.showErrorDialog(context, e));
+        }
+
 
 
         // Set the user if borrowed or accepted
