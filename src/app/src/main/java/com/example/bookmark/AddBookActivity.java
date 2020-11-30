@@ -2,7 +2,10 @@ package com.example.bookmark;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +15,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Photograph;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
@@ -88,12 +92,28 @@ public class AddBookActivity extends AddEditBookActivity {
         StorageServiceProvider.getStorageService().retrieveUserByUsername(username, user -> {
             Book book = new Book(user, title, author, isbn);
             book.setDescription(description);
-//            book.setPhotograph(new Photograph());
+            if (imageUri != null) {
+                Photograph bookPhoto = new Photograph(imageUri);
+                book.setPhotograph(bookPhoto);
+                StorageServiceProvider.getStorageService().storePhotograph(bookPhoto, aVoid -> {
+                }, e -> DialogUtil.showErrorDialog(this, e));
+            } else {
+                book.setPhotograph(null);
+            }
             StorageServiceProvider.getStorageService().storeBook(book, aVoid -> {
             }, e -> DialogUtil.showErrorDialog(this, e));
             finish();
         }, e -> DialogUtil.showErrorDialog(this, e));
     }
+
+
+    @Override
+    protected void deleteImage() {
+        imageUri = null;
+        bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
+        deleteBookImageButton.setVisibility(View.GONE);
+    }
+
 
     /**
      * Gets book details from Google API

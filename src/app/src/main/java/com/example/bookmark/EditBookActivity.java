@@ -3,16 +3,20 @@ package com.example.bookmark;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
+import com.example.bookmark.models.Photograph;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
+
 
 /**
  * This activity allows a user to edit the details of a book, remove a photo
@@ -63,6 +67,36 @@ public class EditBookActivity extends AddEditBookActivity {
         authorEditText.setText(book.getAuthor());
         isbnEditText.setText(book.getIsbn());
         descriptionEditText.setText(book.getDescription());
+        populatePhotograph();
+    }
+
+    private void populatePhotograph() {
+        if (book.getPhotograph() != null) {
+            // if book has a photographId, fetch id
+            EntityId photoId = book.getPhotograph();
+            // fetch photograph from storage service
+            StorageServiceProvider.getStorageService().retrievePhotograph(photoId, photograph -> {
+                imageUri = photograph.getImageUri();
+                bookImage.setImageURI(photograph.getImageUri());
+            }, e -> {
+                DialogUtil.showErrorDialog(this, e);
+            });
+            deleteBookImageButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void deleteImage() {
+        // update book in db
+        book.setPhotograph(null);
+        StorageServiceProvider.getStorageService().storeBook(book,
+            aVoid -> {}, e -> {});
+        // delete photograph in db
+        StorageServiceProvider.getStorageService().deletePhotograph(new Photograph(imageUri), aVoid -> {
+            }, e -> {});
+        imageUri = null;
+        bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
+        deleteBookImageButton.setVisibility(View.GONE);
     }
 
     /**
@@ -81,7 +115,14 @@ public class EditBookActivity extends AddEditBookActivity {
             book.setAuthor(author);
             book.setIsbn(isbn);
             book.setDescription(description);
-            //book.setPhotograph(uriToPhotograph(bookImage));
+            if (imageUri != null) {
+                Photograph bookPhoto = new Photograph(imageUri);
+                book.setPhotograph(bookPhoto);
+                StorageServiceProvider.getStorageService().storePhotograph(bookPhoto, aVoid -> {
+                }, e -> DialogUtil.showErrorDialog(this, e));
+            } else {
+                book.setPhotograph(null);
+            }
             StorageServiceProvider.getStorageService().storeBook(book, aVoid -> {
             }, e -> DialogUtil.showErrorDialog(this, e));
 
@@ -105,6 +146,10 @@ public class EditBookActivity extends AddEditBookActivity {
             StorageServiceProvider.getStorageService().deleteBook(book, aVoid -> {
             }, e -> DialogUtil.showErrorDialog(this, e));
 
+            // delete photograph in db
+            Photograph imagePhoto = new Photograph(imageUri);
+            StorageServiceProvider.getStorageService().deletePhotograph(new Photograph(imageUri), aVoid -> {
+            }, e -> {});
             // Return the edited book
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
