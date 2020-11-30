@@ -7,7 +7,7 @@ Bookmark is a book exchange app!
 [View app progress](https://github.com/CMPUT301F20T01/Bookmark/wiki/User-Stories-Checklist)
 
 ### Exceptional app features:
-- Mocked Database Store for testing
+[View app features](https://github.com/CMPUT301F20T01/Bookmark/wiki/App-Features)
 
 
 ## Team 1
