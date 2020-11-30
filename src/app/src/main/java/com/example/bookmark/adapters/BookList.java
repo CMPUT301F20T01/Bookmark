@@ -154,10 +154,14 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            if (constraint == null) {
+                return getFilterResults(bookList);
+            }
+
             ArrayList<Book> resultsList = new ArrayList<>();
             List<FilterFunction> filters = getFilters(constraint.toString());
             if (filters.size() == 0) {
-                return getFilterResults(resultsList);
+                return getFilterResults(bookList);
             }
 
             for (Book book: bookList) {

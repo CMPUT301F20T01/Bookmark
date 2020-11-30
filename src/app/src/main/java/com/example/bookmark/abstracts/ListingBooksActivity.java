@@ -197,8 +197,6 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     public void onFilterUpdate(boolean[] statusFilterEnabled) {
         this.statusFilterEnabled = statusFilterEnabled;
 
-        // if all are true, just send null constraint
-
         ArrayList<String> enabledFilterStrings = new ArrayList<>();
         Book.Status[] statusEnums = Book.Status.values();
         for (int i = 0; i < statusFilterEnabled.length; i++) {
@@ -206,6 +204,13 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
                 enabledFilterStrings.add(statusEnums[i].toString());
             }
          }
+
+        // If all are true (no filtering), just send null constraint
+        if (enabledFilterStrings.size() == statusFilterEnabled.length) {
+            visibleBooksAdapter.getFilter().filter(null);
+            return;
+        }
+
         String constraint = BookList.STATUS_FILTER_OP
             + TextUtils.join(BookList.FILTER_OP_DELIM, enabledFilterStrings);
         visibleBooksAdapter.getFilter().filter(constraint);
