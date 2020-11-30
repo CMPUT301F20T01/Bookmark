@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.bookmark.NavigationDrawerActivity;
@@ -22,7 +22,6 @@ import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -33,11 +32,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Abstract class for activities that list books - some use cases include
- * viewing search results (ExploreActivity), viewing books the user is
+ * browsing others' books (ExploreActivity), viewing books the user is
  * currently borrowing (BorrowedActivity), and viewing books the user has
  * currently requested. Child classes must implement the abstract methods
  * getActivityTitle(), getBookOwnerVisibility(), getBookStatusVisibility(),
- * getBooks(), setContext(), and setIntentDestination().
+ * getRelevantBooks(), getPackageContext(), and getIntentDestination().
  *
  * @author Ryan Kortbeek.
  */
@@ -47,34 +46,30 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     public static final String USER = "com.example.bookmark.USER";
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
 
-    // All books that match the broad restrictions of the implementing
-    // activity (i.e. for BorrowedActivity this would pertain to all books
-    // that are currently borrowed by the current user)
-    protected final List<Book> relevantBooks = new ArrayList<>();
-    // All books that match the search text (if the search text is empty then
-    // the contents of visibleBooks will be equal to the contents of
-    // relevantBooks
-    protected List<Book> visibleBooks = new ArrayList<>();
-    protected BookList visibleBooksAdapter;
-    protected ListView visibleBooksListView;
+    private final List<Book> bookList = new ArrayList<>();
+    private BookList bookListAdapter;
+    private ListView booksListView;
 
-    protected TextInputLayout searchBarLayout;
-    protected TextInputEditText searchBar;
-
-    protected User user = null;
+    private TextInputLayout searchBarLayout;
+    private EditText searchEditText;
 
     private boolean[] statusFilterEnabled = new boolean[Book.Status.values().length];
     private String statusFilterConstrainString;
+
+    protected User user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing_books);
+        getSupportActionBar().setTitle(getActivityTitle());
+
+        booksListView = findViewById(R.id.books_listview);
         searchBarLayout = findViewById(R.id.search_bar_textInputLayout);
+        searchEditText = searchBarLayout.getEditText();
+
         // Hides the search bar to start
         searchBarLayout.setVisibility(View.GONE);
-        searchBar = (TextInputEditText) searchBarLayout.getEditText();
-        visibleBooksListView = findViewById(R.id.visible_books_listview);
 
         // Initialize status filter to include all statuses (true)
         Arrays.fill(statusFilterEnabled, true);
@@ -88,44 +83,24 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
             e -> DialogUtil.showErrorDialog(this, e)
         );
 
-        getSupportActionBar().setTitle(getActivityTitle());
-
-        visibleBooksAdapter = new BookList(this, visibleBooks,
+        // Setup bookListAdapter
+        bookListAdapter = new BookList(this, bookList,
             getBookOwnerVisibility(), getBookStatusVisibility());
-        visibleBooksListView.setAdapter(visibleBooksAdapter);
+        booksListView.setAdapter(bookListAdapter);
 
-        visibleBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // Setup listeners
+        booksListView.setOnItemClickListener((adapterView, view, i, l) -> goToBookDetails(i));
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // Passes the selected book to the specified intent destination
-                Intent intent = new Intent(getPackageContext(),
-                    getIntentDestination());
-                intent.putExtra(USER, user);
-                intent.putExtra(EXTRA_BOOK, visibleBooks.get(i));
-                startActivity(intent);
-            }
-        });
-
-        // Adds an addTextChangedListener to the search bar which allows the
-        // user to filter through the listed books and the results to be
-        // updated every time the search text is changed
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 updateAdapterFilter();
-                // String searchString = charSequence.toString();
-                // Updates the search results every time the search text is
-                // changed
-                // updateSearchResults(searchString.split(" "));
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            public void afterTextChanged(Editable editable) {}
         });
 
         final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
@@ -133,6 +108,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
             getBooks();
             pullToRefresh.setRefreshing(false);
         });
+
     }
 
     /**
@@ -171,7 +147,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         switch (item.getItemId()) {
             case R.id.menu_filter_search_search_btn:
                 // Changes visibility of search bar
-                onSearchSelected();
+                toggleSearchVisibility();
                 break;
             case R.id.menu_filter_search_filter_btn:
                 FilterDialogFragment.newInstance(statusFilterEnabled)
@@ -182,14 +158,9 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     }
 
     /**
-     * Updates the visibility of the search bar based on its current
-     * visibility. If the search bar is currently VISIBLE then it will be set
-     * to have a visibility of GONE. If the search bar is currently GONE then
-     * it will be set to have a visibility of VISIBLE. Setting the visibility
-     * to GONE means that it does not take up any space for layout purposes
-     * (it disappears and the visible books ListView takes over that space).
+     * Toggles the visibility of the search bar between VISIBLE and GONE.
      */
-    private void onSearchSelected() {
+    private void toggleSearchVisibility() {
         if (searchBarLayout.getVisibility() == View.VISIBLE) {
             searchBarLayout.setVisibility(View.GONE);
         } else {
@@ -197,12 +168,21 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         }
     }
 
+    /**
+     * Updates the adapter filter based on the current status filter and search text.
+     */
     private void updateAdapterFilter() {
-        String constraint = statusFilterConstrainString + " " + searchBar.getText().toString();
-        visibleBooksAdapter.getFilter()
+        String constraint = statusFilterConstrainString + " " + searchEditText.getText().toString();
+        bookListAdapter.getFilter()
             .filter(constraint.length() == 1 ? null : constraint);
     }
 
+    /**
+     * Callback function for FilterDialogFragment. Updates the statusFilterEnabled
+     * member and rebuilds the status filter constrain string.
+     *
+     * @param statusFilterEnabled boolean array describing the status of the filters
+     */
     public void onFilterUpdate(boolean[] statusFilterEnabled) {
         this.statusFilterEnabled = statusFilterEnabled;
 
@@ -224,36 +204,6 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     }
 
     /**
-     * Called every time the text in the search bar is changed. Finds all
-     * books from relevantBooks that contains all of the keywords in the
-     * passed string array, keywords, and displays them. String comparisons are
-     * case-insensitive.
-     *
-     * @param keywords keywords to search
-     */
-    private void updateSearchResults(String[] keywords) {
-        boolean match;
-        visibleBooks.clear();
-        if (keywords.length == 0) {
-            visibleBooks.addAll(relevantBooks);
-        } else {
-            for (Book book : relevantBooks) {
-                match = true;
-                for (String keyword : keywords) {
-                    if (!book.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                        match = false;
-                        break;
-                    }
-                }
-                if (match) {
-                    visibleBooks.add(book);
-                }
-            }
-        }
-        visibleBooksAdapter.notifyDataSetChanged();
-    }
-
-    /**
      * Gets all relevant books.
      */
     private void getBooks() {
@@ -271,6 +221,33 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         } else {
             getRelevantBooks();
         }
+    }
+
+    /**
+     * Replaces the current book list with the given updatedList. To be called in
+     * a subclass's getRelevantBooks() function.
+     *
+     * @param updatedList list to replace current book list
+     */
+    protected void updateBookList(List<Book> updatedList) {
+        bookList.clear();
+        bookList.addAll(updatedList);
+        bookListAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Item click handler for list view. Goes to the book details activity
+     * specified by getIntentDestination().
+     *
+     * @param i item position in listview
+     */
+    private void goToBookDetails(int i) {
+        // Passes the selected book to the specified intent destination
+        Intent intent = new Intent(getPackageContext(),
+            getIntentDestination());
+        intent.putExtra(USER, user);
+        intent.putExtra(EXTRA_BOOK, bookListAdapter.getItem(i));
+        startActivity(intent);
     }
 
     /**
@@ -298,13 +275,10 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     protected abstract boolean getBookStatusVisibility();
 
     /**
-     * Must get all books that match the broad restrictions of the implementing
-     * activity (i.e. for BorrowedActivity this would pertain to all books
-     * that are currently borrowed by the current user). Must clear the
-     * relevantBooks ArrayList and then add all these matching books to
-     * relevantBooks. These books should then be copied into the
-     * visibleBooks ArrayList and notifyDataSetChanged should be called on the
-     * visibleBooksAdapter.
+     * Must compile a list of all books that match the broad restrictions of
+     * the implementing activity (i.e. for BorrowedActivity this would pertain
+     * to all books that are currently borrowed by the current user) and pass
+     * them back through the updateBookList() function.
      */
     protected abstract void getRelevantBooks();
 

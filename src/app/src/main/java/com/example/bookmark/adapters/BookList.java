@@ -52,9 +52,6 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         this.showStatus = showStatus;
         this.bookList = books;
         this.filteredBookList = books;
-        // TODO: FIX THIS
-        // filteredBookList = new ArrayList<>();
-        // filteredBookList.addAll(bookList);
         this.context = context;
     }
 

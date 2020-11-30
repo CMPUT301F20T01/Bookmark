@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ListView
-            android:id="@+id/visible_books_listview"
+            android:id="@+id/books_listview"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -60,7 +60,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_bar_textInput"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/search_hint"
