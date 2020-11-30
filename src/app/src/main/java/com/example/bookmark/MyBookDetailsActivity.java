@@ -253,4 +253,20 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (book != null) {
+            StorageServiceProvider.getStorageService().retrieveBook(
+                book.getId(),
+                b -> {
+                    book = b;
+                    fillBookDetails();
+                    configureActionButton();
+                },
+                e -> DialogUtil.showErrorDialog(this, e)
+            );
+        }
+    }
+
 }

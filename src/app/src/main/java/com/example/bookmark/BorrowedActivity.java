@@ -13,7 +13,7 @@ import com.example.bookmark.util.DialogUtil;
 /**
  * This activity shows a user a list of books that they are currently
  * borrowing. They can select a book which takes them to the
- * BorrowedBookDetailsActivity where they can see the books details and
+ * BorrowerBookDetailsActivity where they can see the books details and
  * return the book.
  *
  * @author Ryan Kortbeek.
@@ -117,6 +117,6 @@ public class BorrowedActivity extends ListingBooksActivity {
      */
     @Override
     protected Class<?> getIntentDestination() {
-        return BorrowedBookDetailsActivity.class;
+        return BorrowerBookDetailsActivity.class;
     }
 }
