@@ -85,6 +85,8 @@ public class BookList extends ArrayAdapter<Book> {
             }
         } else if (context instanceof BorrowedActivity) {
             status.setVisibility(TextView.GONE);
+        } else {
+            notificationIcon.setVisibility(View.INVISIBLE);
         }
 
         return view;
