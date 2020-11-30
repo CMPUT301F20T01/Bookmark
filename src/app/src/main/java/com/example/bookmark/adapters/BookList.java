@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.bookmark.MyBooksActivity;
+import com.example.bookmark.PendingRequestsActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
 
@@ -31,18 +33,16 @@ public class BookList extends ArrayAdapter<Book> {
 
     private final boolean showOwner;
     private final boolean showStatus;
-    private String activityTitle;
 
     private TextView owner;
     private TextView status;
     private TextView description;
 
     public BookList(Context context, List<Book> books, boolean showOwner,
-                    boolean showStatus, String activityTitle) {
+                    boolean showStatus) {
         super(context, 0, books);
         this.showOwner = showOwner;
         this.showStatus = showStatus;
-        this.activityTitle = activityTitle;
         this.booksList = books;
         this.context = context;
     }
@@ -79,15 +79,15 @@ public class BookList extends ArrayAdapter<Book> {
         owner.setText(bookOwner);
         status.setText(bookStatus);
 
-        switch(this.activityTitle) {
-            case "My Books":
-                if (book.getStatus().toString().equals("REQUESTED")) {
-                    notificationIcon.setVisibility(View.VISIBLE);
-                } break;
-            case "Pending Requests":
-                if (book.getStatus().toString().equals("ACCEPTED")) {
-                    notificationIcon.setVisibility(view.VISIBLE);
-                } break;
+        if (context instanceof MyBooksActivity) {
+            if (book.getStatus().toString().equals("REQUESTED")) {
+                notificationIcon.setVisibility(View.VISIBLE);
+            }
+        }
+        if (context instanceof PendingRequestsActivity) {
+            if (book.getStatus().toString().equals("ACCEPTED")) {
+                notificationIcon.setVisibility(View.VISIBLE);
+            }
         }
 
         if (!showOwner) {

@@ -80,7 +80,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
         getSupportActionBar().setTitle(getActivityTitle());
 
         visibleBooksAdapter = new BookList(this, visibleBooks,
-            getBookOwnerVisibility(), getBookStatusVisibility(), getActivityTitle());
+            getBookOwnerVisibility(), getBookStatusVisibility());
         visibleBooksListView.setAdapter(visibleBooksAdapter);
 
         visibleBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
