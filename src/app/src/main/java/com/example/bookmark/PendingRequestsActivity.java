@@ -10,8 +10,10 @@ import com.example.bookmark.util.DialogUtil;
 
 /**
  * This activity shows a user a list of books that they have pending requests
- * for. They can select a book which takes them to the
- * RequestedBookDetailsActivity where they can see the books details.
+ * for (books that they have requested that have a status of either REQUESTED
+ * or ACCEPTED - they can select a book which takes them to the
+ * RequestedBookDetailsActivity or the AcceptedBookDetailsActivity,
+ * respectively where they can see the books details.
  *
  * @author Ryan Kortbeek.
  */
