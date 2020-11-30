@@ -3,9 +3,13 @@ package com.example.bookmark;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.core.content.ContextCompat;
+
+import com.android.volley.toolbox.ImageLoader;
 import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.EntityId;
@@ -73,11 +77,32 @@ public class EditBookActivity extends AddEditBookActivity {
             EntityId photoId = book.getPhotograph();
             // fetch photograph from storage service
             StorageServiceProvider.getStorageService().retrievePhotograph(photoId, photograph -> {
+                imageUri = photograph.getImageUri();
                 bookImage.setImageURI(photograph.getImageUri());
             }, e -> {
                 DialogUtil.showErrorDialog(this, e);
             });
+            deleteBookImageButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void deleteImage() {
+        // update book in db
+        book.setPhotograph(null);
+        StorageServiceProvider.getStorageService().storeBook(book,
+            aVoid -> {
+        }, e -> {
+        });
+        // delete photograph in db
+//        StorageServiceProvider.getStorageService().deletePhotograph(new Photograph(imageUri), aVoid -> {
+//            },
+//            e -> {
+//            });
+//        super.deleteImage();
+        imageUri = null;
+        bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
+        deleteBookImageButton.setVisibility(View.GONE);
     }
 
     /**
