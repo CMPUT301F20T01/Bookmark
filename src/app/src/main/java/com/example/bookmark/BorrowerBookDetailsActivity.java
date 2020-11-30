@@ -257,6 +257,10 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                             aVoid -> Log.d(TAG, "Book stored"),
                             e -> DialogUtil.showErrorDialog(this, e)
                         );
+                        // update book details and action button
+                        setBookDetails();
+                        fillBookDetails();
+                        configureActionButton();
                     },
                     e -> DialogUtil.showErrorDialog(this, e));
             } else {
@@ -282,6 +286,10 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                             aVoid -> Log.d(TAG, "Book stored"),
                             e -> DialogUtil.showErrorDialog(this, e)
                         );
+                        // update book details and action button
+                        setBookDetails();
+                        fillBookDetails();
+                        configureActionButton();
                     },
                     e -> DialogUtil.showErrorDialog(this, e)
                 );
@@ -289,9 +297,5 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }
         }
-        // update book details and action button
-        setBookDetails();
-        fillBookDetails();
-        configureActionButton();
     }
 }
