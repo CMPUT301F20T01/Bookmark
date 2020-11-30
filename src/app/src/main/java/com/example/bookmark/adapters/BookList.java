@@ -88,11 +88,11 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         notificationIcon.setVisibility(View.INVISIBLE);
         if (context instanceof MyBooksActivity) {
             hideBookOwner(view);
-            if (book.getStatus().toString().equals("REQUESTED")) {
+            if (book.getStatus() == Book.Status.REQUESTED) {
                 notificationIcon.setVisibility(View.VISIBLE);
             }
         } else if (context instanceof PendingRequestsActivity) {
-            if (book.getStatus().toString().equals("ACCEPTED")) {
+            if (book.getStatus() == Book.Status.ACCEPTED) {
                 notificationIcon.setVisibility(View.VISIBLE);
             }
         } else if (context instanceof BorrowedActivity) {
