@@ -66,7 +66,8 @@ public class PendingRequestsActivity extends ListingBooksActivity {
                 visibleBooks.clear();
                 relevantBooks.clear();
                 for (Book book : books) {
-                    if (book.getStatus() == Book.Status.REQUESTED) {
+                    if ((book.getStatus() == Book.Status.REQUESTED) ||
+                        (book.getStatus() == Book.Status.ACCEPTED)) {
                         relevantBooks.add(book);
                     }
                 }
@@ -99,6 +100,11 @@ public class PendingRequestsActivity extends ListingBooksActivity {
      */
     @Override
     protected Class<?> getIntentDestination() {
-        return RequestedBookDetailsActivity.class;
+        if (selectedBook.getStatus() == Book.Status.ACCEPTED) {
+            return AcceptedBookDetailsActivity.class;
+        } else {
+            // Happens when selectedBook.getStatus() == Book.Status.REQUESTED
+            return RequestedBookDetailsActivity.class;
+        }
     }
 }
