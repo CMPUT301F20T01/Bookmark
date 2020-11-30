@@ -37,18 +37,18 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/listing_books_action_btn"
-        android:layout_width="59dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:backgroundTint="#00BCD4"
+        android:backgroundTint="@color/colorAccent"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#9C27B0"
-        app:srcCompat="@drawable/ic_iconmonstr_plus_2" />
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        tools:visibility="visible" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_bar_textInputLayout"

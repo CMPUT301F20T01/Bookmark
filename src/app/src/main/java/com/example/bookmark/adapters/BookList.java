@@ -22,6 +22,7 @@ import com.example.bookmark.MyBooksActivity;
 import com.example.bookmark.PendingRequestsActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.EntityId;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
@@ -75,7 +76,15 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         owner = view.findViewById(R.id.book_preview_owner_text);
         TextView status = view.findViewById(R.id.book_preview_status_text);
 
-        //image.setImageBitmap(book.getPhotograph());
+        EntityId id = book.getPhotograph();
+        StorageServiceProvider.getStorageService().retrievePhotograph(
+            id,
+            photograph -> {
+                if (photograph != null) {
+                    image.setImageURI(photograph.getImageUri());
+                }
+            },
+            e -> DialogUtil.showErrorDialog(context, e));
 
 
         // Set the user if borrowed or accepted
