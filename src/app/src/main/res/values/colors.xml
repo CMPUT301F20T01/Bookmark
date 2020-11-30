@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorDeny">#D50000</color>
     <color name="colorImageBackground">#FFD6D7D7</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

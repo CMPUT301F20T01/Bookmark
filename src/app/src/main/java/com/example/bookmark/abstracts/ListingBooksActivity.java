@@ -2,6 +2,7 @@ package com.example.bookmark.abstracts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bookmark.NavigationDrawerActivity;
@@ -52,6 +54,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
 
     private TextInputLayout searchBarLayout;
     private EditText searchEditText;
+    private MenuItem filterMenuItem;
+    private MenuItem searchMenuItem;
 
     private boolean[] statusFilterEnabled = new boolean[Book.Status.values().length];
     private String statusFilterConstrainString;
@@ -96,7 +100,13 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Drawable searchIcon = (Drawable) searchMenuItem.getIcon();
+                searchIcon.mutate().setTint(ContextCompat.getColor(searchEditText.getContext(),
+                    charSequence.length() == 0 ? R.color.colorWhite : R.color.colorAccent
+                ));
+                searchMenuItem.setIcon(searchIcon);
                 updateAdapterFilter();
+
             }
 
             @Override
@@ -134,6 +144,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         // Inflates the menu with the filter and search icons
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_filter_search, menu);
+        filterMenuItem = menu.findItem(R.id.menu_filter_search_filter_btn);
+        searchMenuItem = menu.findItem(R.id.menu_filter_search_search_btn);
         return true;
     }
 
@@ -194,12 +206,17 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
             }
         }
 
+        // Build statusFilterConstrainString and update icon
+        Drawable filterIcon = (Drawable) filterMenuItem.getIcon();
         if (enabledFilterStrings.size() == statusFilterEnabled.length) {
             statusFilterConstrainString = "";
+            filterIcon.mutate().setTint(ContextCompat.getColor(this, R.color.colorWhite));
         } else {
             statusFilterConstrainString = BookList.STATUS_FILTER_OP
                 + TextUtils.join(BookList.FILTER_OP_DELIM, enabledFilterStrings);
+            filterIcon.mutate().setTint(ContextCompat.getColor(this, R.color.colorAccent));
         }
+        filterMenuItem.setIcon(filterIcon);
         updateAdapterFilter();
     }
 
