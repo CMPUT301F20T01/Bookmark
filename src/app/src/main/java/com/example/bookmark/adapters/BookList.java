@@ -31,16 +31,18 @@ public class BookList extends ArrayAdapter<Book> {
 
     private final boolean showOwner;
     private final boolean showStatus;
+    private String activityTitle;
 
     private TextView owner;
     private TextView status;
     private TextView description;
 
     public BookList(Context context, List<Book> books, boolean showOwner,
-                    boolean showStatus) {
+                    boolean showStatus, String activityTitle) {
         super(context, 0, books);
         this.showOwner = showOwner;
         this.showStatus = showStatus;
+        this.activityTitle = activityTitle;
         this.booksList = books;
         this.context = context;
     }
@@ -59,6 +61,7 @@ public class BookList extends ArrayAdapter<Book> {
         ImageView image = view.findViewById(R.id.book_preview_image);
         TextView title = view.findViewById(R.id.bok_preview_title_text);
         TextView author = view.findViewById(R.id.book_preview_author_text);
+        ImageView notificationIcon = view.findViewById(R.id.book_preview_notification_icon);
         description = view.findViewById(R.id.book_preview_description_text);
         owner = view.findViewById(R.id.book_preview_owner_text);
         status = view.findViewById(R.id.book_preview_status_text);
@@ -68,14 +71,24 @@ public class BookList extends ArrayAdapter<Book> {
         String bookStatus = ("Status: "
             + book.getStatus().toString().charAt(0)
             + book.getStatus().toString().substring(1).toLowerCase());
-        // TODO get owner name once functionality is supported by Owner class
-        String bookOwner = "Owner: "; // + book.getOwner().toString();
+        String bookOwner = "Owner: " + book.getOwnerId().toString();
 
         title.setText(book.getTitle());
         author.setText(book.getAuthor());
         description.setText(book.getDescription());
         owner.setText(bookOwner);
         status.setText(bookStatus);
+
+        switch(this.activityTitle) {
+            case "My Books":
+                if (book.getStatus().toString().equals("REQUESTED")) {
+                    notificationIcon.setVisibility(View.VISIBLE);
+                } break;
+            case "Pending Requests":
+                if (book.getStatus().toString().equals("ACCEPTED")) {
+                    notificationIcon.setVisibility(view.VISIBLE);
+                } break;
+        }
 
         if (!showOwner) {
             hideBookOwner(view);
