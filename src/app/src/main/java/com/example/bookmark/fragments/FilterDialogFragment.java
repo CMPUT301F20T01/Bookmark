@@ -3,23 +3,19 @@ package com.example.bookmark.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 
 import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
-import com.example.bookmark.models.Photograph;
 
 /**
  * TODO: Description of class.
@@ -63,7 +59,7 @@ public class FilterDialogFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof ImageSelectDialogFragment.ImageSelectListener) {
+        if (context instanceof FilterDialogFragment.FilterDialogListener) {
             listener = (FilterDialogFragment.FilterDialogListener) context;
         } else {
             throw new RuntimeException(context.toString()
@@ -79,18 +75,30 @@ public class FilterDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View filterView = LayoutInflater.from(context).inflate(R.layout.fragment_filter_dialog, null);
 
-        boolean[] checkboxEnabled = savedInstanceState.getBooleanArray(FILTER_CHECK_ENABLED);
+        Bundle bundle = getArguments();
+        boolean[] checkboxEnabled = bundle.getBooleanArray(FILTER_CHECK_ENABLED);
         for (int i=0; i < checkboxes.length; i++) {
             checkboxes[i] = filterView.findViewById(checkboxIds[i]);
             checkboxes[i].setChecked(checkboxEnabled[i]);
         }
 
-        return builder
+        AlertDialog dialog = builder
             .setView(filterView)
             .setTitle(getString(R.string.filter_book))
             .setPositiveButton(getString(R.string.apply), (d,w) -> updateFilters())
             .setNegativeButton(getString(R.string.cancel), null)
             .create();
+
+        dialog.setOnShowListener(shownDialog -> {
+            ((AlertDialog) shownDialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            ((AlertDialog) shownDialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        });
+
+        return dialog;
     }
 
     private void updateFilters() {
