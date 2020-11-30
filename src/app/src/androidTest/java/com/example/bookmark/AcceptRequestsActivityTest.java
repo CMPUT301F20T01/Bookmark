@@ -76,7 +76,6 @@ public class AcceptRequestsActivityTest {
      */
     @Test
     public void clickDoneButton() {
-        Activity activity = solo.getCurrentActivity();
         View buttonView = rule.getActivity().findViewById(R.id.done_button);
         solo.clickOnView(buttonView);
         solo.waitForLogMessage("Finishing Accept Requests Activity on done button press");
