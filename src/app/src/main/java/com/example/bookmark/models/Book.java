@@ -117,7 +117,11 @@ public class Book implements FirestoreIndexable, Serializable {
      * @param photograph The photograph.
      */
     public void setPhotograph(Photograph photograph) {
-        this.photographId = photograph.getId();
+        if (photograph != null) {
+            this.photographId = photograph.getId();
+        } else {
+            this.photographId = null;
+        }
     }
 
     /**
@@ -194,7 +198,8 @@ public class Book implements FirestoreIndexable, Serializable {
             (String) map.get("author"),
             (String) map.get("isbn")
         );
-        book.photographId = new EntityId((String) map.get("photographId"));
+        String photographIdString = (String) map.get("photographId");
+        book.photographId = photographIdString != null ? new EntityId(photographIdString) : null;
         book.description = (String) map.get("description");
         book.status = Status.valueOf((String) map.get("status"));
         return book;
