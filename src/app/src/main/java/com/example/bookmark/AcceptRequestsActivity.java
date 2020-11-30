@@ -103,34 +103,35 @@ public class AcceptRequestsActivity extends BackButtonActivity implements OnMapR
                 Log.d("LOCATION", e.toString());
                 location = null;
             }
-
-            Double latitude;
-            Double longitude;
-            if (location == null) {
-                latitude = 53.5461;
-                longitude = -113.4938;
-            } else {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            }
-            LatLng markerLocation = new LatLng(latitude, longitude);
-            marker = map.addMarker(new MarkerOptions()
-                .position(markerLocation)
-                .title("Meeting Location")
-                .snippet("Latitude: " + latitude + " Longitude: " + longitude)
-            );
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLocation, 11));
-            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    marker.setPosition(latLng);
-                    marker.setSnippet("Latitude: " + latLng.latitude + " Longitude: " + latLng.longitude);
-                }
-            });
         } else {
             Log.d("LOCATION", "Should request permissions");
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, MY_PERMISSIONS_REQUEST_CODE);
+            location = null;
         }
+
+        Double latitude;
+        Double longitude;
+        if (location == null) {
+            latitude = 53.5461;
+            longitude = -113.4938;
+        } else {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+        LatLng markerLocation = new LatLng(latitude, longitude);
+        marker = map.addMarker(new MarkerOptions()
+            .position(markerLocation)
+            .title("Meeting Location")
+            .snippet("Latitude: " + latitude + " Longitude: " + longitude)
+        );
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLocation, 11));
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                marker.setPosition(latLng);
+                marker.setSnippet("Latitude: " + latLng.latitude + " Longitude: " + latLng.longitude);
+            }
+        });
     }
 
     /**
