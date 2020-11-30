@@ -139,7 +139,7 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
     private void configureActionButton() {
         switch (book.getStatus()) {
             case AVAILABLE:
-                actionButton.setText("Request");
+                actionButton.setText("REQUEST");
                 actionButton.setOnClickListener(requestBookListener);
                 break;
             case REQUESTED:
@@ -149,12 +149,12 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                         for (Request r: requestList) {
                             if (r.getRequesterId().toString().equals(user.getId().toString())) {
                                 // TODO: set button style to OutlinedButton
-                                actionButton.setText("Requested");
+                                actionButton.setText("REQUESTED");
                                 actionButton.setOnClickListener(aVoid -> {});
                                 return;
                             }
                             // this user is not one of the requesters on this book so book is requestable
-                            actionButton.setText("Request");
+                            actionButton.setText("REQUEST");
                             actionButton.setOnClickListener(requestBookListener);
                         }
                     },
@@ -162,11 +162,11 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                 );
                 break;
             case ACCEPTED:
-                actionButton.setText("Borrow");
+                actionButton.setText("BORROW");
                 actionButton.setOnClickListener(borrowBookListener);
                 break;
             case BORROWED:
-                actionButton.setText("Return");
+                actionButton.setText("RETURN");
                 actionButton.setOnClickListener(returnBookListener);
                 break;
         }
@@ -201,8 +201,17 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
      * Handle borrowing a book
      */
     private void borrowBook() {
-        Intent intent = new Intent(this, ScanIsbnActivity.class);
-        startActivityForResult(intent, SCAN_ISBN_TO_BORROW);
+        RequestUtil.retrieveRequestsOnBookByStatus(
+            book,
+            Request.Status.ACCEPTED,
+            request -> {
+                Intent intent = new Intent(this, BorrowBookActivity.class);
+                intent.putExtra(ListingBooksActivity.EXTRA_BOOK, book);
+                intent.putExtra(BorrowBookActivity.EXTRA_REQUEST, request);
+                startActivityForResult(intent, SCAN_ISBN_TO_BORROW);
+            },
+            e -> DialogUtil.showErrorDialog(this, e)
+        );
     }
 
     /**
