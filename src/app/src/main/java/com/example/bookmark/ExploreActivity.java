@@ -11,7 +11,7 @@ import com.example.bookmark.util.DialogUtil;
 /**
  * This activity shows a user a list of books that match the keyword(s) from
  * the search they have just performed. They can select a book which takes them
- * to the ExploreBookDetailsActivity where they can see the books details.
+ * to the BorrowerBookDetailsActivity where they can see the books details.
  *
  * @author Ryan Kortbeek.
  */
@@ -98,6 +98,6 @@ public class ExploreActivity extends ListingBooksActivity {
      */
     @Override
     protected Class<?> getIntentDestination() {
-        return ExploreBookDetailsActivity.class;
+        return BorrowerBookDetailsActivity.class;
     }
 }
