@@ -140,7 +140,7 @@ public class FirebaseStorageService implements StorageService {
         imageReference.getDownloadUrl().addOnSuccessListener(uri -> {
             Log.d(TAG, String.format("Retrieved photograph with id %s.", id.toString()));
             Map<String, Object> map = new HashMap<>();
-            map.put("imageUri", uri);
+            map.put("imageUri", uri.toString());
             Photograph photograph = Photograph.fromFirestoreDocument(id.toString(), map);
             onSuccessListener.onSuccess(photograph);
         }).addOnFailureListener(e -> {

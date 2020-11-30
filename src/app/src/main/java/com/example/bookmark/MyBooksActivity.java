@@ -49,28 +49,6 @@ public class MyBooksActivity extends ListingBooksActivity {
         return "My Books";
     }
 
-    /**
-     * Returns whether the the owner field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookOwnerVisibility() {
-        return false;
-    }
-
-    /**
-     * Returns whether the the status field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookStatusVisibility() {
-        return true;
-    }
-
     @Override
     protected void getRelevantBooks() {
         OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);

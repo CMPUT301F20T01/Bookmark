@@ -12,7 +12,7 @@ import com.example.bookmark.util.DialogUtil;
  * This activity shows a user a list of books that they have pending requests
  * for (books that they have requested that have a status of either REQUESTED
  * or ACCEPTED - they can select a book which takes them to the
- * RequestedBookDetailsActivity or the AcceptedBookDetailsActivity,
+ * BorrowerBookDetailsActivity or the BorrowerBookDetailsActivity,
  * respectively where they can see the books details.
  *
  * @author Ryan Kortbeek.
@@ -31,28 +31,6 @@ public class PendingRequestsActivity extends ListingBooksActivity {
     @Override
     protected String getActivityTitle() {
         return "Pending Requests";
-    }
-
-    /**
-     * Returns whether the the owner field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookOwnerVisibility() {
-        return true;
-    }
-
-    /**
-     * Returns whether the the status field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookStatusVisibility() {
-        return true;
     }
 
     /**
@@ -102,11 +80,6 @@ public class PendingRequestsActivity extends ListingBooksActivity {
      */
     @Override
     protected Class<?> getIntentDestination() {
-        if (selectedBook.getStatus() == Book.Status.ACCEPTED) {
-            return AcceptedBookDetailsActivity.class;
-        } else {
-            // Happens when selectedBook.getStatus() == Book.Status.REQUESTED
-            return RequestedBookDetailsActivity.class;
-        }
+        return BorrowerBookDetailsActivity.class;
     }
 }

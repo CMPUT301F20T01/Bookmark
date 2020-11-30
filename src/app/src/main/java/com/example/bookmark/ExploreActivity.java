@@ -11,7 +11,7 @@ import com.example.bookmark.util.DialogUtil;
 /**
  * This activity shows a user a list of books that match the keyword(s) from
  * the search they have just performed. They can select a book which takes them
- * to the ExploreBookDetailsActivity where they can see the books details.
+ * to the BorrowerBookDetailsActivity where they can see the books details.
  *
  * @author Ryan Kortbeek.
  */
@@ -30,29 +30,7 @@ public class ExploreActivity extends ListingBooksActivity {
     protected String getActivityTitle() {
         return "Explore";
     }
-
-    /**
-     * Returns whether the the owner field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookOwnerVisibility() {
-        return true;
-    }
-
-    /**
-     * Returns whether the the status field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookStatusVisibility() {
-        return true;
-    }
-
+    
     /**
      * Gets all books from the firestore database that are not accepted or
      * borrowed and sets the values of visibleBooks and relevantBooks
@@ -98,6 +76,6 @@ public class ExploreActivity extends ListingBooksActivity {
      */
     @Override
     protected Class<?> getIntentDestination() {
-        return ExploreBookDetailsActivity.class;
+        return BorrowerBookDetailsActivity.class;
     }
 }

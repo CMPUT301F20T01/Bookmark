@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.Geolocation;
 import com.example.bookmark.models.Request;
@@ -52,12 +53,8 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_borrow_book);
 
         Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-
-        if (bundle != null) {
-            book = (Book) bundle.getSerializable(EXTRA_BOOK);
-            request = (Request) bundle.getSerializable(EXTRA_REQUEST);
-        }
+        book = (Book) intent.getSerializableExtra(ListingBooksActivity.EXTRA_BOOK);
+        request = (Request) intent.getSerializableExtra(BorrowBookActivity.EXTRA_REQUEST);
 
         mapView = (MapView) findViewById(R.id.borrowBookMap);
         mapView.onCreate(null);
@@ -79,24 +76,13 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
         if (requestCode == BorrowBookActivity.GET_ISBN && resultCode == Activity.RESULT_OK) {
             String isbn = data.getStringExtra("ISBN");
             if (book.getIsbn().equals(isbn)) {
-                book.setStatus(Book.Status.BORROWED);
-                request.setStatus(Request.Status.BORROWED);
-                saveChanges(book, request);
+                Intent intent = getIntent();
+                intent.putExtra("ISBN", isbn);
+                finish();
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as request ISBN", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void saveChanges(Book book, Request request) {
-        OnSuccessListener<Void> onSuccessListener = aVoid -> {
-            Intent intent = getIntent();
-            setResult(Activity.RESULT_OK, intent);
-            finish();
-        };
-        OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
-        StorageServiceProvider.getStorageService().storeRequest(request, aVoid ->
-            StorageServiceProvider.getStorageService().storeBook(book, onSuccessListener, onFailureListener), onFailureListener);
     }
 
     /**
