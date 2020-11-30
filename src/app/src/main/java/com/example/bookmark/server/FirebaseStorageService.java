@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.EntityId;
+import com.example.bookmark.models.Photograph;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -11,8 +12,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -27,15 +32,14 @@ public class FirebaseStorageService implements StorageService {
         T deserialize(String id, Map<String, Object> map);
     }
 
-    private static class Collection {
-        private static final String USERS = "users";
-        private static final String BOOKS = "books";
-        private static final String REQUESTS = "requests";
+    protected enum Collection {
+        USERS, BOOKS, REQUESTS, PHOTOGRAPHS
     }
 
     private static final String TAG = "FirebaseStorageService";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
     public void storeUser(User user, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
@@ -116,8 +120,76 @@ public class FirebaseStorageService implements StorageService {
         deleteEntity(Collection.REQUESTS, request.getId().toString(), onSuccessListener, onFailureListener);
     }
 
-    protected void storeEntity(String collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    @Override
+    public void storePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        String photographPath = String.format("%s/%s", getCollectionName(Collection.PHOTOGRAPHS), photograph.getId().toString());
+        StorageReference imageReference = storage.getReference().child(photographPath);
+        imageReference.putFile(photograph.getImageUri()).addOnSuccessListener(taskSnapshot -> {
+            Log.d(TAG, String.format("Stored photograph with id %s.", photograph.getId()));
+            onSuccessListener.onSuccess(null);
+        }).addOnFailureListener(e -> {
+            Log.w(TAG, String.format("Error storing photograph with id %s: ", photograph.getId()), e);
+            onFailureListener.onFailure(e);
+        });
+    }
+
+    @Override
+    public void retrievePhotograph(EntityId id, OnSuccessListener<Photograph> onSuccessListener, OnFailureListener onFailureListener) {
+        String photographPath = String.format("%s/%s", getCollectionName(Collection.PHOTOGRAPHS), id.toString());
+        StorageReference imageReference = storage.getReference().child(photographPath);
+        imageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Log.d(TAG, String.format("Retrieved photograph with id %s.", id.toString()));
+            Map<String, Object> map = new HashMap<>();
+            map.put("imageUri", uri);
+            Photograph photograph = Photograph.fromFirestoreDocument(id.toString(), map);
+            onSuccessListener.onSuccess(photograph);
+        }).addOnFailureListener(e -> {
+            if (e instanceof StorageException) {
+                // No photograph with the id exists. Returns null to be consistent.
+                onSuccessListener.onSuccess(null);
+                return;
+            }
+            Log.w(TAG, String.format("Error retrieving photograph with id %s: ", id.toString()), e);
+            onFailureListener.onFailure(e);
+        });
+    }
+
+    @Override
+    public void deletePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        String photographPath = String.format("%s/%s", getCollectionName(Collection.PHOTOGRAPHS), photograph.getId().toString());
+        StorageReference imageReference = storage.getReference().child(photographPath);
+        imageReference.delete().addOnSuccessListener(aVoid -> {
+            Log.d(TAG, String.format("Deleted photograph with id %s.", photograph.getId().toString()));
+            onSuccessListener.onSuccess(null);
+        }).addOnFailureListener(e -> {
+            Log.w(TAG, String.format("Error deleting photograph with id %s: ", photograph.getId().toString()), e);
+            onFailureListener.onFailure(e);
+        });
+    }
+
+    /**
+     * Gets the name of the collection.
+     *
+     * @param collection The collection.
+     * @return The name of the collection.
+     */
+    protected String getCollectionName(Collection collection) {
+        switch (collection) {
+            case BOOKS:
+                return "books";
+            case USERS:
+                return "users";
+            case REQUESTS:
+                return "requests";
+            case PHOTOGRAPHS:
+                return "photographs";
+            default:
+                throw new IllegalArgumentException("Unrecognized collection.");
+        }
+    }
+
+    private void storeEntity(Collection collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .document(entity.getId().toString())
             .set(entity.toFirestoreDocument())
             .addOnSuccessListener(aVoid -> {
@@ -125,13 +197,13 @@ public class FirebaseStorageService implements StorageService {
                 onSuccessListener.onSuccess(aVoid);
             })
             .addOnFailureListener(e -> {
-                Log.w(TAG, String.format("Error storing %s with id %s to collection %s.: ", entity.getClass().getName().toLowerCase(), entity.getId(), collection), e);
+                Log.w(TAG, String.format("Error storing %s with id %s to collection %s: ", entity.getClass().getName().toLowerCase(), entity.getId(), collection), e);
                 onFailureListener.onFailure(e);
             });
     }
 
-    protected <T> void retrieveEntity(String collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    private <T> void retrieveEntity(Collection collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .document(id)
             .get()
             .addOnSuccessListener(documentSnapshot -> {
@@ -144,13 +216,13 @@ public class FirebaseStorageService implements StorageService {
                 }
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, String.format("Error retrieving entity with id %s from collection %s.", id, collection));
+                Log.d(TAG, String.format("Error retrieving entity with id %s from collection %s: ", id, collection), e);
                 onFailureListener.onFailure(e);
             });
     }
 
-    protected <T> void retrieveEntities(String collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    private <T> void retrieveEntities(Collection collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
@@ -161,13 +233,13 @@ public class FirebaseStorageService implements StorageService {
                 onSuccessListener.onSuccess(entities);
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, String.format("Error retrieving entities from collection %s.", collection));
+                Log.d(TAG, String.format("Error retrieving entities from collection %s: ", collection), e);
                 onFailureListener.onFailure(e);
             });
     }
 
-    protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-        conditions.apply(db.collection(collection))
+    private <T> void retrieveEntitiesMatching(Collection collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+        conditions.apply(db.collection(getCollectionName(collection)))
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
@@ -178,13 +250,13 @@ public class FirebaseStorageService implements StorageService {
                 onSuccessListener.onSuccess(entities);
             })
             .addOnFailureListener(e -> {
-                Log.d(TAG, String.format("Error retrieving entities from collection %s matching conditions.", collection));
+                Log.d(TAG, String.format("Error retrieving entities from collection %s matching conditions: ", collection), e);
                 onFailureListener.onFailure(e);
             });
     }
 
-    protected void deleteEntity(String collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    private void deleteEntity(Collection collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .document(id)
             .delete()
             .addOnSuccessListener(aVoid -> {

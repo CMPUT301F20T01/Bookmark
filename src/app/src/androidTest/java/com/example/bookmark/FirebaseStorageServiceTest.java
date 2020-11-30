@@ -2,6 +2,7 @@ package com.example.bookmark;
 
 import com.example.bookmark.mocks.MockModels;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Photograph;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.FirebaseStorageService;
@@ -35,32 +36,8 @@ public class FirebaseStorageServiceTest {
      */
     private static class MockFirebaseStorageService extends FirebaseStorageService {
         @Override
-        protected void storeEntity(String collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-            super.storeEntity(mock(collection), entity, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected <T> void retrieveEntity(String collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntity(mock(collection), id, deserializer, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected <T> void retrieveEntities(String collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntities(mock(collection), deserializer, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntitiesMatching(mock(collection), conditions, deserializer, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected void deleteEntity(String collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-            super.deleteEntity(mock(collection), id, onSuccessListener, onFailureListener);
-        }
-
-        private String mock(String collection) {
-            return String.format("mock-%s", collection);
+        protected String getCollectionName(Collection collection) {
+            return String.format("mock-%s", super.getCollectionName(collection));
         }
     }
 
@@ -100,6 +77,10 @@ public class FirebaseStorageServiceTest {
 
         Request request2 = MockModels.getMockRequest2();
         storageService.storeRequest(request2, aVoid -> semaphore.release(), e -> fail("An error occurred while storing request 2."));
+        acquire(semaphore);
+
+        Photograph photograph = MockModels.getMockPhotograph();
+        storageService.storePhotograph(photograph, aVoid -> semaphore.release(), e -> fail("An error occurred while storing the photograph"));
         acquire(semaphore);
     }
 
@@ -260,6 +241,38 @@ public class FirebaseStorageServiceTest {
             assertTrue(requests.contains(request2));
             semaphore.release();
         }, e -> fail("An error occurred while retrieving the requests by requester."));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests retrieving a photograph.
+     */
+    @Test
+    public void testRetrievePhotograph() {
+        Semaphore semaphore = new Semaphore(0);
+        Photograph photograph = MockModels.getMockPhotograph();
+        storageService.retrievePhotograph(photograph.getId(), photograph2 -> {
+            assertEquals(photograph.getId(), photograph2.getId());
+            semaphore.release();
+        }, e -> fail("An error occurred while retrieving the photograph."));
+        acquire(semaphore);
+    }
+
+    /**
+     * Tests deleting a photograph.
+     */
+    @Test
+    public void testDeletePhotograph() {
+        Semaphore semaphore = new Semaphore(0);
+        Photograph photograph = MockModels.getMockPhotograph();
+        storageService.deletePhotograph(photograph, aVoid ->
+                storageService.retrievePhotograph(photograph.getId(), photograph2 ->
+                        storageService.storePhotograph(photograph, aVoid2 -> {
+                            assertNull(photograph2);
+                            semaphore.release();
+                        }, e -> fail("An error occurred while recreating the deleted photograph.")),
+                    e -> fail("An error occurred while retrieving the deleted photograph.")),
+            e -> fail("An error occurred while deleting the photograph"));
         acquire(semaphore);
     }
 

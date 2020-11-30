@@ -1,6 +1,7 @@
 package com.example.bookmark.mocks;
 
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Photograph;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.InMemoryStorageService;
@@ -26,6 +27,8 @@ public class MockStorageService {
         List<Request> requests = new ArrayList<>();
         requests.add(MockModels.getMockRequest1());
         requests.add(MockModels.getMockRequest2());
-        return new InMemoryStorageService(users, books, requests);
+        List<Photograph> photographs = new ArrayList<>();
+        photographs.add(MockModels.getMockPhotograph());
+        return new InMemoryStorageService(users, books, requests, photographs);
     }
 }

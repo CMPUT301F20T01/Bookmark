@@ -2,6 +2,7 @@ package com.example.bookmark.server;
 
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.EntityId;
+import com.example.bookmark.models.Photograph;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,22 +23,24 @@ public class InMemoryStorageService implements StorageService {
     private final Map<EntityId, User> users = new HashMap<>();
     private final Map<EntityId, Book> books = new HashMap<>();
     private final Map<EntityId, Request> requests = new HashMap<>();
+    private final Map<EntityId, Photograph> photographs = new HashMap<>();
 
     /**
      * Creates an InMemoryStorageService.
      */
     public InMemoryStorageService() {
-        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     /**
      * Creates an InMemoryStorageService.
      *
-     * @param users    The users that should exist to start.
-     * @param books    The books that should exist to start.
-     * @param requests The requests that should exist to start.
+     * @param users       The users that should exist to start.
+     * @param books       The books that should exist to start.
+     * @param requests    The requests that should exist to start.
+     * @param photographs The photographs that should exist to start.
      */
-    public InMemoryStorageService(List<User> users, List<Book> books, List<Request> requests) {
+    public InMemoryStorageService(List<User> users, List<Book> books, List<Request> requests, List<Photograph> photographs) {
         for (User user : users) {
             storeEntity(this.users, user);
         }
@@ -46,6 +49,9 @@ public class InMemoryStorageService implements StorageService {
         }
         for (Request request : requests) {
             storeEntity(this.requests, request);
+        }
+        for (Photograph photograph : photographs) {
+            storeEntity(this.photographs, photograph);
         }
     }
 
@@ -150,6 +156,23 @@ public class InMemoryStorageService implements StorageService {
     @Override
     public void deleteRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         requests.remove(request.getId());
+        onSuccessListener.onSuccess(null);
+    }
+
+    @Override
+    public void storePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        storeEntity(photographs, photograph);
+        onSuccessListener.onSuccess(null);
+    }
+
+    @Override
+    public void retrievePhotograph(EntityId id, OnSuccessListener<Photograph> onSuccessListener, OnFailureListener onFailureListener) {
+        onSuccessListener.onSuccess(photographs.get(id));
+    }
+
+    @Override
+    public void deletePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        photographs.remove(photograph.getId());
         onSuccessListener.onSuccess(null);
     }
 

@@ -2,6 +2,7 @@ package com.example.bookmark.server;
 
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.EntityId;
+import com.example.bookmark.models.Photograph;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -130,4 +131,31 @@ public interface StorageService {
      * @param onFailureListener Callback to run on failure.
      */
     void deleteRequest(Request request, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener);
+
+    /**
+     * Stores a photograph.
+     *
+     * @param photograph        The photograph.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    void storePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener);
+
+    /**
+     * Retrieves a photograph.
+     *
+     * @param id                The id of the photograph.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    void retrievePhotograph(EntityId id, OnSuccessListener<Photograph> onSuccessListener, OnFailureListener onFailureListener);
+
+    /**
+     * Deletes a photograph.
+     *
+     * @param photograph        The photograph.
+     * @param onSuccessListener Callback to run on success.
+     * @param onFailureListener Callback to run on failure.
+     */
+    void deletePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener);
 }
