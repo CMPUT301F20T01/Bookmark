@@ -29,7 +29,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
  *
  * @author Nayan Prakash.
  */
-public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class BorrowBookActivity extends BackButtonActivity implements OnMapReadyCallback {
 
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
     public static final String EXTRA_REQUEST = "com.example.bookmark.REQUEST";
@@ -98,12 +98,66 @@ public class BorrowBookActivity extends AppCompatActivity implements OnMapReadyC
 
         Geolocation location = request.getLocation();
         LatLng meetingLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(meetingLocation, 9));
         map.addMarker(new MarkerOptions()
             .position(meetingLocation)
             .title("Meeting Location")
             .snippet("Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude())
         );
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(meetingLocation, 9));
+    }
+
+    /**
+     * This is the function that handles mapView resume
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    /**
+     * This is the function that handles mapView onStart
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    /**
+     * This is the function that handles mapView stop
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    /**
+     * This is the function that handles mapView pause
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    /**
+     * This is the function that handles mapView destroy
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    /**
+     * This is the function that handles mapView low memory
+     */
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     /**
