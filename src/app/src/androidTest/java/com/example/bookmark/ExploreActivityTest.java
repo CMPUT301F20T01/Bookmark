@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -106,10 +107,9 @@ public class ExploreActivityTest {
         solo.clickOnView(searchBtn);
         solo.waitForText("Search");
         assertEquals(View.VISIBLE, searchBarLayout.getVisibility());
-        TextInputEditText searchEditText =
-            rule.getActivity().findViewById(R.id.search_bar_textInput);
+        EditText searchEditText = searchBarLayout.getEditText();
         ListView listView =
-            rule.getActivity().findViewById(R.id.visible_books_listview);
+            rule.getActivity().findViewById(R.id.books_listview);
         MockModels.getMockBook1().setDescription("Learning to code!");
         MockModels.getMockBook2().setDescription("LEARNT BEHAVIOUR...");
         MockModels.getMockBook3().setDescription("Trying to LeArN.");
@@ -173,7 +173,7 @@ public class ExploreActivityTest {
     @Test
     public void numberOfBooks() {
         ListView listView =
-            rule.getActivity().findViewById(R.id.visible_books_listview);
+            rule.getActivity().findViewById(R.id.books_listview);
         List<Book> validBooks = new ArrayList<>();
         User user = MockModels.getMockRequester();
         StorageServiceProvider.getStorageService().retrieveBooks(books -> {
