@@ -3,27 +3,14 @@ package com.example.bookmark;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bookmark.abstracts.ListingBooksActivity;
-import com.example.bookmark.adapters.BookList;
-import com.example.bookmark.fragments.SearchDialogFragment;
-import com.example.bookmark.models.Book;
-import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 import com.example.bookmark.util.UserUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This activity shows a user a list of their books.
