@@ -112,7 +112,7 @@ public class ImageSelectDialogFragment extends DialogFragment {
             listener = (ImageSelectListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                + " must implement GearAddEditListener");
+                + " must implement ImageSelectListener");
         }
         this.context = context;
     }

@@ -10,6 +10,9 @@ import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This activity shows a user a list of books that they are currently
  * borrowing. They can select a book which takes them to the
@@ -59,15 +62,13 @@ public class BorrowedActivity extends ListingBooksActivity {
         StorageServiceProvider.getStorageService().retrieveBooksByRequester(
                 user,
                 books -> {
-                    visibleBooks.clear();
-                    relevantBooks.clear();
+                    List<Book> relevantBooks = new ArrayList<>();
                     for (Book book : books) {
                         if (book.getStatus() == Book.Status.BORROWED) {
                             relevantBooks.add(book);
                         }
                     }
-                    visibleBooks.addAll(relevantBooks);
-                    visibleBooksAdapter.notifyDataSetChanged();
+                    updateBookList(relevantBooks);
                 }, e -> {
                     DialogUtil.showErrorDialog(this, e);
                 }

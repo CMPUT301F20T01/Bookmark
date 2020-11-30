@@ -22,13 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MyBooksActivity extends ListingBooksActivity {
     FloatingActionButton addBookBtn;
 
-    private final View.OnClickListener addBookListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            goToAddBook();
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +29,7 @@ public class MyBooksActivity extends ListingBooksActivity {
         // Add the add book button
         addBookBtn = findViewById(R.id.listing_books_action_btn);
         addBookBtn.setVisibility(View.VISIBLE);
-        addBookBtn.setOnClickListener(addBookListener);
+        addBookBtn.setOnClickListener((view -> goToAddBook()));
     }
 
     /**
@@ -60,13 +53,7 @@ public class MyBooksActivity extends ListingBooksActivity {
                 StorageServiceProvider.getStorageService().retrieveBooksByOwner(
                     user,
                     books -> {
-                        visibleBooks.clear();
-                        relevantBooks.clear();
-
-                        relevantBooks.addAll(books);
-                        visibleBooks.addAll(relevantBooks);
-
-                        visibleBooksAdapter.notifyDataSetChanged();
+                        updateBookList(books);
                     },
                     onFailureListener
                 );

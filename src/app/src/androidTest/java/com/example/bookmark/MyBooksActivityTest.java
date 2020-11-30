@@ -5,15 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.bookmark.mocks.MockModels;
 import com.example.bookmark.mocks.MockStorageService;
-import com.example.bookmark.models.Book;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -116,7 +113,7 @@ public class MyBooksActivityTest {
      */
     @Test
     public void numberOfBooks() {
-        ListView books_list = (ListView) solo.getView(R.id.visible_books_listview);
+        ListView books_list = (ListView) solo.getView(R.id.books_listview);
         User owner = MockModels.getMockOwner();
         StorageServiceProvider.getStorageService().retrieveBooksByOwner(owner, books -> {
             assertEquals(books.size(), books_list.getCount());

@@ -8,6 +8,9 @@ import com.example.bookmark.models.Book;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This activity shows a user a list of books that match the keyword(s) from
  * the search they have just performed. They can select a book which takes them
@@ -39,8 +42,7 @@ public class ExploreActivity extends ListingBooksActivity {
     @Override
     protected void getRelevantBooks() {
         StorageServiceProvider.getStorageService().retrieveBooks(books -> {
-            visibleBooks.clear();
-            relevantBooks.clear();
+            List<Book> relevantBooks = new ArrayList<>();
             for (Book book : books) {
                 if (!book.getOwnerId().equals(user.getId()) &&
                     (book.getStatus() != Book.Status.BORROWED) &&
@@ -48,8 +50,7 @@ public class ExploreActivity extends ListingBooksActivity {
                     relevantBooks.add(book);
                 }
             }
-            visibleBooks.addAll(relevantBooks);
-            visibleBooksAdapter.notifyDataSetChanged();
+            updateBookList(relevantBooks);
         }, e -> {
             DialogUtil.showErrorDialog(this, e);
         });
