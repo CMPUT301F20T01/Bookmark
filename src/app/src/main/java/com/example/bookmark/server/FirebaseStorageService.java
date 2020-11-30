@@ -32,10 +32,8 @@ public class FirebaseStorageService implements StorageService {
         T deserialize(String id, Map<String, Object> map);
     }
 
-    private static class Collection {
-        private static final String USERS = "users";
-        private static final String BOOKS = "books";
-        private static final String REQUESTS = "requests";
+    protected enum Collection {
+        USERS, BOOKS, REQUESTS, PHOTOGRAPHS
     }
 
     private static final String TAG = "FirebaseStorageService";
@@ -124,7 +122,8 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void storePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        StorageReference imageReference = storage.getReference().child("images/" + photograph.getId().toString());
+        String photographPath = String.format("%s/%s", getCollectionName(Collection.PHOTOGRAPHS), photograph.getId().toString());
+        StorageReference imageReference = storage.getReference().child(photographPath);
         imageReference.putFile(photograph.getImageUri()).addOnSuccessListener(taskSnapshot -> {
             Log.d(TAG, String.format("Stored photograph with id %s.", photograph.getId()));
             onSuccessListener.onSuccess(null);
@@ -136,7 +135,8 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void retrievePhotograph(EntityId id, OnSuccessListener<Photograph> onSuccessListener, OnFailureListener onFailureListener) {
-        StorageReference imageReference = storage.getReference().child("images/" + id.toString());
+        String photographPath = String.format("%s/%s", getCollectionName(Collection.PHOTOGRAPHS), id.toString());
+        StorageReference imageReference = storage.getReference().child(photographPath);
         imageReference.getDownloadUrl().addOnSuccessListener(uri -> {
             Log.d(TAG, String.format("Retrieved photograph with id %s.", id.toString()));
             Map<String, Object> map = new HashMap<>();
@@ -156,7 +156,8 @@ public class FirebaseStorageService implements StorageService {
 
     @Override
     public void deletePhotograph(Photograph photograph, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        StorageReference imageReference = storage.getReference().child("images/" + photograph.getId().toString());
+        String photographPath = String.format("%s/%s", getCollectionName(Collection.PHOTOGRAPHS), photograph.getId().toString());
+        StorageReference imageReference = storage.getReference().child(photographPath);
         imageReference.delete().addOnSuccessListener(aVoid -> {
             Log.d(TAG, String.format("Deleted photograph with id %s.", photograph.getId().toString()));
             onSuccessListener.onSuccess(null);
@@ -166,8 +167,29 @@ public class FirebaseStorageService implements StorageService {
         });
     }
 
-    protected void storeEntity(String collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    /**
+     * Gets the name of the collection.
+     *
+     * @param collection The collection.
+     * @return The name of the collection.
+     */
+    protected String getCollectionName(Collection collection) {
+        switch (collection) {
+            case BOOKS:
+                return "books";
+            case USERS:
+                return "users";
+            case REQUESTS:
+                return "requests";
+            case PHOTOGRAPHS:
+                return "photographs";
+            default:
+                throw new IllegalArgumentException("Unrecognized collection.");
+        }
+    }
+
+    private void storeEntity(Collection collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .document(entity.getId().toString())
             .set(entity.toFirestoreDocument())
             .addOnSuccessListener(aVoid -> {
@@ -180,8 +202,8 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected <T> void retrieveEntity(String collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    private <T> void retrieveEntity(Collection collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .document(id)
             .get()
             .addOnSuccessListener(documentSnapshot -> {
@@ -199,8 +221,8 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected <T> void retrieveEntities(String collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    private <T> void retrieveEntities(Collection collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
@@ -216,8 +238,8 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-        conditions.apply(db.collection(collection))
+    private <T> void retrieveEntitiesMatching(Collection collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
+        conditions.apply(db.collection(getCollectionName(collection)))
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 List<T> entities = new ArrayList<>();
@@ -233,8 +255,8 @@ public class FirebaseStorageService implements StorageService {
             });
     }
 
-    protected void deleteEntity(String collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-        db.collection(collection)
+    private void deleteEntity(Collection collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        db.collection(getCollectionName(collection))
             .document(id)
             .delete()
             .addOnSuccessListener(aVoid -> {

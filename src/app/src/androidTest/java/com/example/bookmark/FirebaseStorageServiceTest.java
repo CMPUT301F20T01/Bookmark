@@ -36,32 +36,8 @@ public class FirebaseStorageServiceTest {
      */
     private static class MockFirebaseStorageService extends FirebaseStorageService {
         @Override
-        protected void storeEntity(String collection, FirestoreIndexable entity, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-            super.storeEntity(mock(collection), entity, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected <T> void retrieveEntity(String collection, String id, FirestoreDeserializer<T> deserializer, OnSuccessListener<T> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntity(mock(collection), id, deserializer, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected <T> void retrieveEntities(String collection, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntities(mock(collection), deserializer, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected <T> void retrieveEntitiesMatching(String collection, Function<Query, Query> conditions, FirestoreDeserializer<T> deserializer, OnSuccessListener<List<T>> onSuccessListener, OnFailureListener onFailureListener) {
-            super.retrieveEntitiesMatching(mock(collection), conditions, deserializer, onSuccessListener, onFailureListener);
-        }
-
-        @Override
-        protected void deleteEntity(String collection, String id, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
-            super.deleteEntity(mock(collection), id, onSuccessListener, onFailureListener);
-        }
-
-        private String mock(String collection) {
-            return String.format("mock-%s", collection);
+        protected String getCollectionName(Collection collection) {
+            return String.format("mock-%s", super.getCollectionName(collection));
         }
     }
 
