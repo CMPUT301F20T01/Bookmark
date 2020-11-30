@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.bookmark.NavigationDrawerActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.adapters.BookList;
@@ -25,8 +27,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Abstract class for activities that list books - some use cases include
@@ -57,6 +57,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
     protected TextInputEditText searchBar;
 
     protected User user = null;
+    protected Book selectedBook = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +86,12 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
         visibleBooksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedBook = visibleBooks.get(i);
                 // Passes the selected book to the specified intent destination
                 Intent intent = new Intent(getPackageContext(),
                     getIntentDestination());
                 intent.putExtra(USER, user);
-                intent.putExtra(EXTRA_BOOK, visibleBooks.get(i));
+                intent.putExtra(EXTRA_BOOK, selectedBook);
                 startActivity(intent);
             }
         });
