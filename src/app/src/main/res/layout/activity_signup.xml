@@ -3,131 +3,128 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_username_textInputLayout"
-        style="@style/OutlinedSpacedTextInputLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:errorEnabled="true"
-        app:helperText="Username"
-        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_username_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_username_textInputLayout"
+            style="@style/OutlinedSpacedTextInputLayout.Top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/signup_firstname_textInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_firstname_textInputLayout"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:errorEnabled="true"
-        app:helperText="First Name"
-        app:helperTextEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_username_textInputLayout">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_username_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/username"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_firstname_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_firstname_textInputLayout"
+            style="@style/OutlinedSpacedTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="First Name"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/signup_lastname_textInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_username_textInputLayout">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_lastname_textInputLayout"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:errorEnabled="true"
-        app:helperText="Last Name"
-        app:helperTextEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_firstname_textInputLayout">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_firstname_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/firstname"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_lastname_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_lastname_textInputLayout"
+            style="@style/OutlinedSpacedTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Last Name"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:errorEnabled="true"
+            app:helperTextEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/signup_email_textInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_firstname_textInputLayout">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_email_textInputLayout"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:errorEnabled="true"
-        app:helperText="Email"
-        app:helperTextEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_lastname_textInputLayout">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_lastname_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lastname"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_email_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_email_textInputLayout"
+            style="@style/OutlinedSpacedTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/signup_phonenumber_textInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_lastname_textInputLayout">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_phonenumber_textInputLayout"
-        style="@style/OutlinedSpacedTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:errorEnabled="true"
-        app:helperText="Phone Number"
-        app:helperTextEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_email_textInputLayout">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_email_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_phonenumber_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_phonenumber_textInputLayout"
+            style="@style/OutlinedSpacedTextInputLayout.Bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone Number"
-            android:inputType="phone" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_email_textInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_phonenumber_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phonenumber"
+                android:inputType="phone"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/signup_signup_button"
+        style="@style/BottomButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
         android:padding="12dp"
-        android:text="DONE"
+        android:text="@string/done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

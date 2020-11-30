@@ -15,6 +15,10 @@
     <string name="isbn">ISBN</string>
     <string name="delete">Delete</string>
     <string name="username">Username</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="email">Email</string>
+    <string name="phonenumber">Phone Number</string>
 
 
     <string name="available">Available</string>
