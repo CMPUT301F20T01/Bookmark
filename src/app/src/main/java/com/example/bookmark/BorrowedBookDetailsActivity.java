@@ -5,15 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.RequestUtil;
+
+import java.util.List;
 
 /**
  * This activity shows the details of a book. As well, the user can click the "Return"
@@ -24,6 +28,8 @@ import com.example.bookmark.util.DialogUtil;
  * @author Nayan Prakash.
  */
 public class BorrowedBookDetailsActivity extends BackButtonActivity {
+
+    private static final String TAG = "Borrowed Book Details";
 
     public static final int GET_ISBN = 1;
 
@@ -59,8 +65,8 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
         getSupportActionBar().setTitle("Book Details");
 
         Intent intent = getIntent();
-        book = (Book) intent.getSerializableExtra("Book");
-        user = (User) intent.getSerializableExtra("User");
+        book = (Book) intent.getSerializableExtra(ListingBooksActivity.EXTRA_BOOK);
+        user = (User) intent.getSerializableExtra(ListingBooksActivity.USER);
 
         titleTextView = findViewById(R.id.borrowed_details_title_text);
         authorTextView = findViewById(R.id.borrowed_details_author_text);
@@ -89,25 +95,23 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
         if (requestCode == BorrowedBookDetailsActivity.GET_ISBN && resultCode == Activity.RESULT_OK) {
             String isbn = data.getStringExtra("ISBN");
             if(book.getIsbn().equals(isbn)) {
-                // TODO: set book as available and update book status and request status
-                StorageServiceProvider.getStorageService().retrieveRequest(
+                RequestUtil.retrieveRequestsOnBookByStatus(
                     book,
-                    user,
+                    Request.Status.BORROWED,
                     request -> {
                         book.setStatus(Book.Status.AVAILABLE);
                         StorageServiceProvider.getStorageService().deleteRequest(
                             request,
-                            aVoid -> Log.d("Accepted Book Details", "Request stored"),
+                            aVoid -> Log.d(TAG, "Request stored"),
                             e -> DialogUtil.showErrorDialog(this, e)
                         );
                         StorageServiceProvider.getStorageService().storeBook(
                             book,
-                            aVoid -> Log.d("Accepted Book Details", "Book stored"),
+                            aVoid -> Log.d(TAG, "Book stored"),
                             e -> DialogUtil.showErrorDialog(this, e)
                         );
                     },
-                    e -> DialogUtil.showErrorDialog(this, e)
-                );
+                    e -> DialogUtil.showErrorDialog(this, e));
             } else {
                 Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
             }
@@ -122,7 +126,7 @@ public class BorrowedBookDetailsActivity extends BackButtonActivity {
         author = book.getAuthor();
         title = book.getTitle();
         description = book.getDescription();
-        ownedBy = book.getOwnerId();
+        ownedBy = book.getOwnerId().toString();
         status = book.getStatus().toString();
     }
 

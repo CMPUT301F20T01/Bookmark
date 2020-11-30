@@ -77,7 +77,7 @@ public class BorrowedActivity extends ListingBooksActivity {
      * accordingly.
      */
     @Override
-    protected void getBooks() {
+    protected void getRelevantBooks() {
         StorageServiceProvider.getStorageService().retrieveBooksByRequester(
                 user,
                 books -> {

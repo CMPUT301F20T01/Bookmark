@@ -10,10 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookmark.abstracts.AddEditBookActivity;
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.models.Book;
+import com.example.bookmark.models.Request;
 import com.example.bookmark.models.User;
+import com.example.bookmark.server.StorageServiceProvider;
+import com.example.bookmark.util.DialogUtil;
+import com.example.bookmark.util.RequestUtil;
 
 /**
  * This activity shows the details of a book. Depending on the
@@ -23,7 +29,12 @@ import com.example.bookmark.models.User;
  * @author Mitch Adam.
  */
 public class MyBookDetailsActivity extends BackButtonActivity implements MenuOptions {
+
+    private static final String TAG = "My Book Details";
+
     private static final int EDIT_REQUEST_CODE = 101;
+    private static final int GET_ISBN_TO_GIVE_BOOK = 102;
+    private static final int GET_ISBN_TO_RECEIVE_BOOK = 103;
 
     private User user;
     private Book book;
@@ -69,10 +80,8 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent(); // gets the previously created intent
-        Bundle bundle = intent.getExtras();
-
-        user = (User) bundle.getSerializable("User");
-        book = (Book) bundle.getSerializable("Book");
+        book = (Book) intent.getSerializableExtra(ListingBooksActivity.EXTRA_BOOK);
+        user = (User) intent.getSerializableExtra(ListingBooksActivity.USER);
 
         titleTextView = findViewById(R.id.book_details_title_text);
         authorTextView = findViewById(R.id.book_details_author_text);
@@ -137,16 +146,16 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
      * Handle giving a book
      */
     private void giveBook() {
-        //TODO
-        Log.d("Book Details", "Give Book Clicked");
+        Intent intent = new Intent(this, ScanIsbnActivity.class);
+        startActivityForResult(intent, GET_ISBN_TO_GIVE_BOOK);
     }
 
     /**
      * Handle receiving a book
      */
     private void receiveBook() {
-        //TODO
-        Log.d("Book Details", "Receive Book Clicked");
+        Intent intent = new Intent(this, ScanIsbnActivity.class);
+        startActivityForResult(intent, GET_ISBN_TO_RECEIVE_BOOK);
     }
 
     @Override
@@ -170,7 +179,12 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     }
 
     /**
-     * Callback for when the Edit book activity returns
+     * Callback for when the Edit book activity returns or when a ISBN is retrieved from
+     * ScanIsbnActivity.
+     *
+     * @param requestCode the requestCode of the activity results
+     * @param resultCode  the resultCode of the activity result
+     * @param data        the intent of the activity result
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -179,8 +193,51 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
             return;
         }
 
-        // Get ISBN
-        if (requestCode == EDIT_REQUEST_CODE) {
+        if (requestCode == GET_ISBN_TO_GIVE_BOOK || requestCode == GET_ISBN_TO_RECEIVE_BOOK) {
+            String isbn = data.getStringExtra("ISBN");
+            if (book.getIsbn().equals(isbn)) {
+                if (requestCode == GET_ISBN_TO_GIVE_BOOK) {
+                    RequestUtil.retrieveRequestsOnBookByStatus(
+                        book,
+                        Request.Status.ACCEPTED,
+                        request -> {
+                            book.setStatus(Book.Status.BORROWED);
+                            request.setStatus(Request.Status.BORROWED);
+                            StorageServiceProvider.getStorageService().storeRequest(
+                                request,
+                                aVoid -> Log.d(TAG, "Request marked BORROWED"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                            StorageServiceProvider.getStorageService().storeBook(
+                                book,
+                                aVoid -> Log.d(TAG, "Book marked BORROWED"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                        },
+                        e -> DialogUtil.showErrorDialog(this, e));
+                } else if (requestCode == GET_ISBN_TO_RECEIVE_BOOK) {
+                    RequestUtil.retrieveRequestsOnBookByStatus(
+                        book,
+                        Request.Status.BORROWED,
+                        request -> {
+                            book.setStatus(Book.Status.AVAILABLE);
+                            StorageServiceProvider.getStorageService().deleteRequest(
+                                request,
+                                aVoid -> Log.d(TAG, "Request deleted"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                            StorageServiceProvider.getStorageService().storeBook(
+                                book,
+                                aVoid -> Log.d(TAG, "Book marked AVAILABLE"),
+                                e -> DialogUtil.showErrorDialog(this, e)
+                            );
+                        },
+                        e -> DialogUtil.showErrorDialog(this, e));
+                }
+            } else {
+                Toast.makeText(this, "Scanned ISBN is not the same as this book's ISBN", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == EDIT_REQUEST_CODE) {
             Bundle bundle = data.getExtras();
             book = (Book) bundle.getSerializable("Book");
 

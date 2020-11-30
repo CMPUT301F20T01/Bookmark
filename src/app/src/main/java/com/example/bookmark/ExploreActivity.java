@@ -59,12 +59,12 @@ public class ExploreActivity extends ListingBooksActivity {
      * accordingly.
      */
     @Override
-    protected void getBooks() {
+    protected void getRelevantBooks() {
         StorageServiceProvider.getStorageService().retrieveBooks(books -> {
             visibleBooks.clear();
             relevantBooks.clear();
             for (Book book : books) {
-                if ((book.getOwnerId() != user.getId()) &&
+                if (!book.getOwnerId().equals(user.getId()) &&
                     (book.getStatus() != Book.Status.BORROWED) &&
                     (book.getStatus() != Book.Status.ACCEPTED)) {
                     relevantBooks.add(book);

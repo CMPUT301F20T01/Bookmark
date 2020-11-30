@@ -24,7 +24,7 @@ public class Book implements FirestoreIndexable, Serializable {
     private String author;
     private String isbn;
 
-    private Photograph photograph = null;
+    private EntityId photographId = null;
     private String description = "";
     private Status status = Status.AVAILABLE;
 
@@ -107,8 +107,8 @@ public class Book implements FirestoreIndexable, Serializable {
      *
      * @return The photograph.
      */
-    public Photograph getPhotograph() {
-        return photograph;
+    public EntityId getPhotograph() {
+        return photographId;
     }
 
     /**
@@ -117,7 +117,7 @@ public class Book implements FirestoreIndexable, Serializable {
      * @param photograph The photograph.
      */
     public void setPhotograph(Photograph photograph) {
-        this.photograph = photograph;
+        this.photographId = photograph.getId();
     }
 
     /**
@@ -177,7 +177,7 @@ public class Book implements FirestoreIndexable, Serializable {
         map.put("title", title);
         map.put("author", author);
         map.put("isbn", isbn);
-        map.put("photograph", photograph != null ? photograph.toFirestoreDocument() : null);
+        map.put("photographId", photographId != null ? photographId.toString() : null);
         map.put("description", description);
         map.put("status", status);
         return map;
@@ -194,7 +194,7 @@ public class Book implements FirestoreIndexable, Serializable {
             (String) map.get("author"),
             (String) map.get("isbn")
         );
-        book.photograph = Photograph.fromFirestoreDocument((Map<String, Object>) map.get("photograph"));
+        book.photographId = new EntityId((String) map.get("photographId"));
         book.description = (String) map.get("description");
         book.status = Status.valueOf((String) map.get("status"));
         return book;
@@ -209,7 +209,7 @@ public class Book implements FirestoreIndexable, Serializable {
             Objects.equals(author, book.author) &&
             Objects.equals(isbn, book.isbn) &&
             Objects.equals(ownerId, book.ownerId) &&
-            Objects.equals(photograph, book.photograph) &&
+            Objects.equals(photographId, book.photographId) &&
             Objects.equals(description, book.description) &&
             status == book.status;
     }

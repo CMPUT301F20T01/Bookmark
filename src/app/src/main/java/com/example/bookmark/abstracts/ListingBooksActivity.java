@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 /**
  * Abstract class for activities that list books - some use cases include
  * viewing search results (ExploreActivity), viewing books the user is
@@ -58,7 +60,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity impl
     protected TextInputLayout searchBarLayout;
     protected TextInputEditText searchBar;
 
-    protected User user;
+    protected User user = null;
 
     private boolean[] statusFilterEnabled = new boolean[Book.Status.values().length];
 
@@ -112,7 +114,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity impl
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String searchString = charSequence.toString();
-                // Updates the search results everytime the search text is
+                // Updates the search results every time the search text is
                 // changed
                 updateSearchResults(searchString.split(" "));
             }
@@ -120,6 +122,12 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity impl
             @Override
             public void afterTextChanged(Editable editable) {
             }
+        });
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
+        pullToRefresh.setOnRefreshListener(() -> {
+            getBooks();
+            pullToRefresh.setRefreshing(false);
         });
     }
 
@@ -221,6 +229,26 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity impl
     }
 
     /**
+     * Gets all relevant books.
+     */
+    private void getBooks() {
+        if (user == null) {
+            String username = UserUtil.getLoggedInUser(this);
+            StorageServiceProvider.getStorageService().retrieveUserByUsername(
+                username,
+                user1 -> {
+                    this.user = user1;
+                    getRelevantBooks();
+                }, e -> {
+                    DialogUtil.showErrorDialog(this, e);
+                }
+            );
+        } else {
+            getRelevantBooks();
+        }
+    }
+
+    /**
      * This method must return the desired title of the activity. This title
      * will be displayed in the top left corner of the options menu.
      *
@@ -253,7 +281,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity impl
      * visibleBooks ArrayList and notifyDataSetChanged should be called on the
      * visibleBooksAdapter.
      */
-    protected abstract void getBooks();
+    protected abstract void getRelevantBooks();
 
     /**
      * Returns the context that is used for the starting point of the

@@ -97,9 +97,18 @@ public class MyBooksActivityTest {
      */
     @Test
     public void addBook() {
-        View fab = rule.getActivity().findViewById(R.id.my_books_add_btn);
+        View fab = rule.getActivity().findViewById(R.id.listing_books_action_btn);
         solo.clickOnView(fab);
         solo.assertCurrentActivity("WRONG ACTIVITY", AddBookActivity.class);
+    }
+
+    /**
+     * Test clicking on a book
+     */
+    @Test
+    public void bookDetails() {
+        solo.clickInList(0, 0);
+        solo.assertCurrentActivity("WRONG ACTIVITY", MyBookDetailsActivity.class);
     }
 
     /**
@@ -107,7 +116,7 @@ public class MyBooksActivityTest {
      */
     @Test
     public void numberOfBooks() {
-        ListView books_list = (ListView) solo.getView(R.id.my_books_listview);
+        ListView books_list = (ListView) solo.getView(R.id.visible_books_listview);
         User owner = MockModels.getMockOwner();
         StorageServiceProvider.getStorageService().retrieveBooksByOwner(owner, books -> {
             assertEquals(books.size(), books_list.getCount());
