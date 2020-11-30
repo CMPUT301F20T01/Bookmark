@@ -1,5 +1,6 @@
 package com.example.bookmark;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bookmark.abstracts.ListingBooksActivity;
 import com.example.bookmark.adapters.BookList;
 import com.example.bookmark.fragments.SearchDialogFragment;
 import com.example.bookmark.models.Book;
@@ -30,19 +32,7 @@ import java.util.List;
  *
  * @author Mitch Adam.
  */
-public class MyBooksActivity extends NavigationDrawerActivity
-    implements SearchDialogFragment.OnFragmentInteractionListener, MenuOptions {
-    public static final String SEARCHED_KEYWORDS = "com.example.bookmark" +
-        ".SEARCH";
-
-    private User user;
-
-    private final List<Book> allBooks = new ArrayList<Book>();
-    private List<Book> filteredBooks = allBooks;
-
-    private BookList booksAdapter;
-    private ListView booksListView;
-
+public class MyBooksActivity extends ListingBooksActivity {
     FloatingActionButton addBookBtn;
 
     private final View.OnClickListener addBookListener = new View.OnClickListener() {
@@ -55,57 +45,47 @@ public class MyBooksActivity extends NavigationDrawerActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_books);
-        getSupportActionBar().setTitle("My Books");
 
-        booksListView = findViewById(R.id.my_books_listview);
-
-        addBookBtn = findViewById(R.id.my_books_add_btn);
+        // Add the add book button
+        addBookBtn = findViewById(R.id.listing_books_action_btn);
+        addBookBtn.setVisibility(View.VISIBLE);
         addBookBtn.setOnClickListener(addBookListener);
-        booksAdapter = new BookList(this, filteredBooks, false, true);
-        booksListView.setAdapter(booksAdapter);
-
-        // Fetch users books
-        getBooks();
-
-        booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Book", filteredBooks.get(position));
-                bundle.putSerializable("User", user);
-                Intent intent = new Intent(MyBooksActivity.this, MyBookDetailsActivity.class);
-                intent.putExtras(bundle);
-
-                startActivity(intent);
-            }
-
-        });
-
-        // Pull down to refresh
-        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getBooks();
-                pullToRefresh.setRefreshing(false);
-            }
-        });
-
     }
-
+    
+    /**
+     * Returns the title that is to be used for this activity.
+     *
+     * @return String
+     */
     @Override
-    protected void onResume() {
-        super.onResume();
-        getBooks();
+    protected String getActivityTitle() {
+        return "My Books";
     }
 
     /**
-     * Get list of users books
+     * Returns whether the the owner field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
      */
-    private void getBooks() {
+    @Override
+    protected boolean getBookOwnerVisibility() {
+        return false;
+    }
+
+    /**
+     * Returns whether the the status field of each Book listed in the
+     * visibleBooksListView for this activity should be visible.
+     *
+     * @return boolean
+     */
+    @Override
+    protected boolean getBookStatusVisibility() {
+        return true;
+    }
+
+    @Override
+    protected void getRelevantBooks() {
         OnFailureListener onFailureListener = e -> DialogUtil.showErrorDialog(this, e);
         String username = UserUtil.getLoggedInUser(this);
         StorageServiceProvider.getStorageService().retrieveUserByUsername(
@@ -115,9 +95,13 @@ public class MyBooksActivity extends NavigationDrawerActivity
                 StorageServiceProvider.getStorageService().retrieveBooksByOwner(
                     user,
                     books -> {
-                        allBooks.clear();
-                        allBooks.addAll(books);
-                        setFilteredBooks();
+                        visibleBooks.clear();
+                        relevantBooks.clear();
+
+                        relevantBooks.addAll(books);
+                        visibleBooks.addAll(relevantBooks);
+
+                        visibleBooksAdapter.notifyDataSetChanged();
                     },
                     onFailureListener
                 );
@@ -126,51 +110,36 @@ public class MyBooksActivity extends NavigationDrawerActivity
         );
     }
 
+    /**
+     * Returns the context that is used for the starting point of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Context
+     */
+    @Override
+    protected Context getPackageContext() {
+        return MyBooksActivity.this;
+    }
 
     /**
-     * Set the list of books to display to user based on what is filtered
+     * Returns the class that is used for the destination of the
+     * intent that is created when a Book in the visibleBooksListView is
+     * clicked.
+     *
+     * @return Class<?>
      */
-    private void setFilteredBooks() {
-        // TODO: Implement filtering
-        filteredBooks = allBooks;
-        booksAdapter.notifyDataSetChanged();
+    @Override
+    protected Class<?> getIntentDestination() {
+        return MyBookDetailsActivity.class;
     }
+
 
     /**
      * Start add book intent
      */
     private void goToAddBook() {
         Intent intent = new Intent(MyBooksActivity.this, AddBookActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_filter_search, menu);
-        return true;
-    }
-
-    /**
-     * Handle menu selection
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_filter_search_search_btn:
-                // Opens search fragment
-                new SearchDialogFragment().show(getSupportFragmentManager(),
-                    "SEARCH_AVAILABLE_BOOKS");
-            case R.id.menu_filter_search_filter_btn:
-                //TODO: Open filter fragment
-                break;
-        }
-        return (super.onOptionsItemSelected(item));
-    }
-
-    @Override
-    public void sendSearchedKeywords(String searchString) {
-        Intent intent = new Intent(MyBooksActivity.this, ExploreActivity.class);
-        intent.putExtra(SEARCHED_KEYWORDS, searchString);
         startActivity(intent);
     }
 }

@@ -26,6 +26,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 /**
  * Abstract class for activities that list books - some use cases include
  * viewing search results (ExploreActivity), viewing books the user is
@@ -111,6 +113,12 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity {
             @Override
             public void afterTextChanged(Editable editable) {
             }
+        });
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
+        pullToRefresh.setOnRefreshListener(() -> {
+            getBooks();
+            pullToRefresh.setRefreshing(false);
         });
     }
 
