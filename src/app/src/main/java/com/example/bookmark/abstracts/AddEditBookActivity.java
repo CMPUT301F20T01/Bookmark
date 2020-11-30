@@ -35,7 +35,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     protected TextInputLayout authorTextInputLayout;
     protected TextInputLayout isbnTextInputLayout;
 
-    protected Uri imageUri;
+    protected Uri imageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,13 +105,7 @@ public abstract class AddEditBookActivity extends BackButtonActivity
     /**
      * Delete the added book image.
      */
-    private void deleteImage() {
-        // TODO: Sync up with Kyle on Firebase stuff
-        // TODO: Clear saved URI
-        imageUri = null;
-        bookImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_add_photo_alternate_24));
-        deleteBookImageButton.setVisibility(View.GONE);
-    }
+    protected abstract void deleteImage();
 
 
     /**
