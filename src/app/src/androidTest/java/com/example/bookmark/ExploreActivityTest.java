@@ -137,7 +137,6 @@ public class ExploreActivityTest {
      */
     @Test
     public void checkBookOwnerVisibility() {
-        assertTrue(rule.getActivity().getBookOwnerVisibility());
         View searchBtn =
             rule.getActivity().findViewById(R.id.menu_filter_search_search_btn);
         solo.clickOnView(searchBtn);
@@ -155,7 +154,6 @@ public class ExploreActivityTest {
      */
     @Test
     public void checkBookStatusVisibility() {
-        assertTrue(rule.getActivity().getBookStatusVisibility());
         View searchBtn =
             rule.getActivity().findViewById(R.id.menu_filter_search_search_btn);
         solo.clickOnView(searchBtn);
@@ -200,7 +198,7 @@ public class ExploreActivityTest {
     @Test
     public void goToBookDetails() {
         solo.clickInList(0, 0);
-        solo.assertCurrentActivity("WRONG ACTIVITY", ExploreBookDetailsActivity.class);
+        solo.assertCurrentActivity("WRONG ACTIVITY", BorrowerBookDetailsActivity.class);
     }
 
     /**
@@ -209,7 +207,7 @@ public class ExploreActivityTest {
      */
     @Test
     public void checkGetIntentDestination() {
-        assertEquals(ExploreBookDetailsActivity.class,
+        assertEquals(BorrowerBookDetailsActivity.class,
             rule.getActivity().getIntentDestination());
     }
 
