@@ -173,6 +173,15 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
     }
 
     /**
+     * Set click handler for owned by TextView
+     */
+    public void borrowerOwnerTextViewClickListener(View v) {
+        Intent intent = new Intent(BorrowerBookDetailsActivity.this, ViewProfileActivity.class);
+        intent.putExtra("USERNAME", ownedBy);
+        startActivity(intent);
+    }
+
+    /**
      * Handle requesting book
      */
     private void requestBook() {
