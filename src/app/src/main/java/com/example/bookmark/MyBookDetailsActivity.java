@@ -155,7 +155,7 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
     }
 
     private void loadImage() {
-        if (book.getPhotograph() != null) {
+        if (book != null && book.getPhotograph() != null) {
             EntityId photoId = book.getPhotograph();
             StorageServiceProvider.getStorageService().retrievePhotograph(
                 photoId,
