@@ -143,9 +143,23 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                 actionButton.setOnClickListener(requestBookListener);
                 break;
             case REQUESTED:
-                // TODO: set button style to OutlinedButton
-                actionButton.setText("Requested");
-                actionButton.setOnClickListener(aVoid -> {});
+                StorageServiceProvider.getStorageService().retrieveRequestsByBook(
+                    book,
+                    requestList -> {
+                        for (Request r: requestList) {
+                            if (r.getRequesterId().toString().equals(user.getId().toString())) {
+                                // TODO: set button style to OutlinedButton
+                                actionButton.setText("Requested");
+                                actionButton.setOnClickListener(aVoid -> {});
+                                return;
+                            }
+                            // this user is not one of the requesters on this book so book is requestable
+                            actionButton.setText("Request");
+                            actionButton.setOnClickListener(requestBookListener);
+                        }
+                    },
+                    e -> DialogUtil.showErrorDialog(this, e)
+                );
                 break;
             case ACCEPTED:
                 actionButton.setText("Borrow");
