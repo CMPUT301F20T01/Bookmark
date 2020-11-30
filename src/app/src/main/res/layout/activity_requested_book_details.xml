@@ -10,7 +10,7 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:id="@+id/requested_details_action_btn"
         android:layout_width="219dp"
-        android:layout_height="38dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:text="@string/book_requested"
         android:textColor="#61000000"
@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/requested_details_book_image"
-        android:layout_width="191dp"
-        android:layout_height="172dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
     <TextView
         android:id="@+id/requested_details_description_text"
         android:layout_width="0dp"
-        android:layout_height="165dp"
+        android:layout_height="150dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
