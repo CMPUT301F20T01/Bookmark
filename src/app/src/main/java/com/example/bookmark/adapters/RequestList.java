@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bookmark.AcceptRequestsActivity;
+import com.example.bookmark.BorrowerBookDetailsActivity;
 import com.example.bookmark.ManageRequestsActivity;
 import com.example.bookmark.R;
+import com.example.bookmark.ViewProfileActivity;
 import com.example.bookmark.models.Request;
 import com.example.bookmark.server.StorageServiceProvider;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,6 +69,17 @@ public class RequestList extends ArrayAdapter<Request> {
         Request request = requests.get(position);
 
         TextView borrowerName = view.findViewById(R.id.borrower_text);
+
+        borrowerName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewProfileActivity.class);
+                Activity origin = (Activity) context;
+                intent.putExtra("USERNAME", request.getRequesterId().toString());
+                origin.startActivity(intent);
+            }
+        });
+
         TextView requestDate = view.findViewById(R.id.request_date_text);
 
         borrowerName.setText(request.getRequesterId().toString());
