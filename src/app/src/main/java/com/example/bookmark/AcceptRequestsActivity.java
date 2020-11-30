@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  *
  * @author Nayan Prakash.
  */
-public class AcceptRequestsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class AcceptRequestsActivity extends BackButtonActivity implements OnMapReadyCallback {
 
     private static final int MY_PERMISSIONS_REQUEST_CODE = 100;
     private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
