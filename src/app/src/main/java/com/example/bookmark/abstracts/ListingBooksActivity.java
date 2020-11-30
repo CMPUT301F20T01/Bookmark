@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,8 +41,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  *
  * @author Ryan Kortbeek.
  */
-public abstract class ListingBooksActivity extends NavigationDrawerActivity implements
-        FilterDialogFragment.FilterDialogListener  {
+public abstract class ListingBooksActivity extends NavigationDrawerActivity
+        implements FilterDialogFragment.FilterDialogListener{
     private static final String FILTER_FRAGMENT_TAG = "FilterFragment";
     public static final String USER = "com.example.bookmark.USER";
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
@@ -196,6 +197,16 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity impl
     public void onFilterUpdate(boolean[] statusFilterEnabled) {
         this.statusFilterEnabled = statusFilterEnabled;
 
+        // if all are true, just send null constraint
+
+        String[] enabledFilters = new String[statusFilterEnabled.length];
+        Book.Status[] statusEnums = Book.Status.values();
+        for (int i = 0; i < statusFilterEnabled.length; i++) {
+            enabledFilters[i] = statusFilterEnabled[i] ? statusEnums[i].toString() : "";
+         }
+        String constraint = BookList.STATUS_FILTER_OP
+            + TextUtils.join(BookList.FILTER_OP_DELIM, enabledFilters);
+        visibleBooksAdapter.getFilter().filter(constraint);
     }
 
     /**
