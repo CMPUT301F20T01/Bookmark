@@ -40,6 +40,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
     /**
      * This function creates the ManageRequests view and retrieves the Owner from Firebase
      * This function also sets the Book Title and sets the requestList adapter
+     *
      * @param savedInstanceState an instance state that has the state of the ManageRequestsActivity
      */
     @Override
@@ -51,6 +52,11 @@ public class ManageRequestsActivity extends BackButtonActivity {
         Bundle bundle = intent.getExtras();
 
         String bookTitle = "Book Title";
+
+        requestList = findViewById(R.id.request_list);
+        requestDataList = new ArrayList<>();
+        requestAdapter = new RequestList(this, requestDataList);
+        requestList.setAdapter(requestAdapter);
 
         if (bundle != null) {
             book = (Book) bundle.getSerializable("Book");
@@ -72,9 +78,10 @@ public class ManageRequestsActivity extends BackButtonActivity {
     /**
      * This function handles activity results from new activities. Specifically, this stores
      * accepted Requests after retrieving meeting locations from AcceptRequestsActivity
+     *
      * @param requestCode the requestCode of the activity result
-     * @param resultCode the resultCode of the activity result
-     * @param data the intent of the activity result
+     * @param resultCode  the resultCode of the activity result
+     * @param data        the intent of the activity result
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -91,7 +98,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
                     StorageServiceProvider.getStorageService().retrieveRequestsByBook(
                         book,
                         requestList -> {
-                            for (Request r: requestList) {
+                            for (Request r : requestList) {
                                 if (!r.getId().toString().equals(request.getId().toString())) {
                                     StorageServiceProvider.getStorageService().deleteRequest(
                                         r,
@@ -129,7 +136,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
             public void onSuccess(List<Request> requestList) {
                 if (requestList != null) {
                     requestDataList.clear();
-                    for (Request r: requestList) {
+                    for (Request r : requestList) {
                         requestDataList.add(r);
                     }
                     requestAdapter.notifyDataSetChanged();

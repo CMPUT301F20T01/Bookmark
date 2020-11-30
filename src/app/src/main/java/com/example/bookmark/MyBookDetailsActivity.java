@@ -110,10 +110,32 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
             },
             e -> DialogUtil.showErrorDialog(this, e)
         );
-        statusTextView.setText("Status: "
-            + book.getStatus().toString().charAt(0)
-            + book.getStatus().toString().substring(1).toLowerCase());
 
+        // Set the user if borrowed or accepted
+        if (book.getStatus().equals(Book.Status.BORROWED)
+            || book.getStatus().equals(Book.Status.ACCEPTED)) {
+            StorageServiceProvider.getStorageService().retrieveRequestsByBook(
+                book,
+                requestList -> {
+                    for (Request r : requestList) {
+                        if (r.getStatus().toString().equals(book.getStatus().toString())) {
+                            String bookStatus = ("Status: "
+                                + book.getStatus().toString().charAt(0)
+                                + book.getStatus().toString().substring(1).toLowerCase()
+                                + " by " + r.getRequesterId().toString());
+                            statusTextView.setText(bookStatus);
+                        }
+                    }
+                },
+                e -> DialogUtil.showErrorDialog(this, e)
+            );
+        } else {
+            // Otherwise just set status
+            String bookStatus = ("Status: "
+                + book.getStatus().toString().charAt(0)
+                + book.getStatus().toString().substring(1).toLowerCase());
+            statusTextView.setText(bookStatus);
+        }
     }
 
     private void configureActionButton() {

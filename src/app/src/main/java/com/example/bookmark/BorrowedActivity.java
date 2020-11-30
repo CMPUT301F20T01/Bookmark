@@ -39,6 +39,7 @@ public class BorrowedActivity extends ListingBooksActivity {
         // Inflates the menu with the filter and search icons
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
+        setSearchMenuItem(menu.findItem(R.id.menu_filter_search_search_btn));
         return true;
     }
 
@@ -60,18 +61,18 @@ public class BorrowedActivity extends ListingBooksActivity {
     @Override
     protected void getRelevantBooks() {
         StorageServiceProvider.getStorageService().retrieveBooksByRequester(
-                user,
-                books -> {
-                    List<Book> relevantBooks = new ArrayList<>();
-                    for (Book book : books) {
-                        if (book.getStatus() == Book.Status.BORROWED) {
-                            relevantBooks.add(book);
-                        }
+            user,
+            books -> {
+                List<Book> relevantBooks = new ArrayList<>();
+                for (Book book : books) {
+                    if (book.getStatus() == Book.Status.BORROWED) {
+                        relevantBooks.add(book);
                     }
-                    updateBookList(relevantBooks);
-                }, e -> {
-                    DialogUtil.showErrorDialog(this, e);
                 }
+                updateBookList(relevantBooks);
+            }, e -> {
+                DialogUtil.showErrorDialog(this, e);
+            }
         );
     }
 

@@ -1,5 +1,6 @@
 package com.example.bookmark.server;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.bookmark.models.Book;
@@ -16,6 +17,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -138,18 +141,29 @@ public class FirebaseStorageService implements StorageService {
         String photographPath = String.format("%s/%s", getCollectionName(Collection.PHOTOGRAPHS), id.toString());
         StorageReference imageReference = storage.getReference().child(photographPath);
         imageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-            Log.d(TAG, String.format("Retrieved photograph with id %s.", id.toString()));
-            Map<String, Object> map = new HashMap<>();
-            map.put("imageUri", uri.toString());
-            Photograph photograph = Photograph.fromFirestoreDocument(id.toString(), map);
-            onSuccessListener.onSuccess(photograph);
+            try {
+                File file = File.createTempFile(id.toString(), "temp");
+                imageReference.getFile(file).addOnSuccessListener(taskSnapshot -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("imageUri", Uri.fromFile(file).toString());
+                    Photograph photograph = Photograph.fromFirestoreDocument(id.toString(), map);
+                    Log.d(TAG, String.format("Retrieved photograph with id %s.", id.toString()));
+                    onSuccessListener.onSuccess(photograph);
+                }).addOnFailureListener(e -> {
+                    Log.w(TAG, String.format("Error retrieving photograph with id %s: ", id.toString()), e);
+                    onFailureListener.onFailure(e);
+                });
+            } catch (IOException e) {
+                Log.d(TAG, String.format("Failed to create a local file to store the photograph with id %s: ", id.toString()), e);
+                onFailureListener.onFailure(e);
+            }
         }).addOnFailureListener(e -> {
             if (e instanceof StorageException) {
                 // No photograph with the id exists. Returns null to be consistent.
                 onSuccessListener.onSuccess(null);
                 return;
             }
-            Log.w(TAG, String.format("Error retrieving photograph with id %s: ", id.toString()), e);
+            Log.w(TAG, String.format("Error retrieving URI of photograph with id %s: ", id.toString()), e);
             onFailureListener.onFailure(e);
         });
     }
