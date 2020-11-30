@@ -23,7 +23,7 @@
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/explore_details_description_text"
+        app:layout_constraintTop_toBottomOf="@+id/borrower_book_details_description_text"
         tools:srcCompat="@tools:sample/avatars"
         app:srcCompat="@drawable/ic_book"/>
 
