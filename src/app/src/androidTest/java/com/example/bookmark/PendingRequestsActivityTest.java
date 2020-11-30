@@ -31,6 +31,7 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -124,6 +125,67 @@ public class PendingRequestsActivityTest {
         solo.enterText(searchEditText, " behaviour...");
         assertTrue(solo.searchText("Programming Pearls"));
         assertEquals(1, listView.getCount());
+    }
+
+    /**
+     * Tests filter functionality. Specifically the onFilterUpdate callback,
+     * updateAdapterFilter(), etc.
+     */
+    @Test
+    public void filter() {
+        View filterBtn =
+            rule.getActivity().findViewById(R.id.menu_filter_search_filter_btn);
+        ListView listView =
+            rule.getActivity().findViewById(R.id.books_listview);
+        // Assert setup is as expected
+        assertTrue(solo.searchText("Requested"));
+        assertTrue(solo.searchText("Accepted"));
+        assertEquals(3, listView.getCount());
+
+        solo.clickOnView(filterBtn);
+        assertTrue(solo.waitForText("Filter Books"));
+
+        // Verify all boxes are enabled by default
+        assertTrue(solo.isCheckBoxChecked(0));
+        assertTrue(solo.isCheckBoxChecked(1));
+        assertTrue(solo.isCheckBoxChecked(2));
+        assertTrue(solo.isCheckBoxChecked(3));
+
+        // Uncheck Requested
+        solo.clickOnCheckBox(1);
+        solo.clickOnText("Apply");
+        assertFalse(solo.searchText("Requested"));
+        assertTrue(solo.searchText("Accepted"));
+        assertEquals(1, listView.getCount());
+
+        // Check Requested, uncheck Accepted
+        solo.clickOnView(filterBtn);
+        assertTrue(solo.waitForText("Filter Books"));
+        solo.clickOnCheckBox(1);
+        solo.clickOnCheckBox(2);
+        solo.clickOnText("Apply");
+        assertTrue(solo.searchText("Requested"));
+        assertFalse(solo.searchText("Accepted"));
+        assertEquals(2, listView.getCount());
+
+        // Uncheck both
+        solo.clickOnView(filterBtn);
+        assertTrue(solo.waitForText("Filter Books"));
+        solo.clickOnCheckBox(1);
+        solo.clickOnText("Apply");
+        assertFalse(solo.searchText("Requested"));
+        assertFalse(solo.searchText("Available"));
+        assertEquals(0, listView.getCount());
+
+        // Check all
+        solo.clickOnView(filterBtn);
+        assertTrue(solo.waitForText("Filter Books"));
+        solo.clickOnCheckBox(1);
+        solo.clickOnCheckBox(2);
+        solo.clickOnText("Apply");
+        assertTrue(solo.searchText("Requested"));
+        assertTrue(solo.searchText("Available"));
+        assertEquals(3, listView.getCount());
     }
 
     /**
