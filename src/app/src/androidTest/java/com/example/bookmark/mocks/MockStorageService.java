@@ -21,11 +21,6 @@ public class MockStorageService {
         users.add(MockModels.getMockOwner());
         users.add(MockModels.getMockRequester());
         List<Book> books = new ArrayList<>();
-        MockModels.getMockBook1().setStatus(Book.Status.REQUESTED);
-        MockModels.getMockBook2().setStatus(Book.Status.REQUESTED);
-        MockModels.getMockBook4().setStatus(Book.Status.BORROWED);
-        MockModels.getMockBook5().setStatus(Book.Status.ACCEPTED);
-        MockModels.getMockBook6().setStatus(Book.Status.BORROWED);
         books.add(MockModels.getMockBook1());
         books.add(MockModels.getMockBook2());
         books.add(MockModels.getMockBook3());
@@ -33,9 +28,6 @@ public class MockStorageService {
         books.add(MockModels.getMockBook5());
         books.add(MockModels.getMockBook6());
         List<Request> requests = new ArrayList<>();
-        MockModels.getMockRequest4().setStatus(Request.Status.BORROWED);
-        MockModels.getMockRequest5().setStatus(Request.Status.ACCEPTED);
-        MockModels.getMockRequest6().setStatus(Request.Status.BORROWED);
         requests.add(MockModels.getMockRequest1());
         requests.add(MockModels.getMockRequest2());
         requests.add(MockModels.getMockRequest4());
