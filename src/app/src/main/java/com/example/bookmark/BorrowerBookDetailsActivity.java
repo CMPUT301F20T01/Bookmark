@@ -105,7 +105,6 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         setBookDetails();
         fillBookDetails();
         configureActionButton();
-//        setViewOwnerProfileHandler();
     }
 
     /**

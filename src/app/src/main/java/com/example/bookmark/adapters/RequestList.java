@@ -70,14 +70,14 @@ public class RequestList extends ArrayAdapter<Request> {
 
         TextView borrowerName = view.findViewById(R.id.borrower_text);
 
-        borrowerName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ViewProfileActivity.class);
-                Activity origin = (Activity) context;
-                intent.putExtra("USERNAME", request.getRequesterId().toString());
-                origin.startActivity(intent);
-            }
+        /**
+         * Set on click listener for requester username
+         */
+        borrowerName.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ViewProfileActivity.class);
+            Activity origin = (Activity) context;
+            intent.putExtra("USERNAME", request.getRequesterId().toString());
+            origin.startActivity(intent);
         });
 
         TextView requestDate = view.findViewById(R.id.request_date_text);
