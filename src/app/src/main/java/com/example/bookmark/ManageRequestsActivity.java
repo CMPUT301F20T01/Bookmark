@@ -3,6 +3,7 @@ package com.example.bookmark;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ import java.util.List;
  * @author Nayan Prakash.
  */
 public class ManageRequestsActivity extends BackButtonActivity {
+
+    public static String TAG = "Manage Requests Activity";
 
     public static int GET_MEETING_LOCATION = 1;
 
@@ -52,7 +55,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
         if (bundle != null) {
             book = (Book) bundle.getSerializable("Book");
             owner = (User) bundle.getSerializable("User");
-            setRequestListener();
+            setRequestData();
             bookTitle = book.getTitle();
         }
 
@@ -84,16 +87,33 @@ public class ManageRequestsActivity extends BackButtonActivity {
                     Request request = (Request) bundle.getSerializable("Request");
                     request.setLocation(geolocation);
                     request.setStatus(Request.Status.ACCEPTED);
-                    StorageServiceProvider.getStorageService().storeRequest(
-                        request,
-                        new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
+                    StorageServiceProvider.getStorageService().retrieveRequestsByBook(
+                        book,
+                        requestList -> {
+                            for (Request r: requestList) {
+                                if (!r.getId().toString().equals(request.getId().toString())) {
+                                    StorageServiceProvider.getStorageService().deleteRequest(
+                                        r,
+                                        aVoid -> Log.d(TAG, "Request " + r.getId().toString() + " deleted"),
+                                        e -> DialogUtil.showErrorDialog(this, e)
+                                    );
+                                }
                             }
                         },
                         e -> DialogUtil.showErrorDialog(this, e)
                     );
+                    StorageServiceProvider.getStorageService().storeRequest(
+                        request,
+                        aVoid -> Log.d(TAG, "Request marked ACCEPTED"),
+                        e -> DialogUtil.showErrorDialog(this, e)
+                    );
+                    book.setStatus(Book.Status.ACCEPTED);
+                    StorageServiceProvider.getStorageService().storeBook(
+                        book,
+                        aVoid -> Log.d(TAG, "Book marked ACCEPTED"),
+                        e -> DialogUtil.showErrorDialog(this, e)
+                    );
+                    finish();
                 }
             }
         }
@@ -102,7 +122,7 @@ public class ManageRequestsActivity extends BackButtonActivity {
     /**
      * This functions sets the request listener for the book's list of requests from Firebase
      */
-    private void setRequestListener() {
+    private void setRequestData() {
         OnSuccessListener<List<Request>> onSuccessListener = new OnSuccessListener<List<Request>>() {
             @Override
             public void onSuccess(List<Request> requestList) {
@@ -116,5 +136,11 @@ public class ManageRequestsActivity extends BackButtonActivity {
             }
         };
         StorageServiceProvider.getStorageService().retrieveRequestsByBook(book, onSuccessListener, e -> DialogUtil.showErrorDialog(this, e));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRequestData();
     }
 }
