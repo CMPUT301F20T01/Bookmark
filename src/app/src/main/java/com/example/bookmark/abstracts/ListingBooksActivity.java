@@ -199,13 +199,15 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
 
         // if all are true, just send null constraint
 
-        String[] enabledFilters = new String[statusFilterEnabled.length];
+        ArrayList<String> enabledFilterStrings = new ArrayList<>();
         Book.Status[] statusEnums = Book.Status.values();
         for (int i = 0; i < statusFilterEnabled.length; i++) {
-            enabledFilters[i] = statusFilterEnabled[i] ? statusEnums[i].toString() : "";
+            if (statusFilterEnabled[i]) {
+                enabledFilterStrings.add(statusEnums[i].toString());
+            }
          }
         String constraint = BookList.STATUS_FILTER_OP
-            + TextUtils.join(BookList.FILTER_OP_DELIM, enabledFilters);
+            + TextUtils.join(BookList.FILTER_OP_DELIM, enabledFilterStrings);
         visibleBooksAdapter.getFilter().filter(constraint);
     }
 
