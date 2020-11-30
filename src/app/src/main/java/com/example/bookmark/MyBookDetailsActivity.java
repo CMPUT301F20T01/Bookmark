@@ -101,15 +101,17 @@ public class MyBookDetailsActivity extends BackButtonActivity implements MenuOpt
         authorTextView.setText(book.getAuthor());
         isbnTextView.setText("ISBN: " + book.getIsbn());
         descriptionTextView.setText("Description: " + book.getDescription());
-        StorageServiceProvider.getStorageService().retrievePhotograph(
-            book.getPhotograph(),
-            photograph -> {
-                if (photograph != null) {
-                    imageView.setImageURI(photograph.getImageUri());
-                }
-            },
-            e -> DialogUtil.showErrorDialog(this, e)
-        );
+        if (book.getPhotograph() != null) {
+            StorageServiceProvider.getStorageService().retrievePhotograph(
+                book.getPhotograph(),
+                photograph -> {
+                    if (photograph != null) {
+                        imageView.setImageURI(photograph.getImageUri());
+                    }
+                },
+                e -> DialogUtil.showErrorDialog(this, e)
+            );
+        }
 
         // Set the user if borrowed or accepted
         if (book.getStatus().equals(Book.Status.BORROWED)

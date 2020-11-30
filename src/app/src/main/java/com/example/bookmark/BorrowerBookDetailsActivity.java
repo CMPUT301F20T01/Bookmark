@@ -130,15 +130,17 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         authorTextView.setText(author);
         isbnTextView.setText("ISBN: " + isbn);
         descriptionTextView.setText("Description: " + description);
-        StorageServiceProvider.getStorageService().retrievePhotograph(
-            imageId,
-            photograph -> {
-                if (photograph != null) {
-                    imageView.setImageURI(photograph.getImageUri());
-                }
-            },
-            e -> DialogUtil.showErrorDialog(this, e)
-        );
+        if (imageId != null) {
+            StorageServiceProvider.getStorageService().retrievePhotograph(
+                imageId,
+                photograph -> {
+                    if (photograph != null) {
+                        imageView.setImageURI(photograph.getImageUri());
+                    }
+                },
+                e -> DialogUtil.showErrorDialog(this, e)
+            );
+        }
         ownedByTextView.setText("Owned by: " + ownedBy);
         statusTextView.setText("Status: " + status);
     }
@@ -160,11 +162,12 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
                 StorageServiceProvider.getStorageService().retrieveRequestsByBook(
                     book,
                     requestList -> {
-                        for (Request r: requestList) {
+                        for (Request r : requestList) {
                             if (r.getRequesterId().toString().equals(user.getId().toString())) {
                                 // TODO: set button style to OutlinedButton
                                 actionButton.setText("REQUESTED");
-                                actionButton.setOnClickListener(aVoid -> {});
+                                actionButton.setOnClickListener(aVoid -> {
+                                });
                                 return;
                             }
                         }
@@ -261,7 +264,7 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         // set book status to AVAILABLE and delete the request
         if (requestCode == SCAN_ISBN_TO_RETURN) {
             String isbn = data.getStringExtra("ISBN");
-            if(book.getIsbn().equals(isbn)) {
+            if (book.getIsbn().equals(isbn)) {
                 RequestUtil.retrieveRequestsOnBookByStatus(
                     book,
                     Request.Status.BORROWED,
@@ -290,7 +293,7 @@ public class BorrowerBookDetailsActivity extends BackButtonActivity {
         // set book and request status to BORROWED
         else if (requestCode == SCAN_ISBN_TO_BORROW) {
             String isbn = data.getStringExtra("ISBN");
-            if(book.getIsbn().equals(isbn)) {
+            if (book.getIsbn().equals(isbn)) {
                 RequestUtil.retrieveRequestsOnBookByStatus(
                     book, Request.Status.ACCEPTED,
                     request -> {
