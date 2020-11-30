@@ -51,7 +51,7 @@ public class MyBookDetailsActivityTest {
         new ActivityTestRule<MyBookDetailsActivity>(MyBookDetailsActivity.class, true, true) {
             @Override
             protected Intent getActivityIntent() {
-                Book book = MockModels.getMockBook3();
+                Book book = MockModels.getMockBook1();
                 Intent intent = new Intent();
                 intent.putExtra(ListingBooksActivity.EXTRA_BOOK, book);
                 return intent;
@@ -86,6 +86,16 @@ public class MyBookDetailsActivityTest {
         View scanISBNBtn = rule.getActivity().findViewById(R.id.menu_edit_edit_btn);
         solo.clickOnView(scanISBNBtn);
         solo.assertCurrentActivity("WRONG ACTIVITY", EditBookActivity.class);
+    }
+
+    /**
+     * Test manage book request
+     */
+    @Test
+    public void manageRequest() {
+        View scanISBNBtn = rule.getActivity().findViewById(R.id.book_details_action_btn);
+        solo.clickOnView(scanISBNBtn);
+        solo.assertCurrentActivity("WRONG ACTIVITY", ManageRequestsActivity.class);
     }
 
     /**

@@ -24,9 +24,15 @@ public class MockStorageService {
         books.add(MockModels.getMockBook1());
         books.add(MockModels.getMockBook2());
         books.add(MockModels.getMockBook3());
+        books.add(MockModels.getMockBook4());
+        books.add(MockModels.getMockBook5());
+        books.add(MockModels.getMockBook6());
         List<Request> requests = new ArrayList<>();
         requests.add(MockModels.getMockRequest1());
         requests.add(MockModels.getMockRequest2());
+        requests.add(MockModels.getMockRequest4());
+        requests.add(MockModels.getMockRequest5());
+        requests.add(MockModels.getMockRequest6());
         List<Photograph> photographs = new ArrayList<>();
         photographs.add(MockModels.getMockPhotograph());
         return new InMemoryStorageService(users, books, requests, photographs);
