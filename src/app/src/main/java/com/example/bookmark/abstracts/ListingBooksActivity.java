@@ -43,7 +43,7 @@ import java.util.List;
  * @author Ryan Kortbeek.
  */
 public abstract class ListingBooksActivity extends NavigationDrawerActivity
-        implements FilterDialogFragment.FilterDialogListener{
+    implements FilterDialogFragment.FilterDialogListener {
     private static final String FILTER_FRAGMENT_TAG = "FilterFragment";
     public static final String USER = "com.example.bookmark.USER";
     public static final String EXTRA_BOOK = "com.example.bookmark.BOOK";
@@ -55,6 +55,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     private TextInputLayout searchBarLayout;
     private EditText searchEditText;
     private MenuItem filterMenuItem;
+
     private MenuItem searchMenuItem;
 
     private boolean[] statusFilterEnabled = new boolean[Book.Status.values().length];
@@ -96,7 +97,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         booksListView.setOnItemClickListener((adapterView, view, i, l) -> goToBookDetails(i));
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -110,7 +112,8 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
@@ -147,6 +150,15 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         filterMenuItem = menu.findItem(R.id.menu_filter_search_filter_btn);
         searchMenuItem = menu.findItem(R.id.menu_filter_search_search_btn);
         return true;
+    }
+
+    /**
+     * Allows a subclass to set private attribute searchMenuItem.
+     *
+     * @param searchMenuItem search item logo on menu
+     */
+    protected void setSearchMenuItem(MenuItem searchMenuItem) {
+        this.searchMenuItem = searchMenuItem;
     }
 
     /**
