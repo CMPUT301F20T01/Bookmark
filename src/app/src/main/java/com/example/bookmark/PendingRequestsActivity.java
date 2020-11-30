@@ -13,8 +13,10 @@ import java.util.List;
 
 /**
  * This activity shows a user a list of books that they have pending requests
- * for. They can select a book which takes them to the
- * RequestedBookDetailsActivity where they can see the books details.
+ * for (books that they have requested that have a status of either REQUESTED
+ * or ACCEPTED - they can select a book which takes them to the
+ * BorrowerBookDetailsActivity or the BorrowerBookDetailsActivity,
+ * respectively where they can see the books details.
  *
  * @author Ryan Kortbeek.
  */
@@ -35,28 +37,6 @@ public class PendingRequestsActivity extends ListingBooksActivity {
     }
 
     /**
-     * Returns whether the the owner field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookOwnerVisibility() {
-        return true;
-    }
-
-    /**
-     * Returns whether the the status field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookStatusVisibility() {
-        return true;
-    }
-
-    /**
      * Gets all books from the firestore database that are requested by the
      * current user and sets the values of visibleBooks and relevantBooks
      * accordingly.
@@ -68,7 +48,8 @@ public class PendingRequestsActivity extends ListingBooksActivity {
             books -> {
                 List<Book> relevantBooks = new ArrayList<>();
                 for (Book book : books) {
-                    if (book.getStatus() == Book.Status.REQUESTED) {
+                    if ((book.getStatus() == Book.Status.REQUESTED) ||
+                        (book.getStatus() == Book.Status.ACCEPTED)) {
                         relevantBooks.add(book);
                     }
                 }
@@ -100,6 +81,6 @@ public class PendingRequestsActivity extends ListingBooksActivity {
      */
     @Override
     protected Class<?> getIntentDestination() {
-        return RequestedBookDetailsActivity.class;
+        return BorrowerBookDetailsActivity.class;
     }
 }

@@ -16,6 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.bookmark.BorrowedActivity;
+import com.example.bookmark.MyBooksActivity;
+import com.example.bookmark.PendingRequestsActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.models.Book;
 
@@ -39,18 +42,12 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
 
     private final Context context;
 
-    private final boolean showOwner;
-    private final boolean showStatus;
-
     private TextView owner;
     private TextView status;
     private TextView description;
 
-    public BookList(Context context, List<Book> books, boolean showOwner,
-                    boolean showStatus) {
+    public BookList(Context context, List<Book> books) {
         super(context, 0, books);
-        this.showOwner = showOwner;
-        this.showStatus = showStatus;
         this.bookList = books;
         this.filteredBookList = books;
         this.context = context;
@@ -70,6 +67,7 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         ImageView image = view.findViewById(R.id.book_preview_image);
         TextView title = view.findViewById(R.id.bok_preview_title_text);
         TextView author = view.findViewById(R.id.book_preview_author_text);
+        ImageView notificationIcon = view.findViewById(R.id.book_preview_notification_icon);
         description = view.findViewById(R.id.book_preview_description_text);
         owner = view.findViewById(R.id.book_preview_owner_text);
         status = view.findViewById(R.id.book_preview_status_text);
@@ -79,8 +77,7 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         String bookStatus = ("Status: "
             + book.getStatus().toString().charAt(0)
             + book.getStatus().toString().substring(1).toLowerCase());
-        // TODO get owner name once functionality is supported by Owner class
-        String bookOwner = "Owner: "; // + book.getOwner().toString();
+        String bookOwner = "Owner: " + book.getOwnerId().toString();
 
         title.setText(book.getTitle());
         author.setText(book.getAuthor());
@@ -88,10 +85,17 @@ public class BookList extends ArrayAdapter<Book> implements Filterable {
         owner.setText(bookOwner);
         status.setText(bookStatus);
 
-        if (!showOwner) {
+        notificationIcon.setVisibility(View.INVISIBLE);
+        if (context instanceof MyBooksActivity) {
             hideBookOwner(view);
-        }
-        if (!showStatus) {
+            if (book.getStatus().toString().equals("REQUESTED")) {
+                notificationIcon.setVisibility(View.VISIBLE);
+            }
+        } else if (context instanceof PendingRequestsActivity) {
+            if (book.getStatus().toString().equals("ACCEPTED")) {
+                notificationIcon.setVisibility(View.VISIBLE);
+            }
+        } else if (context instanceof BorrowedActivity) {
             status.setVisibility(TextView.GONE);
         }
 

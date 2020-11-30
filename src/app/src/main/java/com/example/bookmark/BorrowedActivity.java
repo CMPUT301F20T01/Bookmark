@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * This activity shows a user a list of books that they are currently
  * borrowing. They can select a book which takes them to the
- * BorrowedBookDetailsActivity where they can see the books details and
+ * BorrowerBookDetailsActivity where they can see the books details and
  * return the book.
  *
  * @author Ryan Kortbeek.
@@ -50,28 +50,6 @@ public class BorrowedActivity extends ListingBooksActivity {
     @Override
     protected String getActivityTitle() {
         return "Borrowed";
-    }
-
-    /**
-     * Returns whether the the owner field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookOwnerVisibility() {
-        return true;
-    }
-
-    /**
-     * Returns whether the the status field of each Book listed in the
-     * visibleBooksListView for this activity should be visible.
-     *
-     * @return boolean
-     */
-    @Override
-    protected boolean getBookStatusVisibility() {
-        return false;
     }
 
     /**
@@ -118,6 +96,6 @@ public class BorrowedActivity extends ListingBooksActivity {
      */
     @Override
     protected Class<?> getIntentDestination() {
-        return BorrowedBookDetailsActivity.class;
+        return BorrowerBookDetailsActivity.class;
     }
 }

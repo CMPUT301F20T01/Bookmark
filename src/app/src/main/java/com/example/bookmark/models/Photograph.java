@@ -67,7 +67,7 @@ public class Photograph implements FirestoreIndexable {
         }
         return new Photograph(
             new EntityId(id),
-            (Uri) map.get("imageUri")
+            Uri.parse((String) map.get("imageUri"))
         );
     }
 

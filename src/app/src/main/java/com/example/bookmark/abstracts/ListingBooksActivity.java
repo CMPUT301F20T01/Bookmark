@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.bookmark.NavigationDrawerActivity;
 import com.example.bookmark.R;
 import com.example.bookmark.adapters.BookList;
@@ -27,8 +29,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Abstract class for activities that list books - some use cases include
@@ -57,6 +57,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
     private String statusFilterConstrainString;
 
     protected User user = null;
+    protected Book selectedBook = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +85,7 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
         );
 
         // Setup bookListAdapter
-        bookListAdapter = new BookList(this, bookList,
-            getBookOwnerVisibility(), getBookStatusVisibility());
+        bookListAdapter = new BookList(this, bookList);
         booksListView.setAdapter(bookListAdapter);
 
         // Setup listeners
@@ -257,22 +257,6 @@ public abstract class ListingBooksActivity extends NavigationDrawerActivity
      * @return String
      */
     protected abstract String getActivityTitle();
-
-    /**
-     * This method must return a boolean value corresponding to whether the
-     * owner of each listed book should be displayed.
-     *
-     * @return boolean
-     */
-    protected abstract boolean getBookOwnerVisibility();
-
-    /**
-     * This method must return a boolean value corresponding to whether the
-     * status of each listed book should be displayed.
-     *
-     * @return boolean
-     */
-    protected abstract boolean getBookStatusVisibility();
 
     /**
      * Must compile a list of all books that match the broad restrictions of

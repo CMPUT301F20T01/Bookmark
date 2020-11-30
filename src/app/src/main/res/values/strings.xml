@@ -37,7 +37,7 @@
     <string name="choose_location">Choose meeting location</string>
 
     <string name="meeting_location">Meeting Location</string>
-    <string name="scan_isbn">SCAN_ISBN</string>
+    <string name="scan_isbn">SCAN ISBN</string>
 
     <string name="choose_book_image">Choose Book Image</string>
     <string name="choose_from_gallery">Choose From Gallery</string>
