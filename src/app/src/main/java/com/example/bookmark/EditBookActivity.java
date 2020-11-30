@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.example.bookmark.abstracts.AddEditBookActivity;
 import com.example.bookmark.models.Book;
 import com.example.bookmark.models.EntityId;
@@ -147,6 +146,10 @@ public class EditBookActivity extends AddEditBookActivity {
             StorageServiceProvider.getStorageService().deleteBook(book, aVoid -> {
             }, e -> DialogUtil.showErrorDialog(this, e));
 
+            // delete photograph in db
+            Photograph imagePhoto = new Photograph(imageUri);
+            StorageServiceProvider.getStorageService().deletePhotograph(new Photograph(imageUri), aVoid -> {
+            }, e -> {});
             // Return the edited book
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
